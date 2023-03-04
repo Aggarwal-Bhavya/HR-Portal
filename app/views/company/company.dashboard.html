@@ -1,0 +1,387 @@
+<body ng-controller="superAdminCtrl">
+
+    <div class="adminDashboard">
+        <div class="sidebarDashboard">
+            <div class="logo-details">
+                <i class='bx bxs-component'></i>
+                <span class="logo-name">HRMS</span>
+            </div>
+
+            <ul class="nav-links">
+                <li>
+                    <a href="#">
+                        <i class='bx bx-grid-alt'></i>
+                        <span class="link-name">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bx-list-ul'></i>
+                        <span class="link-name">View Branches</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#newBranchModal" ng-click="openNewBranchModal()">
+                        <i class='bx bxs-user-plus'></i>
+                        <span class="link-name">New Branch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bx-edit'></i>
+                        <span class="link-name">Update Branch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-chat'></i>
+                        <span class="link-name">Message</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#updateCompanyAdminModal"
+                        ng-click="openUpdateCompanyAdminModal()">
+                        <i class='bx bx-user-circle'></i>
+                        <span class="link-name">Update Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#updateCompanyModal"
+                        ng-click="openUpdateCompanyModal()">
+                        <i class='bx bx-cog'></i>
+                        <span class="link-name">Settings</span>
+                    </a>
+                </li>
+                <li class="log-out">
+                    <a href="#">
+                        <i class='bx bx-log-out'></i>
+                        <span class="link-name">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- home section -->
+        <section class="home-section">
+            <nav>
+                <div class="sidebar-button">
+                    <i class='bx bx-menu sidebarBtn'></i>
+                    <span class="dashboa">Dashboard</span>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Search..." ng-model="searchBar">
+                    <i class='bx bx-search-alt-2'></i>
+                </div>
+            </nav>
+
+            <!-- customer details -->
+            <div class="home-content">
+                <div class="sales-boxes">
+                    <div class="company box">
+                        <div class="title">Branches</div>
+                        <div class="sales-details">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Branch ID</th>
+                                        <th>Branch Name</th>
+                                        <th>Date of Creation</th>
+                                        <th>Branch Head</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="company in companies | filter: searchBar">
+                                        <td>
+                                            <p>{{company._id}}</p>
+                                        </td>
+                                        <td>
+                                            <p>{{company.companyName}}</p>
+                                        </td>
+                                        <td>
+                                            <p>{{company.createdAt | date:'dd/MM/yyyy'}}</p>
+                                        </td>
+                                        <td>
+                                            <p>{{company.email[0]}}</p>
+                                        </td>
+                                        <td>
+                                            <p>{{company.isActive ? 'Active' : 'Inactive'}}</p>
+                                        </td>
+                                        <td>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                style="font-size: 25px; color: #443a3a;"
+                                                ng-click="openEditModal(company)"><i class='bx bxs-edit'></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="button">
+                            <a href="#">See All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDIT BRANCH MODAL -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Update Branch Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="updateForm" novalidate autocomplete="off">
+                                <h5>Branch Information</h5>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Name</span>
+                                    <input type="text" ng-model="branch.branchName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Location</span>
+                                    <input type="text" ng-model="branch.address" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch City</span>
+                                    <input type="text" ng-model="branch.city" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Contact
+                                        Details</span>
+                                    <input type="text" ng-model="branch.contactNumber" class=" form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch
+                                        Departments</span>
+                                    <input type="text" ng-model="branch.departments" class=" form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="superButtonClose"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="superButton" ng-click="saveData($event)">Save
+                                        changes</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPANY ADMIN UPDATE THEIR PROFILE MODAL -->
+            <div class="modal fade" id="updateCompanyAdminModal" tabindex="-1"
+                aria-labelledby="updateCompanyAdminModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateCompanyAdminModalLabel">Update Company Admin Information
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="upadteCompanyAdminForm" novalidate autocomplete="off">
+                                <h5>Company Admin Information</h5>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                                    <input type="text" ng-model="companyadmin.firstName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                                    <input type="text" ng-model="companyadmin.lastName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                                    <input type="text" ng-model="companyadmin.email" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                                    <input type="text" ng-model="companyadmin.personalEmail" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                    <input type="text" ng-model="companyadmin.password" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
+                                    <input type="text" ng-model="companyadmin.maritalStatus" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Current Address</span>
+                                    <input type="text" ng-model="companyadmin.currentAddress" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="superButtonClose"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="superButton" ng-click="updateCompanyAdmin($event)">
+                                        Update Information
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CREATING NEW BRANCH AND BRANCH ADMIN -->
+            <div class="modal fade" id="newBranchModal" tabindex="-1" aria-labelledby="newBranchModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newBranchModalLabel">New Branch Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="newBranchForm" novalidate autocomplete="off">
+                                <h6>Branch Information</h6>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Name</span>
+                                    <input type="text" ng-model="branch.branchName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Location</span>
+                                    <input type="text" ng-model="branch.address" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch City</span>
+                                    <input type="text" ng-model="branch.city" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch Contact
+                                        Details</span>
+                                    <input type="text" ng-model="branch.contactNumber" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Branch
+                                        Departments</span>
+                                    <input type="text" ng-model="branch.departments" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+                                <h6>Branch Admin Information</h6>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                                    <input type="text" ng-model="branch.firstName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                                    <input type="text" ng-model="branch.lastName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
+                                    <input type="text" ng-model="branch.employeeEmail" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                                    <input type="text" ng-model="branch.personalEmail" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                    <input type="text" ng-model="branch.password" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Aadhar Number</span>
+                                    <input type="text" ng-model="branch.aadharNumber" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="superButtonClose"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="superButton" ng-click="addNewBranch($event)">
+                                        Create Branch
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- EDITING COMPANY DETAILS MODAL -->
+            <div class="modal fade" id="updateCompanyModal" tabindex="-1" aria-labelledby="updateCompanyModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateCompanyModalLabel">Update Company Information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="updateCompanyForm" novalidate autocomplete="off">
+                                <h6>Company Information</h6>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Company Name</span>
+                                    <input type="text" ng-model="company.companyName" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Company Logo</span>
+                                    <input type="text" ng-model="company.companyLogo" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                                    <input type="text" ng-model="company.email" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
+                                    <input type="text" ng-model="company.phoneNumber" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Company Website</span>
+                                    <input type="text" ng-model="company.companyWebsite" class="form-control"
+                                        aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="superButtonClose"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="superButton" ng-click="updateCompany($event)">
+                                        Update Company
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+
+
+<!-- Dashboard toggle button -->
+<!-- <script>
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function () {
+        sidebar.classList.toggle("active");
+    }
+</script> -->

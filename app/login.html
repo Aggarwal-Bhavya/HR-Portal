@@ -1,0 +1,103 @@
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Courier New', Courier, monospace;
+        letter-spacing: 1px;
+    }
+
+    section {
+        height: 100vh;
+        width: 100%;
+        background: url(hr.png);
+        background-size: cover;
+        opacity: 0.65;
+    }
+
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 700px;
+        height: 350px;
+        background: rgba(168, 173, 228, 0.8);
+    }
+
+    .container .form-content,
+    .container .login-form {
+        position: relative;
+        width: 50%;
+        height: 350px;
+        float: left;
+        box-sizing: border-box;
+    }
+
+    .container .form-content {
+        padding: 40px 30px;
+        color: #1d1d1d;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .container .login-form {
+        height: 380px;
+        background: #8396dc;
+        top: -15px;
+        opacity: 0.85;
+        box-shadow: -20px 0 15px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+    }
+
+    .container .login-form h1 {
+        text-align: center;
+        color: #262626;
+        font-weight: bold;
+    }
+
+    .container .login-form input {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        border-radius: 25px;
+        outline: none;
+        font-size: 15px;
+    }
+
+    .container .login-form input:hover {
+        border: 2px solid rgba(0, 0, 0, 1);
+    }
+
+    .container .login-form input[type="submit"] {
+        color: #fff;
+        background: #2424d0;
+        font-size: 18px;
+    }
+</style>
+
+<body ng-controller="loginController">
+    <section>
+        <div class="container">
+            <div class="form-content">
+                <h2>WELCOME TO HRMS!</h2>
+                <p>
+                    HRMS allows you to view, manage and update employee information.
+                    Login to access HRMS features!
+                </p>
+            </div>
+            <div class="login-form">
+                <h1>LOGIN</h1>
+                <form>
+                    <input type="text" name="email" ng-model="user.employeeEmail" ng-required="true"
+                        placeholder="Enter email" />
+                    <input type="password" name="password" ng-model="user.password" ng-required="true"
+                        placeholder="Enter password" />
+                    <input type="submit" name="" value="Login" ng-click="loginUser($event)" />
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
