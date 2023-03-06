@@ -13,16 +13,33 @@ app.controller('loginController', [
     function ($scope, $http, $location) {
         $scope.loginUser = function () {
             console.log('allow login');
-            $location.path('/superadmin');
-            // console.log($scope.user);
-            // $http
-            // .post('http://localhost:5000/api/login/check-superadmin-info', $scope.user)
-            // .then(function(res) {
-            //     console.log(res.data);
-            // })
-            // .catch(function(err) {
-            //     console.log(err);
-            // })
+            // $location.path('/sidebar/superadmin');
+            console.log($scope.user);
+            $http
+            .post('http://localhost:5000/api/login/check-superadmin-info', $scope.user)
+            .then(function(res) {
+                console.log(res.data);
+                var userInfo = {
+                    userId: res.data.userData._id,
+                    employeeCode: res.data.userData.employeeCode,
+                    firstName: res.data.userData.firstName,
+                    lastName: res.data.userData.lastName,
+                    employeeEmail: res.data.userData.employeeEmail,
+                    department: res.data.userData.department,
+                    employeeRole: res.data.userData.employeeRole,
+                    isActive: res.data.userData.isActive,
+                    companyDetails: res.data.userData.company,
+                }
+                localStorage.setItem('user', JSON.stringify(userInfo));
+                if(userInfo.employeeRole == 'superadmin' && userInfo.companyDetails.companyName == '') {
+                    $location.path('/sidebar/superadmin');
+                } else if(userInfo.employeeRole == 'companyadmin' && userInfo.companyDetails.companyName != '') {
+                    $location.path('/sidepanel/company');
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
         }
     }
 ])

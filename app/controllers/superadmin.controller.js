@@ -5,7 +5,8 @@ app.controller('superAdminCtrl', [
     '$http',
     '$window',
     'superadminService',
-    function ($scope, $http, $window, superadminService) {
+    '$location',
+    function ($scope, $http, $window, superadminService, $location) {
         $scope.companies = [];
 
         // VIEWING ALL CLIENTS

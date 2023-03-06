@@ -4,16 +4,20 @@ app.controller('companyAdminCtrl', [
     '$scope',
     '$http',
     '$window',
-    'superadminService',
-    function ($scope, $http, $window, superadminService) {
-        $scope.companies = [];
+    'companyService',
+    function ($scope, $http, $window, companyService) {
+        $scope.branches = [];
+        var currCompany = JSON.parse(localStorage.getItem('user'));
+        // console.log(JSON.parse(localStorage.getItem('user')).companyDetails.companyId);
+        // console.log(currCompany.companyDetails.companyId);
 
-        // VIEWING ALL CLIENTS
-        superadminService
-            .getAllCompanies()
+
+        // VIEWING ALL BRANCHES
+        companyService
+            .getAllBranches(currCompany.companyDetails.companyId)
             .then(function (res) {
-                $scope.companies = res.data.companyData;
-                // console.log($scope.companies);
+                $scope.branches = res.data.branchData;
+                console.log($scope.branches);
                 // console.log(res.data.companyData)
             })
             .catch(function (err) {
@@ -22,11 +26,12 @@ app.controller('companyAdminCtrl', [
 
 
         // EDIT BRANCH INFO MODAL
-        $scope.openEditModal = function (company) {
-            superadminService
-                .getCompany(company._id)
+        $scope.openEditModal = function (branch) {
+            // console.log(branch._id);
+            companyService
+                .getBranch(branch._id)
                 .then(function (res) {
-                    $scope.company = res.data.companyData;
+                    $scope.branch = res.data.branchData;
                     // console.log($scope.company);
                 })
                 .catch(function (err) {
@@ -38,8 +43,8 @@ app.controller('companyAdminCtrl', [
         $scope.saveData = function ($event) {
             $event.preventDefault();
 
-            superadminService
-                .updateCompany($scope.company)
+            companyService
+                .updateBranch($scope.branch)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();
@@ -48,14 +53,16 @@ app.controller('companyAdminCtrl', [
                     console.log(err);
                 })
         };
+        
 
         // UPDATING COMPANY ADMIN INFORMATION MODAL
         $scope.openUpdateCompanyAdminModal = function () {
 
-            superadminService
-                .getSuperadmin()
+            companyService
+                .getCompanyAdmin(currCompany.companyDetails.companyId)
                 .then(function (res) {
-                    $scope.superadmin = res.data.adminData;
+                    $scope.companyadmin = res.data.adminData;
+                    $scope.companyadmin.password = ''
                     // console.log($scope.superadmin);
                 })
                 .catch(function (err) {
@@ -66,9 +73,10 @@ app.controller('companyAdminCtrl', [
 
         $scope.updateCompanyAdmin = function ($event) {
             $event.preventDefault();
-
-            superadminService
-                .updateSuperadmin($scope.superadmin)
+            $scope.companyadmin.id = currCompany.companyDetails.companyId;
+            console.log($scope.companyadmin);
+            companyService
+                .putCompanyAdmin($scope.companyadmin)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();
@@ -86,10 +94,12 @@ app.controller('companyAdminCtrl', [
 
         $scope.addNewBranch = function ($event) {
             $event.preventDefault();
-            // console.log($scope.company);
+            $scope.branch.id = currCompany.companyDetails.companyId;
+            $scope.branch.companyName = currCompany.companyDetails.companyName;
+            // console.log($scope.branch);
 
-            superadminService
-                .createCompany($scope.company)
+            companyService
+                .createBranch($scope.branch)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();
@@ -102,8 +112,8 @@ app.controller('companyAdminCtrl', [
 
         // EDIT COMPANY DETAILS
         $scope.openUpdateCompanyModal = function (company) {
-            superadminService
-                .getCompany(company._id)
+            companyService
+                .getCompany(currCompany.companyDetails.companyId)
                 .then(function (res) {
                     $scope.company = res.data.companyData;
                     // console.log($scope.company);
@@ -117,7 +127,7 @@ app.controller('companyAdminCtrl', [
         $scope.updateCompany = function ($event) {
             $event.preventDefault();
 
-            superadminService
+            companyService
                 .updateCompany($scope.company)
                 .then(function (res) {
                     // console.log(res.data);

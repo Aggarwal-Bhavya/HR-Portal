@@ -8,18 +8,25 @@ router
         Employee
             .findOne({
                 $and: [
-                    { employeeRole: "superadmin" },
                     { isActive: true },
                     { employeeEmail: req.body.employeeEmail },
                     { password: req.body.password }
                 ]
             })
             .then(function(item) {
-                console.log('Superadmin found');
-                res.status(201).json({
-                    message: 'Found superadmin',
-                    data: item
-                })
+                if(item) {
+                    console.log('Found user');
+                    res.status(201).json({
+                        message: 'Found user',
+                        userData: item
+                    })
+                } else {
+                    console.log('Not found');
+                    res.status(401).json({
+                        message: 'Not found',
+                        data: item
+                    })
+                }
             })
             .catch(function(err) {
                 console.log('Login error fail     ', err);

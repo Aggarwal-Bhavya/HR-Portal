@@ -101,19 +101,20 @@ var employeeSchema = new Schema({
         type: Boolean,
         default: true
     },
-    // branch: {
-    //     branchId: {
-    //         type: objectId,
-    //         ref: "Branch",
-    //         required: false
-    //     },
-    //     branchName: {
-    //         type: String,
-    //     },
-    //     branchAddress: {
-    //         type: String
-    //     }
-    // },
+    branch: {
+        branchId: {
+            type: objectId,
+            required: false
+        },
+        branchName: {
+            type: String,
+            default: ""
+        },
+        branchCity: {
+            type: String,
+            default: ""
+        }
+    },
     company: {
         companyId: {
             type: objectId,

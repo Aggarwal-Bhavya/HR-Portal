@@ -10,7 +10,6 @@ const Employee = require('../models/employee');
 // 4. view companies whose account it holds and specific company via their id
 // 5. update specific contents of company data
 // 6. soft delete a company account
-// router.get('/login')
 
 
 router
@@ -21,7 +20,7 @@ router
                     $and: [{ employeeRole: "superadmin" }, { isActive: true }]
                 })
             .then(function (item) {
-                console.log(item);
+                // console.log(item);
                 res.status(201).json({
                     message: 'super admin found',
                     adminData: item
@@ -76,25 +75,10 @@ router
             companyWebsite: req.body.companyWebsite,
         });
 
-        // var companyAdmin = new Employee({
-        //     firstName: req.body.firstName,
-        //     lastName: req.body.lastName,
-        //     employeeEmail: req.body.employeeEmail,
-        //     personalEmail: req.body.personalEmail,
-        //     password: req.body.password,
-        //     department: "rda",
-        //     bloodGroup: "rda",
-        //     gender: "rda",
-        //     currentAddress: "rda",
-        //     permanentAddress: "rda",
-        //     employeeRole: "companyadmin",
-        //     aadharNumber: req.body.aadharNumber
-        // });
-
         newCompany
             .save()
             .then(function (data) {
-                console.log(data);
+                // console.log(data);
                 
                 var companyAdmin = new Employee({
                     firstName: req.body.firstName,
@@ -167,14 +151,14 @@ router
                     _id: id
                 })
             .then(function (item) {
-                console.log(item);
+                // console.log(item);
                 res.status(201).json({
                     message: 'Company data found',
                     companyData: item
                 })
             })
             .catch(function (err) {
-                console.log('get specific comapny error   ', err);
+                console.log('get specific company error   ', err);
                 res.status(500).json({
                     message: 'Error',
                     data: err
@@ -198,7 +182,9 @@ router
                     _id: id
                 }, {
                 $set: updateCompany
-            })
+                }, {
+                    new: true
+                })
             .then(function (data) {
                 res.status(201).json({
                     message: 'Company info updated',

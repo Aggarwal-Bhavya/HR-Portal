@@ -1,0 +1,224 @@
+<div class="adminDashboard">
+    <div class="sidebarDashboard">
+        <div class="logo-details">
+            <i class='bx bxs-component'></i>
+            <span class="logo-name">HRMS</span>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a ui-sref="sidebar.dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidebar.viewall">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="link-name">View Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#newCompanyModal" ng-click="openNewCompanyModal()">
+                    <i class='bx bxs-user-plus'></i>
+                    <span class="link-name">New Customer</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-edit'></i>
+                    <span class="link-name">Update Customer</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-chat'></i>
+                    <span class="link-name">Message</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-support'></i>
+                    <span class="link-name">Support</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#updateSuperAdminModal"
+                    ng-click="openUpdateSuperAdminModal()">
+                    <i class='bx bx-cog'></i>
+                    <span class="link-name">Settings</span>
+                </a>
+            </li>
+            <li class="log-out">
+                <a href="#">
+                    <i class='bx bx-log-out'></i>
+                    <span class="link-name">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- home section -->
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboa">Dashboard</span>
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="Search..." ng-model="searchBar">
+                <i class='bx bx-search-alt-2'></i>
+            </div>
+        </nav>
+
+        <main ui-view> </main>
+
+        <!-- CREATING NEW COMPANY AND COMPANY ADMIN -->
+        <div class="modal fade" id="newCompanyModal" tabindex="-1" aria-labelledby="newCompanyModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newCompanyModalLabel">New Company Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="newCompanyForm" novalidate autocomplete="off">
+                            <h6>Company Information</h6>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Company Name</span>
+                                <input type="text" ng-model="company.companyName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Company Logo</span>
+                                <input type="text" ng-model="company.companyLogo" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                                <input type="text" ng-model="company.email" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
+                                <input type="text" ng-model="company.phoneNumber" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Company Website</span>
+                                <input type="text" ng-model="company.companyWebsite" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <h6>Company Admin Information</h6>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                                <input type="text" ng-model="company.firstName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                                <input type="text" ng-model="company.lastName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
+                                <input type="text" ng-model="company.employeeEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                                <input type="text" ng-model="company.personalEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                <input type="text" ng-model="company.password" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Aadhar Number</span>
+                                <input type="text" ng-model="company.aadharNumber" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Close
+                                </button>
+                                <button type="button" class="superButton" ng-click="addNewCompany($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Create Company
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUPER ADMIN UPDATE THEIR PROFILE MODAL -->
+        <div class="modal fade" id="updateSuperAdminModal" tabindex="-1" aria-labelledby="updateSuperAdminModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateSuperAdminModalLabel">Update Super Admin Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="upadteSuperAdminForm" novalidate autocomplete="off">
+                            <h5>Super Admin Information</h5>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                                <input type="text" ng-model="superadmin.firstName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                                <input type="text" ng-model="superadmin.lastName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                                <input type="text" ng-model="superadmin.employeeEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                                <input type="text" ng-model="superadmin.personalEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                <input type="text" ng-model="superadmin.password" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
+                                <input type="text" ng-model="superadmin.maritalStatus" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Current Address</span>
+                                <input type="text" ng-model="superadmin.currentAddress" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Close
+                                </button>
+                                <button type="button" class="superButton" ng-click="updateSuperAdmin($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Update Information
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
