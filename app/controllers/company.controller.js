@@ -7,7 +7,11 @@ app.controller('companyAdminCtrl', [
     'companyService',
     function ($scope, $http, $window, companyService) {
         $scope.branches = [];
+        $scope.branchHeads = [];
         var currCompany = JSON.parse(localStorage.getItem('user'));
+
+        $scope.viewName = currCompany.companyDetails.companyName;
+        // console.log($scope.viewName)
         // console.log(JSON.parse(localStorage.getItem('user')).companyDetails.companyId);
         // console.log(currCompany.companyDetails.companyId);
 
@@ -17,13 +21,23 @@ app.controller('companyAdminCtrl', [
             .getAllBranches(currCompany.companyDetails.companyId)
             .then(function (res) {
                 $scope.branches = res.data.branchData;
-                console.log($scope.branches);
+                // console.log($scope.branches);
                 // console.log(res.data.companyData)
             })
             .catch(function (err) {
                 console.log(err);
             });
 
+        // VIEWING ALL BRANCH HEADS INFO
+        companyService
+            .getBranchHeads(currCompany.companyDetails.companyId)
+            .then(function (res) {
+                $scope.branchHeads = res.data.branchHeads;
+                // console.log($scope.branchHeads);
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
 
         // EDIT BRANCH INFO MODAL
         $scope.openEditModal = function (branch) {

@@ -37,5 +37,35 @@ app.config(["$stateProvider","$urlRouterProvider",function ($stateProvider, $url
             url: "/company",
             templateUrl: "./views/company/company.dashboard.html",
             controller: "companyAdminCtrl"
-        });;
+        })
+        .state("sidepanel.viewall", {
+            url: "/view-all",
+            templateUrl: "./views/company/company.view-all.html",
+            controller: "companyAdminCtrl"
+        })
+        .state("sidepanel.viewall-branchheads", {
+            url: "/branch-heads",
+            templateUrl: "./views/company/company.view-branch-heads.html",
+            controller: "companyAdminCtrl"
+        })
+        .state("sideboard", {
+            url: "/sideboard",
+            templateUrl: "./views/branch/branch.sideboard.html",
+            controller: "branchAdminCtrl"
+        })
+        .state("sideboard.dashboard", {
+            url: "/branch",
+            templateUrl: "./views/branch/branch.dashboard.html",
+            controller: "branchAdminCtrl"
+        })
+        .state("sideboard.viewall", {
+            url: "/view-all",
+            templateUrl: "./views/branch/branch.view-all.html",
+            controller: "branchAdminCtrl"
+        })
+        .state("sideboard.viewall-deptheads", {
+            url: "/department-heads",
+            templateUrl: "./views/branch/branch.view-dept-heads.html",
+            controller: "branchAdminCtrl"
+        });
 }])

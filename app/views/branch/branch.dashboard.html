@@ -3,42 +3,46 @@
     <div class="home-content">
         <div class="sales-boxes">
             <div class="company box">
-                <div class="title">Top Performing Branches</div>
+                <div class="title">Top Performing Employees</div>
                 <div class="sales-details">
                     <table>
                         <thead>
                             <tr>
-                                <th>Branch ID</th>
-                                <th>Branch Name</th>
-                                <th>Date of Creation</th>
-                                <th>Branch Address</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Reporting To</th>
+                                <th>Department</th>
+                                <th>Designation</th>
                                 <th>Status</th>
                                 <!-- <th>Actions</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="branch in branches | filter: searchBar | limitTo: 5">
+                            <tr ng-repeat="employee in employees | filter: searchBar | limitTo: 5">
                                 <td>
-                                    <p>{{branch._id}}</p>
+                                    <p>{{employee._id}}</p>
                                 </td>
                                 <td>
-                                    <p>{{branch.branchName}}</p>
+                                    <p>{{employee.firstName + ' ' + employee.lastName}}</p>
                                 </td>
                                 <td>
-                                    <p>{{branch.createdAt | date:'dd/MM/yyyy'}}</p>
+                                    <p>{{employee.reportingTo.managerName}}</p>
                                 </td>
                                 <td>
-                                    <p>{{branch.address}}</p>
+                                    <p>{{employee.department}}</p>
                                 </td>
                                 <td>
-                                    <p>{{branch.isActive ? 'Active' : 'Inactive'}}</p>
+                                    <p>{{employee.designation}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.isActive ? 'Active' : 'Inactive'}}</p>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="button">
-                    <a ui-sref="sidepanel.viewall">See All</a>
+                    <a ui-sref="sideboard.viewall">See All</a>
                 </div>
             </div>
         </div>

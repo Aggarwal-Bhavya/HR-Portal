@@ -8,5 +8,6 @@ var router = express.Router();
 router.use("/superadmin", require("../controllers/superadmin.api"));
 router.use("/company", require("../controllers/company.api"));
 router.use("/login", require("../controllers/login.api"));
+router.use("/branch", require("../controllers/branch.api"));
 
 module.exports = router;

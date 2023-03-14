@@ -36,6 +36,10 @@ app.factory('companyService', [
             updateBranch: function(user) {
                 url = 'http://localhost:5000/api/company/update-branch-info/' + user._id;
                 return $http.put(url, user);
+            },
+            getBranchHeads: function(id) {
+                url = 'http://localhost:5000/api/company/all-branch-heads/' + id;
+                return $http.get(url);
             }
         }
     }

@@ -3,7 +3,7 @@ var router = express.Router();
 var Employee = require('../models/employee');
 
 router
-    .post('/check-superadmin-info', function (req, res) {
+    .post('/check-login-info', function (req, res) {
         console.log(req.body)
         Employee
             .findOne({

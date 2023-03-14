@@ -19,10 +19,24 @@ var employeeSchema = new Schema({
         min: 3, 
         default: ""
     },
-    directManager: {
-        type: String,
-        default: ""
-    }, 
+    // directManager: {
+    //     type: String,
+    //     default: ""
+    // }, 
+    reportingTo: {
+        managerId: {
+            type: objectId,
+            required: false
+        },
+        managerName: {
+            type: String,
+            default: ""
+        },
+        role: {
+            type: String, 
+            default: ""
+        }
+    },
     designation: {
         type: String,
         default: ""
@@ -94,7 +108,7 @@ var employeeSchema = new Schema({
     },
     employeeRole: {
         type: String,
-        enum: ["superadmin", "companyadmin", "branchadmin", "hradmin", "employee"],
+        enum: ["superadmin", "companyadmin", "branchadmin", "departmenthead", "hradmin", "employee"],
         required: true
     },
     isActive: {

@@ -116,6 +116,7 @@ app.controller('superAdminCtrl', [
             .getSuperadmin()
                 .then(function (res) {
                     $scope.superadmin = res.data.adminData;
+                    $scope.superadmin.password = '';
                     // console.log($scope.superadmin);
                 })
                 .catch(function (err) {

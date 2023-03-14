@@ -17,7 +17,7 @@ router
         Company
             .findById({ _id: id})
             .then(function(item) {
-                console.log(item);
+                // console.log(item);
                 res.status(201).json({
                     message: 'Company Info',
                     companyData: item
@@ -126,7 +126,7 @@ router
                     branch: {
                         branchId: data._id,
                         branchName: data.branchName,
-                        branchCity: data.branchCity
+                        branchCity: data.city
                     }
                 });
 
@@ -255,6 +255,32 @@ router
                 console.log("Branch info update error    ", err);
                 res.status(500).json({
                     message: 'Branch update error',
+                    data: err
+                })
+            })
+    })
+    .get('/all-branch-heads/:id', function(req, res) {
+        var id = req.params.id;
+
+        Employee
+            .find({ 
+                $and: [
+                    { isActive: true },
+                    { employeeRole: "branchadmin" },
+                    { "company.companyId": id }
+                ]
+            })
+            .then(function(item) {
+                // console.log(item);
+                res.status(201).json({
+                    message: 'Branch Head Information',
+                    branchHeads: item
+                })
+            })
+            .catch(function(err) {
+                console.log('Brand admin info fetch error     ', err);
+                res.status(500).json({
+                    message: 'Error',
                     data: err
                 })
             })

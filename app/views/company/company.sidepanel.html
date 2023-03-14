@@ -7,15 +7,21 @@
 
         <ul class="nav-links">
             <li>
-                <a href="#">
+                <a ui-sref="sidepanel.dashboard">
                     <i class='bx bx-grid-alt'></i>
                     <span class="link-name">Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a ui-sref="sidepanel.viewall">
                     <i class='bx bx-list-ul'></i>
                     <span class="link-name">View Branches</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidepanel.viewall-branchheads">
+                    <i class='bx bx-menu'></i>
+                    <span class="link-name">View Branch Heads</span>
                 </a>
             </li>
             <li>
@@ -25,22 +31,16 @@
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-edit'></i>
-                    <span class="link-name">Update Branch</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-chat'></i>
-                    <span class="link-name">Message</span>
-                </a>
-            </li>
-            <li>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#updateCompanyAdminModal"
                     ng-click="openUpdateCompanyAdminModal()">
                     <i class='bx bx-user-circle'></i>
                     <span class="link-name">Update Admin</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-trash' ></i>
+                    <span class="link-name">Delete Account</span>
                 </a>
             </li>
             <li>
@@ -64,7 +64,7 @@
         <nav>
             <div class="sidebar-button">
                 <i class='bx bx-menu sidebarBtn'></i>
-                <span class="dashboa">Dashboard</span>
+                <span class="dashboard">{{viewName}}</span>
             </div>
 
             <div class="search-box">

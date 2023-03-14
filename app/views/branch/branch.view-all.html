@@ -1,0 +1,151 @@
+<body>
+    <!-- customer details -->
+    <div class="home-content">
+        <div class="sales-boxes">
+            <div class="company box">
+                <div class="title">All Employees</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Reporting To</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="employee in employees | filter: searchBar">
+                                <td>
+                                    <p>{{employee._id}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.firstName + ' ' + employee.lastName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.reportingTo.managerName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.department}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.designation}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.isActive ? 'Active' : 'Inactive'}}</p>
+                                </td>
+                                <td>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
+                                        style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(employee)"><i
+                                            class='bx bxs-edit'></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Update Employee Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="updateForm" novalidate autocomplete="off">
+                        <h6>Employee Personal Information</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                            <input type="text" ng-model="employee.firstName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                            <input type="text" ng-model="employee.lastName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>  
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                            <input type="text" ng-model="employee.personalEmail" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.maritalStatus">
+                                <option ng-value="status" ng-repeat="status in maritalStatuses">
+                                    {{status}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <h6>Employee Details</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Designation</span>
+                            <input type="text" ng-model="employee.designation" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Department</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.department">
+                                <option ng-value="dept" ng-repeat="dept in branch.departments">
+                                    {{dept}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Role</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.employeeRole">
+                                <option ng-value="role" ng-repeat="role in employeeRoles">
+                                    {{role}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- <h6>Reporting Manager Details</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Employee ID</span>
+                            <input type="text" ng-model="employee.managerid" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Name</span>
+                            <input type="text" ng-model="employee.managername" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Role</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.managerrole">
+                                <option ng-value="role" ng-repeat="role in employeeRoles">
+                                    {{role}}
+                                </option>
+                            </select>
+                        </div> -->
+
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="saveData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

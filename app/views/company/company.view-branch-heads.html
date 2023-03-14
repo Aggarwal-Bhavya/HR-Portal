@@ -1,0 +1,52 @@
+<body>
+    <!-- customer details -->
+    <div class="home-content">
+        <div class="sales-boxes">
+            <div class="company box">
+                <div class="title">Branch Heads</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Branch Name</th>
+                                <th>Point of Contact</th>
+                                <th>Branch City</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="head in branchHeads | filter: searchBar">
+                                <td>
+                                    <p>{{head._id}}</p>
+                                </td>
+                                <td>
+                                    <p>{{head.firstName + ' ' + head.lastName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{head.branch.branchName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{head.employeeEmail}}</p>
+                                </td>
+                                <td>
+                                    <p>{{head.branch.branchCity}}</p>
+                                </td>
+                                <td>
+                                    <p>{{head.isActive ? 'Active' : 'Inactive'}}</p>
+                                </td>
+                                <!-- <td>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
+                                        style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(branch)"><i
+                                            class='bx bxs-edit'></i></a>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
