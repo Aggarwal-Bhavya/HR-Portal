@@ -1,0 +1,98 @@
+<div class="adminDashboard">
+    <div class="sidebarDashboard">
+        <div class="logo-details">
+            <i class='bx bxs-component'></i>
+            <span class="logo-name">HRMS</span>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a ui-sref="sidemenu.dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="link-name">View Employees</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall-deptheads">
+                    <i class='bx bx-menu'></i>
+                    <span class="link-name">Department Heads</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall-pastemployees">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="link-name">Previous Employees</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#newEmployeeModal" ng-click="openNewEmployeeModal()">
+                    <i class='bx bxs-user-plus'></i>
+                    <span class="link-name">New Employee</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="menu.attendance">
+                    <i class='bx bxs-time'></i>
+                    <span class="link-name">Attendance</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="link-name">Leave</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#updateBranchAdminModal"
+                    ng-click="openUpdateBranchAdminModal()">
+                    <i class='bx bx-user-circle'></i>
+                    <span class="link-name">Update Data</span>
+                </a>
+            </li>
+            <li class="log-out">
+                <a href="#">
+                    <i class='bx bx-log-out'></i>
+                    <span class="link-name">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- home section -->
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboard">{{viewName}}</span>
+            </div>
+
+            <div class="punch-btns">
+                <!-- <button type="button" class="btn btn-success mr-3" ng-click="TimeIn()" ng-show="timeInButton">
+                    Time In
+                </button>
+                <button type="button" class="btn btn-success mr-3" ng-click="TimeOut()" ng-show="timeOutButton">
+                    Time Out
+                </button> -->
+                <button type="button" class="btn btn-success mr-3" ng-click="TimeIn()" ng-if="!timeIn">
+                    Time In
+                </button>
+                <button type="button" class="btn btn-success mr-3" ng-click="TimeOut()" ng-if="timeIn && !timeOut">
+                    Time Out
+                </button>
+                <span>
+                    <span id="headerAttendanceTimeMessage" ng-if="timeIn && !timeOut">Last In: </span>
+                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn}}</strong>
+                </span>
+            </div>
+        </nav>
+
+        <main ui-view> </main>
+
+    </section>
+</div>

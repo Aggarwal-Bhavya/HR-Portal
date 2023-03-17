@@ -36,6 +36,14 @@ app.factory('branchService', [
             updateEmployeeInfo: function(user) {
                 url = 'http://localhost:5000/api/branch/update-employee-info/' + user._id;
                 return $http.put(url, user);
+            },
+            getPastEmployees: function(id) {
+                url = 'http://localhost:5000/api/branch/all-previous-employees/' + id;
+                return $http.get(url);
+            },
+            removeEmployee: function(id) {
+                url = 'http://localhost:5000/api/branch/remove-employee/' + id;
+                return $http.put(url);
             }
         }
     }

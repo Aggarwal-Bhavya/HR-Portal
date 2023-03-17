@@ -1,0 +1,238 @@
+<div class="adminDashboard">
+    <div class="sidebarDashboard">
+        <div class="logo-details">
+            <i class='bx bxs-component'></i>
+            <span class="logo-name">HRMS</span>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a ui-sref="sidemenu.dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="link-name">View Employees</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall-deptheads">
+                    <i class='bx bx-menu'></i>
+                    <span class="link-name">Department Heads</span>
+                </a>
+            </li>
+            <li>
+                <a ui-sref="sidemenu.viewall-pastemployees">
+                    <i class='bx bx-list-ul'></i>
+                    <span class="link-name">Previous Employees</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#newEmployeeModal" ng-click="openNewEmployeeModal()">
+                    <i class='bx bxs-user-plus'></i>
+                    <span class="link-name">New Employee</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-time' ></i>
+                    <span class="link-name">Attendance</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="link-name">Leave</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#updateBranchAdminModal"
+                    ng-click="openUpdateBranchAdminModal()">
+                    <i class='bx bx-user-circle'></i>
+                    <span class="link-name">Update Data</span>
+                </a>
+            </li>
+            <li class="log-out">
+                <a href="#">
+                    <i class='bx bx-log-out'></i>
+                    <span class="link-name">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- home section -->
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboard">{{viewName}}</span>
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="Search..." ng-model="searchBar">
+                <i class='bx bx-search-alt-2'></i>
+            </div>
+        </nav>
+
+        <main ui-view> </main>
+
+
+        <!-- CREATING NEW EMPLOYEE FOR BRANCH -->
+        <div class="modal fade" id="newEmployeeModal" tabindex="-1" aria-labelledby="newEmployeeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newEmployeeModalLabel">New Employee Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="newEmployeeForm" novalidate autocomplete="off">
+                            <h6>Employee Personal Information</h6>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                                <input type="text" ng-model="employee.firstName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                                <input type="text" ng-model="employee.lastName" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                                <input type="text" ng-model="employee.personalEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Date of Birth</span>
+                                <input type="text" ng-model="employee.dateOfBirth" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Blood Group</span>
+                                <input type="text" ng-model="employee.bloodGroup" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="dropdown">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Gender</span>
+                                <select class="form-select" aria-label="Default select example"
+                                    ng-model="employee.gender">
+                                    <option ng-value="gender" ng-repeat="gender in genders">
+                                        {{gender}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Aadhar Number</span>
+                                <input type="text" ng-model="employee.aadharNumber" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Pan Number</span>
+                                <input type="text" ng-model="employee.panNumber" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Visa Type</span>
+                                <input type="text" ng-model="employee.visaType" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="dropdown">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
+                                <select class="form-select" aria-label="Default select example"
+                                    ng-model="employee.maritalStatus">
+                                    <option ng-value="status" ng-repeat="status in maritalStatuses">
+                                        {{status}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Current Address</span>
+                                <input type="text" ng-model="employee.currentAddress" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Permanent Address</span>
+                                <input type="text" ng-model="employee.permanentAddress" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+
+                            <h6>Employee Details</h6>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
+                                <input type="text" ng-model="employee.employeeEmail" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                <input type="text" ng-model="employee.password" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Designation</span>
+                                <input type="text" ng-model="employee.designation" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="dropdown">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Department</span>
+                                <select class="form-select" aria-label="Default select example"
+                                    ng-model="employee.department">
+                                    <option ng-value="dept" ng-repeat="dept in branchDepts.departments">
+                                        {{dept}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="dropdown">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Role</span>
+                                <select class="form-select" aria-label="Default select example"
+                                    ng-model="employee.employeeRole">
+                                    <option ng-value="role" ng-repeat="role in employeeRoles">
+                                        {{role}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <h6>Reporting Manager Details</h6>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Employee ID</span>
+                                <input type="text" ng-model="employee.managerid" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Name</span>
+                                <input type="text" ng-model="employee.managername" class="form-control"
+                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="dropdown">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Role</span>
+                                <select class="form-select" aria-label="Default select example"
+                                    ng-model="employee.managerrole">
+                                    <option ng-value="role" ng-repeat="role in employeeRoles">
+                                        {{role}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                    style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Close
+                                </button>
+                                <button type="button" class="superButton" ng-click="addNewEmployee($event)"
+                                    style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    Add Employee
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

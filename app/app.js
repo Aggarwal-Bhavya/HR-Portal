@@ -4,6 +4,10 @@
 ///<reference path="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js" />
 ///<reference path="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js" />
 
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" />
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js" />
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.2/calendar.min.js" />
+
 var app = angular.module("myApp", ["ui.router"]);
 
 app.controller('loginController', [
@@ -29,7 +33,8 @@ app.controller('loginController', [
                     employeeRole: res.data.userData.employeeRole,
                     isActive: res.data.userData.isActive,
                     companyDetails: res.data.userData.company,
-                    branchDetails: res.data.userData.branch
+                    branchDetails: res.data.userData.branch,
+                    reportingManager: res.data.userData.reportingTo
                 }
                 localStorage.setItem('user', JSON.stringify(userInfo));
                 if(userInfo.employeeRole == 'superadmin' && userInfo.companyDetails.companyName == '') {
@@ -38,6 +43,10 @@ app.controller('loginController', [
                     $location.path('/sidepanel/company');
                 } else if(userInfo.employeeRole == 'branchadmin' && userInfo.companyDetails.companyName != '' && userInfo.branchDetails.branchName != '') {
                     $location.path('/sideboard/branch');
+                } else if(userInfo.employeeRole == 'hradmin' && userInfo.companyDetails.companyName != '' && userInfo.branchDetails.branchName != '') {
+                    $location.path('/sidemenu/hradmin');
+                } else if((userInfo.employeeRole == 'employee' || userInfo.employeeRole == 'departmenthead') && userInfo.companyDetails.companyName != '' && userInfo.branchDetails.branchName != '') {
+                    $location.path('/menu');
                 }
             })
             .catch(function(err) {

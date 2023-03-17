@@ -8,8 +8,9 @@ var Branch = require('../models/branch');
 // 2. Adding employee info
 // 3. Managing employee info
 // 4. View team wise info for employees of a branch
-// 5. View direct managers for a team or department info
-// 6. Fetching and updating branch admin info
+// 5. Removing and viewing all previous employees of the branch
+// 6. View direct managers for a team or department info
+// 7. Fetching and updating branch admin info
 
 router
     .get('/branch-info/:id', function(req, res) {
@@ -97,7 +98,15 @@ router
         var id = req.params.id;
         Employee
             .find({
-                "branch.branchId": id
+                $and: [
+                    { "branch.branchId": id },
+                    { isActive: true },
+                    { $or: [
+                        { employeeRole: "departmenthead" },
+                        { employeeRole: "employee" },
+                        { employeeRole: "hradmin"}
+                    ] }
+                ]
             })
             .then(function(item) {
                 res.status(201).json({
@@ -255,6 +264,51 @@ router
                 console.log('Error in updating employee info    ', err);
                 res.status(500).json({
                     message: 'Employee information update fail',
+                    data: err
+                })
+            })
+    })
+    .put('/remove-employee/:id', function(req, res) {
+        var id = req.params.id;
+
+        Employee
+            .findByIdAndUpdate(
+                { _id: id }, 
+                { $set: { isActive: false } }
+            )
+            .then(function(item) {
+                res.status(201).json({
+                    message: 'Employee removed'
+                })
+            })
+            .catch(function(err) {
+                console.log('Error removing employee   ', err);
+                res.status(500).json({
+                    message: 'Error removing employee', 
+                    data: err
+                })
+            })
+    })
+    .get('/all-previous-employees/:id', function(req, res) {
+        var id = req.params.id;
+
+        Employee
+            .find({
+                $and: [
+                    { "branch.branchId": id },
+                    { isActive: false }
+                ]
+            })
+            .then(function(item) {
+                res.status(201).json({
+                    message: 'All previous employees of this branch are ',
+                    previousEmployeesData: item
+                })
+            })
+            .catch(function (err) {
+                console.log('Error in fetching previous branch employees info   ', err);
+                res.status(500).json({
+                    message: 'Branch employee error  ',
                     data: err
                 })
             })

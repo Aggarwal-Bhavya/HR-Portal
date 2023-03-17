@@ -1,5 +1,5 @@
 ///<reference path="../app.js" />
-app.config(["$stateProvider","$urlRouterProvider",function ($stateProvider, $urlRouterProvider) {
+app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
 
     $stateProvider
@@ -67,5 +67,45 @@ app.config(["$stateProvider","$urlRouterProvider",function ($stateProvider, $url
             url: "/department-heads",
             templateUrl: "./views/branch/branch.view-dept-heads.html",
             controller: "branchAdminCtrl"
+        })
+        .state("sideboard.viewall-pastemployees", {
+            url: "/past-employees",
+            templateUrl: "./views/branch/branch.view-past-employees.html",
+            controller: "branchAdminCtrl"
+        })
+        .state("sidemenu", {
+            url: "/sidemenu",
+            templateUrl: "./views/hradmin/hradmin.sidemenu.html",
+            controller: "hrAdminCtrl"
+        })
+        .state("sidemenu.dashboard", {
+            url: "/hradmin",
+            templateUrl: "./views/hradmin/hradmin.dashboard.html",
+            controller: "hrAdminCtrl"
+        })
+        .state("sidemenu.viewall", {
+            url: "/view-all",
+            templateUrl: "./views/hradmin/hradmin.view-all.html",
+            controller: "hrAdminCtrl"
+        })
+        .state("sidemenu.viewall-deptheads", {
+            url: "/department-heads",
+            templateUrl: "./views/hradmin/hradmin.view-dept-heads.html",
+            controller: "hrAdminCtrl"
+        })
+        .state("sidemenu.viewall-pastemployees", {
+            url: "/past-employees",
+            templateUrl: "./views/hradmin/hradmin.view-past-employees.html",
+            controller: "hrAdminCtrl"
+        })
+        .state("menu", {
+            url: "/menu",
+            templateUrl: "./views/employee/employee.menu.html",
+            controller: "employeeCtrl"
+        })
+        .state("menu.attendance", {
+            url: "/attendance",
+            templateUrl: "./views/employee/employee.attendance.html",
+            controller: "employeeCtrl"
         });
 }])

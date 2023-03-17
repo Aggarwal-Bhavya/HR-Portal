@@ -41,6 +41,9 @@
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
                                         style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(employee)"><i
                                             class='bx bxs-edit'></i></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        style="font-size: 28px; color: #443a3a" ng-click="openDeleteModal(employee)"><i
+                                            class='bx bxs-user-x'></i></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -70,7 +73,7 @@
                             <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
                             <input type="text" ng-model="employee.lastName" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>  
+                        </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
                             <input type="text" ng-model="employee.personalEmail" class="form-control"
@@ -148,4 +151,44 @@
             </div>
         </div>
     </div>
+
+
+    <!-- DELETE MODAL -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Remove Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="deleteForm" novalidate autocomplete="off">
+                        <h5>Employee Information</h5>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Name</span>
+                            <input type="text" ng-model="employee.firstName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
+                            <input type="text" ng-model="employee.employeeEmail" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <h6>Do you wish to remove this employee?</h6>
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="deleteData($event)"
+                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Remove Employee
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>

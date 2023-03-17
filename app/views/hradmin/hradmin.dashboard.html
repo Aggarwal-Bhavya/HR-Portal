@@ -1,0 +1,52 @@
+<body>
+    <!-- customer details -->
+    <div class="home-content">
+        <div class="sales-boxes">
+            <div class="company box">
+                <div class="title">Top Performing Employees</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Reporting To</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Status</th>
+                                <!-- <th>Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="employee in employees | filter: searchBar | limitTo: 5">
+                                <td>
+                                    <p>{{employee._id}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.firstName + ' ' + employee.lastName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.reportingTo.managerName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.department}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.designation}}</p>
+                                </td>
+                                <td>
+                                    <p>{{employee.isActive ? 'Active' : 'Inactive'}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="button">
+                    <a ui-sref="sidemenu.viewall">See All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
