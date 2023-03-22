@@ -107,5 +107,15 @@ app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $u
             url: "/attendance",
             templateUrl: "./views/employee/employee.attendance.html",
             controller: "employeeCtrl"
+        })
+        .state("menu.leave", {
+            url: "/leave",
+            templateUrl: "./views/employee/employee.leave.nav.html",
+            controller: "employeeCtrl"
+        })
+        .state("menu.leave.apply-leave", {
+            url: "/apply-leave",
+            templateUrl: "./views/employee/employee.apply-leave.html",
+            controller: "employeeCtrl"
         });
 }])

@@ -6,9 +6,12 @@
 
 ///<reference path="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" />
 ///<reference path="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js" />
-///<reference path="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.2/calendar.min.js" />
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.0/calendar.js" />
 
-var app = angular.module("myApp", ["ui.router"]);
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" />
+
+
+var app = angular.module("myApp", ["ui.router", "ui.calendar"]);
 
 app.controller('loginController', [
     '$scope',

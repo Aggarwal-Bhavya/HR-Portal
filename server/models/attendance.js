@@ -56,11 +56,9 @@ var attendanceSchema = new Schema({
         }
     },
     date: {
-        // type: String
         type: Date
     },
     timeIn: {
-        // type: String
         type: Date
     },
     timeOut: {
@@ -74,13 +72,42 @@ var attendanceSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ["present", "absent", "half-day", "leave", "pending"],
+        enum: ["present", "half-day", "leave", "pending"],
         default: "pending"
+    },
+    leave: {
+        leaveType: {
+            type: String,
+            enum: ["casual", "sick", "personal", "vacation", "emergency"],
+            required: false
+        },
+        startDate: {
+            type: Date,
+            required: false
+        },
+        endDate: {
+            type: Date,
+            required: false
+        },
+        duration: {
+            type: Number,
+            required: false
+        },
+        approvalStatus: {
+            type: String,
+            enum: ["approved", "rejected", "pending"],
+            required: false
+        },
+        comments: {
+            type: String,
+            required: false
+        }
     }
 },
     {
         timestamps: true
-    })
+    }
+);
 
 var Attendance = mongoose.model('attendance', attendanceSchema);
 

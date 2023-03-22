@@ -1,0 +1,31 @@
+<div class="leave-form">
+    <!-- <form>
+        <input type="text" name="email" ng-model="user.employeeEmail" ng-required="true"
+            placeholder="Enter email" />
+        <input type="password" name="password" ng-model="user.password" ng-required="true"
+            placeholder="Enter password" />
+        <input type="submit" name="" value="Login" ng-click="loginUser($event)" />
+    </form> -->
+
+    <form>
+        <label for="leave-type">Leave Type:</label>
+        <select id="leave-type" name="leave-type" ng-model="leaveType">
+            <option ng-value="select">Select Leave Type</option> 
+            <option ng-repeat="leave in leaveTypeList">{{leave}}</option>
+        </select>
+
+        <div style="display: flex; justify-content: space-between;">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date" ng-model="startDate" ng-change="calculateDuration()">
+
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date" ng-model="endDate" ng-change="calculateDuration()">
+        </div>
+        <p ng-show="duration">{{duration}} day(s)</p>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" ng-model="comments"></textarea>
+
+        <button type="submit" ng-click="applyLeave()">Submit</button>
+    </form>
+</div>

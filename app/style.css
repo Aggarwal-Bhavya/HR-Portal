@@ -108,15 +108,15 @@ body {
     transition: all 0.3s ease;
 }
 
-.sidebarDashboard.active ~ .home-section {
+.sidebarDashboard.active~.home-section {
     width: calc(100% - 60px);
     left: 60px;
     background: #f9f9f9;
 }
 
 .home-section nav {
-    position: fixed;
-    width: calc(100% - 240px);
+    /* position: fixed; */
+    /* width: calc(100% - 240px); */
     left: 240px;
     height: 80px;
     background: #f5f5f5ff;
@@ -134,7 +134,7 @@ body {
     font-size: 15px;
 }
 
-.sidebarDashboard.active ~ .home-section nav {
+.sidebarDashboard.active~.home-section nav {
     width: calc(100% - 60px);
     left: 60px;
 }
@@ -184,9 +184,10 @@ body {
 }
 
 /* CUSTOMER INFO BOXES */
-.home-section .home-content {
+/* .home-section .home-content {
     padding-top: 100px;
-}
+} */
+
 
 .home-section .sales-boxes {
     display: flex;
@@ -202,7 +203,7 @@ body {
     padding: 20px;
 }
 
-.home-section .sales-boxes .box .sales-details{
+.home-section .sales-boxes .box .sales-details {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -248,20 +249,20 @@ body {
 
 .home-content .sales-boxes .sales-details {
     display: flex;
-	flex-wrap: wrap;
-	grid-gap: 24px;
-	margin-top: 24px;
-	width: 100%;
+    flex-wrap: wrap;
+    grid-gap: 24px;
+    margin-top: 24px;
+    width: 100%;
 }
 
 .home-content .sales-boxes .sales-details table {
     width: 100%;
-	border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .home-content .sales-boxes .sales-details table th {
     padding-bottom: 12px;
-	text-align: left;
+    text-align: left;
     border-bottom: 1.5px solid rgb(130, 129, 129);
 }
 
@@ -270,8 +271,117 @@ body {
 }
 
 .home-content .sales-boxes .sales-details table tr td:first-child {
-	display: flex;
-	align-items: center;
-	grid-gap: 12px;
-	padding-left: 6px;
+    display: flex;
+    align-items: center;
+    grid-gap: 12px;
+    padding-left: 6px;
+}
+
+.home-content .calendar-component {
+    /* display: flex; */
+    margin: 50px;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+
+.home-content .calendar-component .fc-basic-view .fc-day-number {
+    padding: 5px;
+    /* border: 1px solid red; */
+}
+
+.home-content .calendar-component .fc-basic-view .fc-body .fc-row {
+    min-height: 1em;
+}
+
+.home-content .calendar-component .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 5px;
+}
+
+
+/* LEAVE APPLICATION SECTION */
+.home-section .leave-nav {
+    margin-top: 10px;
+}
+
+.home-section .leave-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.home-section .leave-nav li {
+    padding: 10px;
+    /* border: 2px solid #a299d9; */
+    box-shadow: 5px 10px rgba(182, 175, 236, 0.2);
+    background-color: #a59af4;
+}
+
+.home-section .leave-nav li:hover {
+    background: #5433ea;
+    opacity: 0.8;
+    color: white;
+    cursor: pointer;
+}
+
+.home-section .leave-nav li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 5em;
+}
+
+.home-section .leave-nav li:last-child {
+    margin-right: 0;
+}
+
+.home-section div .leave-form form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.home-section div .leave-form form label {
+    margin-top: 10px;
+}
+
+.home-section div .leave-form form select,
+.home-section div .leave-form form input,
+.home-section div .leave-form form textarea {
+    margin-top: 5px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+.home-section div .leave-form form p {
+    margin-top: 5px;
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+
+.home-section div .leave-form form select {
+    width: 100%;
+}
+
+.home-section div .leave-form form input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #555;
+}
+
+.home-section div .leave-form form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.home-section div .leave-form form button[type="submit"]:hover {
+    background-color: #3e8e41;
 }

@@ -7,33 +7,9 @@
 
         <ul class="nav-links">
             <li>
-                <a ui-sref="sidemenu.dashboard">
+                <a>
                     <i class='bx bx-grid-alt'></i>
                     <span class="link-name">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="sidemenu.viewall">
-                    <i class='bx bx-list-ul'></i>
-                    <span class="link-name">View Employees</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="sidemenu.viewall-deptheads">
-                    <i class='bx bx-menu'></i>
-                    <span class="link-name">Department Heads</span>
-                </a>
-            </li>
-            <li>
-                <a ui-sref="sidemenu.viewall-pastemployees">
-                    <i class='bx bx-list-ul'></i>
-                    <span class="link-name">Previous Employees</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#newEmployeeModal" ng-click="openNewEmployeeModal()">
-                    <i class='bx bxs-user-plus'></i>
-                    <span class="link-name">New Employee</span>
                 </a>
             </li>
             <li>
@@ -43,7 +19,7 @@
                 </a>
             </li>
             <li>
-                <a>
+                <a ui-sref="menu.leave.apply-leave">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="link-name">Leave</span>
                 </a>
@@ -87,7 +63,9 @@
                 </button>
                 <span>
                     <span id="headerAttendanceTimeMessage" ng-if="timeIn && !timeOut">Last In: </span>
+                    <!-- <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{punchTimeIn}}</strong> -->
                     <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn}}</strong>
+
                 </span>
             </div>
         </nav>
