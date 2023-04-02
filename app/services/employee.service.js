@@ -24,6 +24,26 @@ app.factory('employeeService', [
             getWorkStatus: function(empId, month, year) {
                 url = 'http://localhost:5000/api/employee/attendance-status/' + empId + '/' + month + '/' + year;
                 return $http.get(url);
+            },
+            applyLeave: function(leave) {
+                url = 'http://localhost:5000/api/attendance/apply-leave';
+                return $http.post(url, leave);
+            },
+            getLeavesInfo: function(empId, branchId) {
+                url = 'http://localhost:5000/api/attendance/get-leaves/' + empId + '/' + branchId;
+                return $http.get(url);
+            },
+            getLeavesToApprove: function(empId, branchId) {
+                url = 'http://localhost:5000/api/attendance/to-approve-leaves/' + empId + '/' + branchId;
+                return $http.get(url);
+            },
+            yearlyRatios: function(empId, year) {
+                url = 'http://localhost:5000/api/employee/year-stats/' + empId + '/' + year;
+                return $http.get(url);
+            },
+            monthlyStats: function(empId, month, year) {
+                url = 'http://localhost:5000/api/employee/month-stats/' + empId + '/' + month + '/' + year;
+                return $http.get(url);
             }
         }
     }

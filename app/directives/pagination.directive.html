@@ -1,0 +1,17 @@
+<ul class="pagination">
+    <li ng-class="{disabled: currentPage == 1}">
+        <a href ng-click="onPageChange({page: 1})">&laquo;</a>
+    </li>
+    <li ng-class="{disabled: currentPage == 1}">
+        <a href ng-click="onPageChange({page: currentPage-1})">&lsaquo;</a>
+    </li>
+    <li ng-repeat="page in pages track by $index" ng-class="{'active': currentPage == page}">
+        <a href ng-click="onPageChange({page: page})">{{page}}</a>
+    </li>    
+    <li ng-class="{disabled: currentPage == totalPages}">
+        <a href ng-click="onPageChange({page: currentPage+1})">&rsaquo;</a>
+    </li>
+    <li ng-class="{disabled: currentPage == totalPages}">
+        <a href ng-click="onPageChange({page: totalPages})">&raquo;</a>
+    </li>
+</ul>

@@ -10,6 +10,8 @@
 
 ///<reference path="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" />
 
+///<reference path="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" />
+
 
 var app = angular.module("myApp", ["ui.router", "ui.calendar"]);
 

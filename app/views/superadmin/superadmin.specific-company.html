@@ -1,0 +1,184 @@
+<body>
+    <!-- customer details -->
+    <div class="home-content">
+        <div class="sales-boxes">
+            <div class="company box">
+                <div class="title" style="display: flex; justify-content: space-between;">
+                    {{companyData.companyName}}
+                    <div style="display: flex; flex-direction: column;">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" ng-if="companyData.isActive"
+                            style="font-size: 20px; color: #443a3a;" ng-click="openEditModal(companyData)">
+                            <i class='bx bxs-edit'>
+                                Edit
+                            </i>
+                        </a>
+
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" ng-if="companyData.isActive"
+                            style="font-size: 20px; color: #443a3a" ng-click="openDeleteModal(companyData)">
+                            <i class='bx bxs-user-x'>
+                                Deactivate
+                            </i>
+                        </a>
+                    </div>
+                </div>
+                <div class="sales-details">
+                    <div class="details">
+                        <p>
+                            <strong>
+                                Company ID:
+                            </strong>
+                            {{companyData._id}}
+                        </p>
+                        <p>
+                            <strong>
+                                Company Logo:
+                            </strong>
+                            {{companyData.companyLogo}}
+                        </p>
+                        <p>
+                            <strong>
+                                Date of Joining:
+                            </strong>
+                            {{companyData.createdAt | date:'dd/MM/yyyy'}}
+                        </p>
+                        <p ng-if="companyData.dateOfLeaving">
+                            <strong>
+                                Date of Leaving:
+                            </strong>
+                            {{companyData.dateOfLeaving | date:'dd/MM/yyyy'}}
+                        </p>
+                        <p>
+                            <strong>
+                                Point of Contact:
+                            </strong>
+                        <p>
+                            <strong>
+                                Email:
+                            </strong>
+                        </p>
+                        <p ng-repeat="email in companyData.email" style="margin-left: 20px;">
+                            {{email}}
+                        </p>
+                        </p>
+                        <p>
+                            <strong>
+                                Phone Number:
+                            </strong>
+                        <p ng-repeat="num in companyData.phoneNumber" style="margin-left: 20px;">
+                            {{num}}
+                        </p>
+                        </p>
+                        <p>
+                            <strong>
+                                Website:
+                            </strong>
+                        <p style="margin-left: 20px;">
+                            {{companyData.companyWebsite}}
+                        </p>
+                        </p>
+                        <p>
+                            <strong>
+                                Status:
+                            </strong>
+                            {{companyData.isActive ? 'Active' : 'Inactive'}}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Update Customer Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="updateForm" novalidate autocomplete="off">
+                        <h5>Customer Information</h5>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Name</span>
+                            <input type="text" ng-model="company.companyName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Logo</span>
+                            <input type="text" ng-model="company.companyLogo" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Email</span>
+                            <input type="text" ng-model="company.email" class=" form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Phone
+                                Number</span>
+                            <input type="text" ng-model="company.phoneNumber" class=" form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer
+                                Website</span>
+                            <input type="text" ng-model="company.companyWebsite" class=" form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="saveData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Deactivate Customer Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="deleteForm" novalidate autocomplete="off">
+                        <h5>Customer Information</h5>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Name</span>
+                            <input type="text" ng-model="company.companyName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Customer Email</span>
+                            <input type="text" ng-model="company.email" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <h6>Do you wish the deactivate this customer account?</h6>
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="deleteData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Deactivate Company
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

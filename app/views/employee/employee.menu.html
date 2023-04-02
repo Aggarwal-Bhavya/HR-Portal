@@ -64,7 +64,7 @@
                 <span>
                     <span id="headerAttendanceTimeMessage" ng-if="timeIn && !timeOut">Last In: </span>
                     <!-- <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{punchTimeIn}}</strong> -->
-                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn}}</strong>
+                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn | date: 'dd/MM/yyyy hh:mma'}}</strong>
 
                 </span>
             </div>

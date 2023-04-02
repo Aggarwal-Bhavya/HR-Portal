@@ -19,10 +19,6 @@ var employeeSchema = new Schema({
         min: 3, 
         default: ""
     },
-    // directManager: {
-    //     type: String,
-    //     default: ""
-    // }, 
     reportingTo: {
         managerId: {
             type: objectId,
@@ -56,10 +52,6 @@ var employeeSchema = new Schema({
         type: String,
         required: true
     },
-    // dateOfJoining: {
-    //     type: Date,
-    //     required: true
-    // },
     dateOfLeaving: {
         type: Date
     },

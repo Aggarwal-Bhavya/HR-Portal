@@ -1,0 +1,305 @@
+<body>
+
+    <loader is-loading="loading" style="text-align: center; margin-top: 15%;">
+    </loader>
+    <!-- branch details -->
+    <div class="home-content" ng-hide="loading">
+        <div class="sales-boxes">
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Active For: {{active}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Average Performance In {{year}}:
+                    {{avgPerformance}}</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Total Presence In {{year}}:
+                    {{presentCount}}</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Average Presence Rate In {{year}}:
+                    {{presentRate}}%
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Average Absence Rate In {{year}}:
+                    {{leaveRate}}%
+                </div>
+            </div>
+        </div>
+
+        <div class="sales-boxes">
+
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Total Leaves Applied: {{leavesApplied}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Approved Leaves: {{approvedLeaves}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Rejected Leaves: {{rejectedLeaves}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Average Leave Duration: {{avgDuration}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 18px;">Average Performance:
+                </div>
+            </div>
+
+        </div>
+
+        <div class="many-boxes" style="display: flex;">
+            <div class="sales-boxes" style="width: 75%; height: 100%">
+                <div class="company box">
+                    <div class="title" style="display: flex; justify-content: space-between;">
+                        {{employeeData.firstName}} {{employeeData.lastName}}
+                        <div style="display: flex; flex-direction: column;">
+
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" ng-if="employeeData.isActive"
+                                style="font-size: 18px; color: #443a3a;" ng-click="openEditModal(employee)">
+                                <i class='bx bxs-edit'>Edit</i>
+                            </a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                ng-if="employeeData.isActive" style="font-size: 18px; color: #443a3a;"
+                                ng-click="openDeleteModal(employee)">
+                                <i class='bx bxs-user-x'>Remove</i>
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="sales-details">
+                        <div class="details">
+                            <p>
+                                <strong>
+                                    Employee ID:
+                                </strong>
+                                {{employeeData._id}}
+                            </p>
+                            <p>
+                                <strong>
+                                    Personal Details
+                                </strong>
+                            </p>
+
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 10px;">Personal Email</th>
+                                            <th style="padding: 10px;">Phone Number</th>
+                                            <th style="padding: 10px;">DOB</th>
+                                            <th style="padding: 10px;">Gender</th>
+                                            <th style="padding: 10px;">Current Address</th>
+                                            <th style="padding: 10px;">Permanent Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.personalEmail}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>1234567891</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.dateOfBirth | date: 'dd-MM-yyyy'}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.gender}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.currentAddress}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.permanentAddress}}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p>
+                                <strong>
+                                    Employee Details
+                                </strong>
+                            </p>
+
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 10px;">Employee Email</th>
+                                            <th style="padding: 10px;">Joined At</th>
+                                            <th style="padding: 10px;" ng-if="employeeData.dateOfLeaving">Date of
+                                                Leaving</th>
+                                            <th style="padding: 10px;">Designation</th>
+                                            <th style="padding: 10px;">Department</th>
+                                            <th style="padding: 10px;">Reporting To</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.employeeEmail}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.createdAt | date: 'dd-MM-yyyy'}}</p>
+                                            </td>
+                                            <td style="padding: 10px;" ng-if="employeeData.dateOfLeaving">
+                                                <p>{{employeeData.dateOfLeaving | date: 'dd-MM-yyyy'}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.designation}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.department}}</p>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <p>{{employeeData.reportingTo.managerName}}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="sales-boxes" style="width: 50%; height: 100%">
+                <div class="company box">
+                    <month-year-selector on-month-year-change="updateData(month, year)"></month-year-selector>
+                    <canvas id="workingChart"></canvas>
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Update Employee Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="updateForm" novalidate autocomplete="off">
+                        <h6>Employee Personal Information</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                            <input type="text" ng-model="employee.firstName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                            <input type="text" ng-model="employee.lastName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
+                            <input type="text" ng-model="employee.personalEmail" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.maritalStatus">
+                                <option ng-value="status" ng-repeat="status in maritalStatuses">
+                                    {{status}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <h6>Employee Details</h6>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Designation</span>
+                            <input type="text" ng-model="employee.designation" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="dropdown">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Role</span>
+                            <select class="form-select" aria-label="Default select example"
+                                ng-model="employee.employeeRole">
+                                <option ng-value="role" ng-repeat="role in employeeRoles">
+                                    {{role}}
+                                </option>
+                            </select>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="saveData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DELETE MODAL -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Remove Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="deleteForm" novalidate autocomplete="off">
+                        <h5>Employee Information</h5>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Name</span>
+                            <input type="text" ng-model="employee.firstName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
+                            <input type="text" ng-model="employee.employeeEmail" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <h6>Do you wish to remove this employee?</h6>
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="deleteData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Remove Employee
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -4,9 +4,14 @@ app.factory('superadminService', [
     '$http',
     function($http) {
         var url = "";
+
         return {
             getAllCompanies: function() {
                 url = 'http://localhost:5000/api/superadmin/all-companies';
+                return $http.get(url);
+            },
+            getAllInactiveCompanies: function() {
+                url = 'http://localhost:5000/api/superadmin/inactive-companies';
                 return $http.get(url);
             },
             getCompany: function(id) {

@@ -6,16 +6,19 @@ app.controller('employeeCtrl', [
     '$window',
     'employeeService',
     function ($scope, $http, $window, employeeService) {
+        // var socket = io.connect('http://localhost:5000');
+        // var socket = io();
         var currUser = JSON.parse(localStorage.getItem('user'));
         $scope.viewName = currUser.firstName + ' ' + currUser.lastName;
 
         $scope.startDate = new Date(moment());
         $scope.endDate = new Date(moment());
         $scope.duration = null;
-        $scope.leaveTypeList = ['Casual', 'Sick Leave', 'Personal Leave', 'Vacation', 'Emergency']
+        $scope.leaveTypeList = ['casual', 'sick', 'personal', 'vacation', 'emergency'];
         $scope.leave = {};
 
         // var currTime = JSON.parse(localStorage.getItem('timeIn'));
+        $scope.leavesInfo = [];
 
         // $scope.timeIn = localStorage.getItem('timeIn');
         $scope.timeIn = JSON.parse(localStorage.getItem('timeIn'));
@@ -34,9 +37,9 @@ app.controller('employeeCtrl', [
                 var start = moment($scope.startDate);
                 var end = moment($scope.endDate);
                 var duration = 0;
-                
-                while(start.isSameOrBefore(end)) {
-                    if(start.day() !== 0 && start.day() !== 6) {
+
+                while (start.isSameOrBefore(end)) {
+                    if (start.day() !== 0 && start.day() !== 6) {
                         duration++;
                     }
                     start.add(1, 'd')
@@ -48,12 +51,22 @@ app.controller('employeeCtrl', [
             }
         };
 
-        $scope.$watchGroup(['startDate', 'endDate'], function() {
+        $scope.$watchGroup(['startDate', 'endDate'], function () {
             $scope.calculateDuration();
         });
 
 
         $scope.applyLeave = function () {
+            $scope.leave.employeeId = currUser.userId;
+            $scope.leave.employeeEmail = currUser.employeeEmail;
+            $scope.leave.employeeName = $scope.viewName;
+            $scope.leave.managerId = currUser.reportingManager.managerId;
+            $scope.leave.managerName = currUser.reportingManager.managerName;
+            $scope.leave.branchId = currUser.branchDetails.branchId;
+            $scope.leave.branchName = currUser.branchDetails.branchName;
+            $scope.leave.branchCity = currUser.branchDetails.branchCity;
+            $scope.leave.companyId = currUser.companyDetails.companyId;
+            $scope.leave.companyName = currUser.companyDetails.companyName;
             $scope.leave.leaveType = $scope.leaveType;
             $scope.leave.startDate = $scope.startDate;
             $scope.leave.endDate = $scope.endDate;
@@ -61,6 +74,18 @@ app.controller('employeeCtrl', [
             $scope.leave.comments = $scope.comments;
 
             console.log($scope.leave);
+            employeeService
+                .applyLeave($scope.leave)
+                .then(function (res) {
+                    // console.log(res)
+                    if (res.status === 201) {
+                        $window.alert('Leave applied successfully!');
+                        // $route.reload();
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
         }
 
 
@@ -84,9 +109,9 @@ app.controller('employeeCtrl', [
                 .then(function (res) {
                     if (res.status === 201) {
                         console.log(res.data.clockInData._id);
-                        console.log(res.data.clockInData.timeIn);
+                        console.log(res.data.clockInData.present.timeIn);
                         var timeInfo = {
-                            timeIn: res.data.clockInData.timeIn,
+                            timeIn: res.data.clockInData.present.timeIn,
                             timeId: res.data.clockInData._id
                         }
                         $scope.data = res.data.clockInData;
@@ -146,14 +171,17 @@ app.controller('employeeCtrl', [
                 employeeService
                     .getAttendance(currUser.userId, month, year)
                     .then(function (res) {
+                        // console.log(res.data.record);
                         var events = res.data.record.map(function (attendance) {
-                            var start = moment(attendance.date);
+                            var start = attendance.present ? moment(attendance.present.date) : moment(attendance.leave.date);
+                            // console.log(start);
                             return {
                                 title: attendance.status,
                                 start: start,
                                 color: getColorForStatus(attendance.status)
                             };
                         });
+                        // console.log(events);
 
                         var today = moment();
                         var firstDayOfMonth = moment().startOf('year');
@@ -207,12 +235,13 @@ app.controller('employeeCtrl', [
                 employeeService
                     .getHoursWorked(currUser.userId, month, year)
                     .then(function (res) {
+                        // console.log(res);
                         $scope.hoursData = res.data.hoursData;
                         // console.log(moment($scope.hoursData[0].date).format('YYYY-MM-DD'))
 
                         for (var i = 0; i < $scope.hoursData.length; i++) {
-                            dateLabels.push(moment($scope.hoursData[i].date).format('YYYY-MM-DD'));
-                            hoursData.push($scope.hoursData[i].hoursWorked);
+                            dateLabels.push(moment($scope.hoursData[i].present.date).format('YYYY-MM-DD'));
+                            hoursData.push($scope.hoursData[i].present.hoursWorked);
                         }
 
                         new Chart('hoursChart', {
@@ -336,5 +365,64 @@ app.controller('employeeCtrl', [
             })
             return colors;
         };
+
+        // getting leaves data
+        employeeService
+            .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId)
+            .then(function (res) {
+                $scope.leavesInfo = res.data.leaveData;
+                // console.log($scope.leavesInfo);
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+
+        // getting leaves that need to be approved
+        $scope.leavesToApprove = [];
+        employeeService
+            .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId)
+            .then(function (res) {
+                $scope.leavesToApprove = res.data.leavesToApprove;
+                // console.log($scope.leavesToApprove)
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+
+        // listen for the 'leave_approved' event
+        // socket.on('leave_approved', function (leaveId) {
+        //     // update the status of the leave with the given ID
+        //     for (var i = 0; i < $scope.leavesToApprove.length; i++) {
+        //         if ($scope.leavesToApprove[i]._id === leaveId) {
+        //             $scope.leavesToApprove[i].status = 'approved';
+        //             break;
+        //         }
+        //     }
+        // });
+
+        // listen for the 'leave_rejected' event
+        // socket.on('leave_rejected', function (leaveId) {
+        //     // update the status of the leave with the given ID
+        //     for (var i = 0; i < $scope.leavesToApprove.length; i++) {
+        //         if ($scope.leavesToApprove[i]._id === leaveId) {
+        //             $scope.leavesToApprove[i].status = 'rejected';
+        //             break;
+        //         }
+        //     }
+        // });
+
+        // approving leaves
+        $scope.approveRequest = function (leave) {
+            console.log('approved');
+            console.log(leave);
+            // socket.emit('approve_leave', leave._id);
+            
+        }
+
+        // rejecting leaves
+        $scope.rejectRequest = function (leave) {
+            console.log('rejected');
+            // socket.emit('reject_leave', leave._id);
+        }
     }
 ]);

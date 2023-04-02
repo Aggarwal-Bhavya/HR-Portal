@@ -7,7 +7,7 @@ var Employee = require('../models/employee');
 var Attendance = require('../models/attendance');
 
 // 1. Punching in attendance
-// 2. Punch ou attendabnce
+// 2. Punch out attendabnce
 // 3. viewing month-wise attendance record
 // 4. aggregations for month wise attendance
 // 5. aggregation for month wise hours worked
@@ -19,7 +19,7 @@ router
     .post('/mark-attendance', function (req, res) {
         Attendance.findOne({
             'employee.employeeId': req.body.employeeId,
-            'date': { $gte: startOfDay, $lt: endOfDay }
+            'present.date': { $gte: startOfDay, $lt: endOfDay }
         })
             .then(function (existingAttendance) {
                 if (existingAttendance) {
@@ -47,8 +47,11 @@ router
                             companyId: req.body.companyId,
                             companyName: req.body.companyName
                         },
-                        date: new Date(),
-                        timeIn: new Date(),
+                        present: {
+                            date: new Date(),
+                            timeIn: new Date(),
+                            hoursWorked: 0
+                        },
                         leave: null
                     })
 
@@ -132,9 +135,9 @@ router
                         { _id: id },
                         {
                             $set: {
-                                timeOut: today,
-                                hoursWorked: today.diff(item.timeIn, 'hours'),
-                                status: item.hoursWorked >= 8 ? 'present' : (item.hoursWorked >= 4 ? 'half-day' : 'leave')
+                                'present.timeOut': today,
+                                'present.hoursWorked': today.diff(item.present.timeIn, 'hours'),
+                                status: item.present.hoursWorked >= 8 ? 'present' : (item.present.hoursWorked >= 4 ? 'half-day' : 'leave')
                             }
                         },
                         { new: true }
@@ -166,25 +169,37 @@ router
         Attendance
             .find(
                 {
-                    $expr: {
-                        $and: [
-                            { $eq: [{ $month: { $ifNull: ['$date', null] } }, month] },
-                            { $eq: [{ $year: { $ifNull: ['$date', null] } }, year] }
-                        ]
-                    },
+                    $or: [
+                        {
+                            $and: [
+                                { $type: { $ifNull: ['$present.date', 'null'] } },
+                                { $eq: [{ $month: { $ifNull: ['$present.date', null] } }, month] },
+                                { $eq: [{ $year: { $ifNull: ['$present.date', null] } }, year] }
+                            ]
+                        },
+                        {
+                            $and: [
+                                { $type: { $ifNull: ['$leave.date', 'null'] } },
+                                { $eq: [{ $month: { $ifNull: ['$leave.date', null] } }, month] },
+                                { $eq: [{ $year: { $ifNull: ['$leave.date', null] } }, year] },
+                                // { 'leave.approvalStatus': 'approved' }
+                            ]
+                        }
+                    ],
                     'employee.employeeId': empId,
                     $or: [
                         { status: 'present' },
                         { status: 'half-day' },
                         { status: 'leave' },
-                        { status: 'pending' }
+                        // { status: 'pending' }
                     ]
                 },
                 {
                     _id: 0,
-                    date: 1,
-                    timeIn: 1,
-                    timeOut: 1,
+                    'present.date': 1,
+                    'present.timeIn': 1,
+                    'present.timeOut': 1,
+                    'leave.date': 1,
                     status: 1
                 }
             )
@@ -220,7 +235,7 @@ router
                 {
                     $match:
                     {
-                        date: {
+                        'present.date': {
                             $gte: new Date(dateString1),
                             $lt: new Date(dateString2)
                         }
@@ -229,14 +244,14 @@ router
                 {
                     $project: {
                         employee: 1,
-                        hoursWorked: 1,
-                        date: 1,
+                        'present.hoursWorked': 1,
+                        'present.date': 1,
                         status: 1
                     }
                 },
                 {
                     $sort: {
-                        date: 1
+                        'present.date': 1
                     }
                 }
             ])
@@ -270,10 +285,31 @@ router
                 {
                     $match:
                     {
-                        date: {
-                            $gte: new Date(dateString1),
-                            $lt: new Date(dateString2)
-                        }
+                        $or: [
+                            {
+                                'present.date': {
+                                    $gte: new Date(dateString1),
+                                    $lt: new Date(dateString2)
+                                }
+                            },
+                            {
+                                // $and: [
+                                //     {
+                                //         'leave.date': {
+                                //             $gte: new Date(dateString1),
+                                //             $lt: new Date(dateString2)
+                                //         }
+                                //     },
+                                //     {
+                                //         'leave.approvalStatus': 'approved'
+                                //     }
+                                // ]
+                                'leave.date': {
+                                    $gte: new Date(dateString1),
+                                    $lt: new Date(dateString2)
+                                }
+                            }
+                        ]
                     }
                 },
                 {
@@ -297,61 +333,6 @@ router
                     data: err
                 })
             })
-    })
-    .post('/apply-leave', function (req, res) {
-        var leave = {
-            leaveType: req.body.leaveType,
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
-            duration: req.body.duration,
-            comments: req.body.comments,
-            approvalStatus: "pending"
-        };
-
-        var leaveAttendance = new Attendance({
-            employee: {
-                employeeId: req.body.employeeId,
-                employeeEmail: req.body.employeeEmail,
-                employeeName: req.body.employeeName
-            },
-            reportingTo: {
-                managerId: req.body.managerId,
-                managerName: req.body.managerName,
-                // managerEmail: req.body.managerEmail
-            },
-            branch: {
-                branchId: req.body.branchId,
-                branchName: req.body.branchName,
-                branchCity: req.body.branchCity
-            },
-            company: {
-                companyId: req.body.companyId,
-                companyName: req.body.companyName
-            },
-            date: "",
-            timeIn: "",
-            leave: leave
-        });
-
-        leaveAttendance
-            .save()
-            .then(function (item) {
-                console.log(item);
-            })
-            .catch(function (err) {
-                console.log('Error applying for leave   ', err);
-            })
     });
-// .get('/show-efficiency/:empId/:month/:year', function(req, res) {
-//     var empId = req.params.empId;
-//     var month = req.params.month;
-//     var year = req.params.year;
-
-//     // Attendance  
-//     //     .aggregate([
-//     //         { $match: { 'employee.employeeId': ObjectId(empId) } },
-
-//     //     ])
-// });
 
 module.exports = router;

@@ -4,70 +4,130 @@ app.controller('companyAdminCtrl', [
     '$scope',
     '$http',
     '$window',
+    '$state',
+    '$rootScope',
     'companyService',
-    function ($scope, $http, $window, companyService) {
-        $scope.branches = [];
-        $scope.branchHeads = [];
+    function ($scope, $http, $window, $state, $rootScope, companyService) {
         var currCompany = JSON.parse(localStorage.getItem('user'));
 
         $scope.viewName = currCompany.companyDetails.companyName;
-        // console.log($scope.viewName)
-        // console.log(JSON.parse(localStorage.getItem('user')).companyDetails.companyId);
-        // console.log(currCompany.companyDetails.companyId);
 
+        $scope.currentPage = 1;
+        $scope.pageSize = 5;
+        $scope.totalPages = 1;
 
         // VIEWING ALL BRANCHES
-        companyService
-            .getAllBranches(currCompany.companyDetails.companyId)
-            .then(function (res) {
-                $scope.branches = res.data.branchData;
-                // console.log($scope.branches);
-                // console.log(res.data.companyData)
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+        if($state.current.name === 'sidepanel.viewall' || $state.current.name === 'sidepanel.dashboard') {
+            $scope.branches = [];
+            $scope.loading = true;
+            getAllBranches();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getAllBranches();
+            };
+        }
 
-        // VIEWING ALL BRANCH HEADS INFO
-        companyService
-            .getBranchHeads(currCompany.companyDetails.companyId)
-            .then(function (res) {
-                $scope.branchHeads = res.data.branchHeads;
-                // console.log($scope.branchHeads);
-            })
-            .catch(function(err) {
-                console.log(err);
-            })
-
-        // EDIT BRANCH INFO MODAL
-        $scope.openEditModal = function (branch) {
-            // console.log(branch._id);
+        function getAllBranches() {
             companyService
-                .getBranch(branch._id)
+                .getAllBranches(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize)
                 .then(function (res) {
-                    $scope.branch = res.data.branchData;
-                    // console.log($scope.company);
+                    $scope.loading = false;
+                    $scope.branches = res.data.branchData;
+                    $rootScope.branchCount = res.data.totalCount;
+                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        }
+
+        // VIEWING ALL EMPLOYEES + PAGINATION
+        if ($state.current.name === 'sidepanel.employees') {
+            $scope.employees = [];
+            $scope.loading = true;
+            getActiveEmployeeData();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getActiveEmployeeData();
+            };
+        }
+
+
+        function getActiveEmployeeData() {
+            companyService
+                .getAllCompanyEmployees(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize)
+                .then(function (res) {
+                    $scope.loading = false;
+                    $scope.employees = res.data.companyData;
+                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    console.log($scope.employees);
                 })
                 .catch(function (err) {
                     console.log(err);
                 })
-            $http.get('#editModal').modal('show');
-        };
+        }
 
-        $scope.saveData = function ($event) {
-            $event.preventDefault();
-
+        // GETTING COMPANY HEAD COUNT
+        if(!$rootScope.headCount) {
             companyService
-                .updateBranch($scope.branch)
-                .then(function (res) {
-                    // console.log(res.data);
-                    $window.location.reload();
+                .getCompanyHeadCount(currCompany.companyDetails.companyId)
+                .then(function(res) {
+                    $rootScope.headCount = res.data.headCount[0].count;
+                    // console.log($rootScope.headCount);
                 })
                 .catch(function (err) {
                     console.log(err);
                 })
-        };
-        
+        }
+
+        // GETTING EACH BRANCH PERFORMANCE
+        // avg = branch.totalWorkingHours / branch.employeeCount
+        if(!$rootScope.branchPerformance) {
+            var today = new Date();
+            // console.log(today.getFullYear());
+            companyService
+                .getBranchesPerformance(currCompany.companyDetails.companyId, today.getFullYear())
+                .then(function (res) {
+                    $rootScope.branchPerformance = res.data.branch;
+                    // console.log($rootScope.branchPerformance);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        // MORE DETAILS FOR SOME BRANCH
+        $scope.moreDetails = function (branch) {
+            // console.log(branch);
+            $rootScope.specifcBranch = branch;
+            $state.go("sidepanel.branch", { branch_id: branch._id });
+        }
+
+        // MORE DETAILS FOR SOME EMPLOYEE
+        // MORE DETAILS FOR SOME EMPLOYEE
+        $scope.moreDetailsEmployee = function (employee) {
+            $rootScope.specificEmployee = employee;
+            $state.go("sidepanel.employee", { employee_id: employee._id });
+            // console.log(employee)
+        }
+
 
         // UPDATING COMPANY ADMIN INFORMATION MODAL
         $scope.openUpdateCompanyAdminModal = function () {

@@ -38,7 +38,7 @@
                                     <p>{{company.isActive ? 'Active' : 'Inactive'}}</p>
                                 </td>
                                 <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
                                         style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(company)"><i
                                             class='bx bxs-edit'></i></a>
 
@@ -48,7 +48,16 @@
 
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#activateModal"
                                         style="font-size: 28px; color: #443a3a" ng-click="openActivateModal(company)"><i
-                                            class='bx bxs-user-check'></i></a>
+                                            class='bx bxs-user-check'></i></a> -->
+                                    <a type="submit" style="background-color: #4CAF50;
+                                                color: white;
+                                                border: none;
+                                                border-radius: 4px;
+                                                cursor: pointer;
+                                                padding: 2px;" ng-click="moreDetails(company)">
+                                        More Details
+                                    </a>
+
                                 </td>
                             </tr>
                         </tbody>
@@ -98,12 +107,12 @@
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="superButtonClose" data-bs-dismiss="modal" 
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Close
                             </button>
                             <button type="button" class="superButton" ng-click="saveData($event)"
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Save Changes
                             </button>
                         </div>
@@ -138,11 +147,11 @@
                         <h6>Do you wish the deactivate this customer account?</h6>
                         <div class="modal-footer">
                             <button type="button" class="superButtonClose" data-bs-dismiss="modal"
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Close
                             </button>
                             <button type="button" class="superButton" ng-click="deleteData($event)"
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Deactivate Company
                             </button>
                         </div>
@@ -176,11 +185,11 @@
                         <h6>Do you wish the activate this customer account?</h6>
                         <div class="modal-footer">
                             <button type="button" class="superButtonClose" data-bs-dismiss="modal"
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Close
                             </button>
                             <button type="button" class="superButton" ng-click="activateData($event)"
-                            style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
                                 Activate Company
                             </button>
                         </div>

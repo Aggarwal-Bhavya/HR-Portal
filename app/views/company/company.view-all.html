@@ -1,4 +1,6 @@
 <body>
+    <loader is-loading="loading" style="text-align: center; margin-top: 15%;">
+    </loader>
     <!-- customer details -->
     <div class="home-content">
         <div class="sales-boxes">
@@ -38,71 +40,24 @@
                                     <p>{{branch.isActive ? 'Active' : 'Inactive'}}</p>
                                 </td>
                                 <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
                                         style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(branch)"><i
-                                            class='bx bxs-edit'></i></a>
+                                            class='bx bxs-edit'></i></a> -->
+                                    <a type="submit" style="background-color: #4CAF50;
+                                            color: white;
+                                            border: none;
+                                            border-radius: 4px;
+                                            cursor: pointer;
+                                            padding: 2px;" ng-click="moreDetails(branch)">
+                                        More Details
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <pagination current-page="currentPage" total-pages="totalPages" on-page-change="loadPage(page)"></pagination>
             </div>
         </div>
     </div>
-
-    <!-- EDIT BRANCH MODAL -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Update Branch Information</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form name="updateForm" novalidate autocomplete="off">
-                        <h5>Branch Information</h5>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Name</span>
-                            <input type="text" ng-model="branch.branchName" class="form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Location</span>
-                            <input type="text" ng-model="branch.address" class="form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch City</span>
-                            <input type="text" ng-model="branch.city" class="form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Contact
-                                Details</span>
-                            <input type="text" ng-model="branch.contactNumber" class=" form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch
-                                Departments</span>
-                            <input type="text" ng-model="branch.departments" class=" form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
-                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
-                                Close
-                            </button>
-                            <button type="button" class="superButton" ng-click="saveData($event)"
-                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>

@@ -5,13 +5,25 @@ app.factory('hrService', [
     function ($http) {
         var url = "";
         return {
-            getAllEmployees: function(id) {
-                url = 'http://localhost:5000/api/hradmin/all-employees/' + id;
-                return $http.get(url);
+            getAllEmployees: function(id, currPage, pageSize) {
+                url = "http://localhost:5000/api/hradmin/all-employees/" + id;
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
-            getDepartmentHeads: function(id) {
+            getDepartmentHeads: function(id, currPage, pageSize) {
                 url = 'http://localhost:5000/api/hradmin/department-heads/' + id;
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
             getEmployeeInfo: function(id) {
                 url = 'http://localhost:5000/api/hradmin/employee-info/' + id;
@@ -29,9 +41,15 @@ app.factory('hrService', [
                 url = 'http://localhost:5000/api/hradmin/remove-employee/' + id;
                 return $http.put(url);
             },
-            getPastEmployees: function(id) {
+            getPastEmployees: function(id, currPage, pageSize) {
                 url = 'http://localhost:5000/api/hradmin/all-previous-employees/' + id;
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
             createEmployee: function(user) {
                 url = 'http://localhost:5000/api/hradmin/new-employee';

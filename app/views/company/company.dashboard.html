@@ -1,6 +1,43 @@
 <body>
     <!-- customer details -->
     <div class="home-content">
+        <div class="sales-boxes" style="justify-content: space-evenly;">
+            <div class="stats-card">
+                <div class="title" style="font-size: 20px;">Company Head Count:</div>
+                <div style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{headCount}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 20px;">Active Branch Count:</div>
+                <div style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{branchCount}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 20px;">Best Performing Branch:</div>
+                <div style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{branchPerformance[0].branchDetails.branchName}}
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="title" style="font-size: 20px;">Employee of the Month:</div>
+                <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{companies[0].createdAt | date: 'dd/MM/yyyy'}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title" style="font-size: 20px;">Employee Turnover Rate:</div>
+                <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{companies[0].companyName}}
+                </div>
+            </div>
+        </div>
+
         <div class="sales-boxes">
             <div class="company box">
                 <div class="title">Top Performing Branches</div>

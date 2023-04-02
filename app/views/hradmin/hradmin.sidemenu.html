@@ -37,22 +37,15 @@
                 </a>
             </li>
             <li>
-                <a>
+                <a ui-sref="sidemenu.attendance">
                     <i class='bx bxs-time' ></i>
                     <span class="link-name">Attendance</span>
                 </a>
             </li>
             <li>
-                <a>
+                <a ui-sref="sidemenu.leave.apply-leave">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="link-name">Leave</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#updateBranchAdminModal"
-                    ng-click="openUpdateBranchAdminModal()">
-                    <i class='bx bx-user-circle'></i>
-                    <span class="link-name">Update Data</span>
                 </a>
             </li>
             <li class="log-out">
@@ -72,9 +65,24 @@
                 <span class="dashboard">{{viewName}}</span>
             </div>
 
+
             <div class="search-box">
                 <input type="text" placeholder="Search..." ng-model="searchBar">
                 <i class='bx bx-search-alt-2'></i>
+            </div>
+
+            <div class="punch-btns">
+                <button type="button" class="btn btn-success mr-3" ng-click="TimeIn()" ng-if="!timeIn">
+                    Time In
+                </button>
+                <button type="button" class="btn btn-success mr-3" ng-click="TimeOut()" ng-if="timeIn && !timeOut">
+                    Time Out
+                </button>
+                <span>
+                    <span id="headerAttendanceTimeMessage" ng-if="timeIn && !timeOut">Last In: </span>
+                    <!-- <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{punchTimeIn}}</strong> -->
+                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn | date: 'dd/MM/yyyy hh:mma'}}</strong>
+                </span>
             </div>
         </nav>
 

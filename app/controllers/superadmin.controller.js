@@ -4,86 +4,60 @@ app.controller('superAdminCtrl', [
     '$scope',
     '$http',
     '$window',
+    '$state',
+    '$stateParams',
     'superadminService',
-    '$location',
-    function ($scope, $http, $window, superadminService, $location) {
-        $scope.companies = [];
+    '$rootScope',
+    function ($scope, $http, $window, $state, $stateParams, superadminService, $rootScope) {
 
         // VIEWING ALL CLIENTS
-        superadminService
-        .getAllCompanies()
-        .then(function (res) {
-            $scope.companies = res.data.companyData;
-            // console.log($scope.companies);
-            // console.log(res.data.companyData)
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
+        if (!$rootScope.companies) {
+            superadminService
+                .getAllCompanies()
+                .then(function (res) {
+                    // $scope.companies = res.data.companyData;
+                    $rootScope.companies = res.data.companyData;
+                    $scope.activeCount = res.data.companyData.length;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        }
 
+        // VIEWING ALL INACTIVE CLIENTS
+        if (!$rootScope.inactiveCompanies) {
+            superadminService
+                .getAllInactiveCompanies()
+                .then(function (res) {
+                    // $scope.inactiveCompanies = res.data.companyData;
+                    $rootScope.inactiveCompanies = res.data.companyData;
+                    $scope.inactiveCount = res.data.companyData.length;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
 
-        // EDIT COMPANY INFO MODAL
-        $scope.openEditModal = function (company) {
-                superadminService
+        // MORE DETAILS FOR SOME COMPANY
+        $scope.moreDetails = function (company) {
+            superadminService
                 .getCompany(company._id)
                 .then(function (res) {
-                    $scope.company = res.data.companyData;
-                    // console.log($scope.company);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-            $http.get('#editModal').modal('show');
-        };
-
-        $scope.saveData = function ($event) {
-            $event.preventDefault();
-
-            superadminService
-            .updateCompany($scope.company)
-                .then(function (res) {
-                    // console.log(res.data);
-                    $window.location.reload();
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-        };
-
-
-        // DEACTIVATING COMPANY ACCOUNT MODAL
-        $scope.openDeleteModal = function (company) {
-            superadminService
-            .getCompany(company._id)
-                .then(function (res) {
-                    $scope.company = res.data.companyData;
-                    // console.log($scope.company);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-            $http.get('#deleteModal').modal('show');
-        };
-
-        $scope.deleteData = function ($event) {
-            $event.preventDefault();
+                    // console.log(res.data.companyData);
+                    $rootScope.specificCompany = res.data.companyData;
+                    $state.go("sidebar.company", { company_id: company._id });
             
-            superadminService
-            .deactivateCompany($scope.company._id)
-                .then(function (res) {
-                    // console.log(res.data);
-                    $window.location.reload();
                 })
                 .catch(function (err) {
-                    console.log(err)
+                    console.log(err);
                 })
-        };
+            }
 
 
         // ACTIVATING A COMPANY ACCOUNT MODAL
         $scope.openActivateModal = function (company) {
             superadminService
-            .getCompany(company._id)
+                .getCompany(company._id)
                 .then(function (res) {
                     $scope.company = res.data.companyData;
                     // console.log($scope.company);
@@ -96,9 +70,9 @@ app.controller('superAdminCtrl', [
 
         $scope.activateData = function ($event) {
             $event.preventDefault();
-           
+
             superadminService
-            .activateCompany($scope.company._id)
+                .activateCompany($scope.company._id)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();
@@ -111,11 +85,12 @@ app.controller('superAdminCtrl', [
 
         // UPDATING SUPER ADMIN INFORMATION MODAL
         $scope.openUpdateSuperAdminModal = function () {
-            
+
             superadminService
-            .getSuperadmin()
+                .getSuperadmin()
                 .then(function (res) {
                     $scope.superadmin = res.data.adminData;
+                    $scope.doj = res.data.adminData.createdAt;
                     $scope.superadmin.password = '';
                     // console.log($scope.superadmin);
                 })
@@ -127,9 +102,9 @@ app.controller('superAdminCtrl', [
 
         $scope.updateSuperAdmin = function ($event) {
             $event.preventDefault();
-            
+
             superadminService
-            .updateSuperadmin($scope.superadmin)
+                .updateSuperadmin($scope.superadmin)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();
@@ -148,9 +123,9 @@ app.controller('superAdminCtrl', [
         $scope.addNewCompany = function ($event) {
             $event.preventDefault();
             // console.log($scope.company);
-            
+
             superadminService
-            .createCompany($scope.company)
+                .createCompany($scope.company)
                 .then(function (res) {
                     // console.log(res.data);
                     $window.location.reload();

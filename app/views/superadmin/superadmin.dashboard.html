@@ -2,6 +2,36 @@
 
     <!-- customer details -->
     <div class="home-content">
+        <div class="sales-boxes" style="justify-content: space-evenly;">
+            <div class="stats-card">
+                <div class="title">Active Client Count:</div>
+                <div ng-model="activeCount" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{activeCount}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title">Inactive Client Count:</div>
+                <div ng-model="inactiveCount" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{inactiveCount}}
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="title">Last Client Was:</div>
+                <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{companies[0].companyName}}
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="title">Last Client Joined On:</div>
+                <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{companies[0].createdAt | date: 'dd/MM/yyyy'}}
+                </div>
+            </div>
+        </div>
+
         <div class="sales-boxes">
             <div class="company box">
                 <div class="title">Recent Clients</div>
