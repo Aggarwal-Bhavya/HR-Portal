@@ -1,0 +1,120 @@
+<body>
+    <!-- customer details -->
+    <div class="home-content">
+        <div class="sales-boxes" style="justify-content: space-evenly;">
+            <div class="stats-card">
+                <div class="title">Joining Date:</div>
+                <div ng-model="activeCount" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{myData.createdAt | date: 'dd-MM-yyyy'}}
+                </div>
+            </div>
+
+            <!-- <div class="stats-card">
+                <div class="title">Active For:</div>
+                <div ng-model="activeCount" style="text-align: center; font-weight: 450; font-size: 20px;">
+                    {{active}}
+                </div>
+            </div> -->
+        </div>
+
+        <div class="sales-boxes">
+
+            <div class="company box">
+                <div class="title">Employee Details</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Reporting To</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Joined At</th>
+                                <!-- <th>Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p>{{myData._id}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.firstName + ' ' + myData.lastName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.reportingTo.managerName}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.employeeDetails.department}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.employeeDetails.designation}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.createdAt | date: 'dd-MM-yyyy'}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="title">Personal Details</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contact Number</th>
+                                <th>Personal Email</th>
+                                <th>DOB</th>
+                                <th>Blood Group</th>
+                                <th>Aadhar Number</th>
+                                <th>Pan Number</th>
+                                <th>Current Address</th>
+                                <th>Permanent Address</th>
+                                <!-- <th>Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p>{{myData.personalDetails.contact.phoneNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.contact.personalEmail}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.dateOfBirth | date: 'dd-MM-yyyy'}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.bloodGroup}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.aadharNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.panNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.currentAddress.street + ', ' +
+                                        myData.personalDetails.currentAddress.city + ', ' +
+                                        myData.personalDetails.currentAddress.pincode}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.permanentAddress.street + ', ' +
+                                        myData.personalDetails.permanentAddress.city + ', ' +
+                                        myData.personalDetails.permanentAddress.pincode}}</p>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="button">
+                    <a ui-sref="menu.attendance">See All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>

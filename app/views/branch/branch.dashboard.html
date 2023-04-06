@@ -12,13 +12,13 @@
             </div>
 
             <div class="stats-card">
-                <div class="title" style="font-size: 20px;">Average Performance Rate:</div>
+                <div class="title" style="font-size: 20px;">Branch Created At:</div>
                 <div style="text-align: center; font-weight: 450; font-size: 20px;">
-                    {{branchCount}}
+                    {{creationDate | date: 'dd-MM-yyyy hh:ssa'}}
                 </div>
             </div>
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 20px;">Employee of the Year:</div>
                 <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
                     {{companies[0].createdAt | date: 'dd/MM/yyyy'}}
@@ -37,7 +37,7 @@
                 <div ng-model="doj" style="text-align: center; font-weight: 450; font-size: 20px;">
                     {{companies[0].companyName}}
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="sales-boxes">
@@ -68,10 +68,10 @@
                                     <p>{{employee.reportingTo.managerName}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.department}}</p>
+                                    <p>{{employee.employeeDetails.department}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.designation}}</p>
+                                    <p>{{employee.employeeDetails.designation}}</p>
                                 </td>
                                 <td>
                                     <p>{{employee.isActive ? 'Active' : 'Inactive'}}</p>

@@ -51,7 +51,7 @@ app.controller('loginController', [
                 } else if(userInfo.employeeRole == 'hradmin' && userInfo.companyDetails.companyName != '' && userInfo.branchDetails.branchName != '') {
                     $location.path('/sidemenu/hradmin');
                 } else if((userInfo.employeeRole == 'employee' || userInfo.employeeRole == 'departmenthead') && userInfo.companyDetails.companyName != '' && userInfo.branchDetails.branchName != '') {
-                    $location.path('/menu');
+                    $location.path('/menu/dashboard');
                 }
             })
             .catch(function(err) {

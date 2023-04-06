@@ -1,4 +1,4 @@
-var Employee = require('../../models/employee');
+// var Employee = require('../../models/employee');
 var Attendance = require('../attendance-operations/attendance.model');
 var moment = require('moment');
 
@@ -7,10 +7,11 @@ var endOfDay = moment().endOf('day').toDate();
 
 var markAttendanceOperation = {
     timeInAttendance: function (req, res) {
-        Attendance.findOne({
-            'employee.employeeId': req.body.employeeId,
-            'present.date': { $gte: startOfDay, $lt: endOfDay }
-        })
+        Attendance
+            .findOne({
+                'employee.employeeId': req.body.employeeId,
+                'present.date': { $gte: startOfDay, $lt: endOfDay }
+            })
             .then(function (existingAttendance) {
                 if (existingAttendance) {
                     res

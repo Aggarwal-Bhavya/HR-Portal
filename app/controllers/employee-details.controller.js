@@ -182,8 +182,8 @@ app.controller('employeeDetailsCtrl', [
                 }
 
                 var joinedAt = new Date($scope.employeeData.createdAt);
-                if ($scope.employeeData.dateOfLeaving) {
-                    activeDays(new Date($scope.employeeData.dateOfLeaving), joinedAt);
+                if ($scope.employeeData.employeeDetails.dateOfLeaving) {
+                    activeDays(new Date($scope.employeeData.employeeDetails.dateOfLeaving), joinedAt);
                 } else {
                     activeDays(moment(), joinedAt);
                 }

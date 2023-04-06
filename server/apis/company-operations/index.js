@@ -14,6 +14,7 @@ router.put('/deactivate-company/:id', companyOperations.deactivateCompany);
 router.put('/activate-company/:id', companyOperations.activateCompany);
 router.get('/company-admin-info/:id', companyAdminActions.getCompanyAdminInfo);
 router.put('/update-companyadmin', companyAdminActions.updateCompanyAdminInfo);
+router.put('/change-password', companyAdminActions.changePassword);
 router.get('/company-head-count/:id', companyStats.companyHeadCount);
 router.get('/branch-performance/:id/:year', companyStats.branchPerformance);
 router.get('/monthly-performance/:id/:month/:year', companyStats.performanceAnalysis);

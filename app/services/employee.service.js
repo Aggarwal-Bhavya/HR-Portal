@@ -29,13 +29,25 @@ app.factory('employeeService', [
                 url = 'http://localhost:5000/api/attendance/apply-leave';
                 return $http.post(url, leave);
             },
-            getLeavesInfo: function(empId, branchId) {
+            getLeavesInfo: function(empId, branchId, currPage, pageSize) {
                 url = 'http://localhost:5000/api/attendance/get-leaves/' + empId + '/' + branchId;
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
-            getLeavesToApprove: function(empId, branchId) {
+            getLeavesToApprove: function(empId, branchId, currPage, pageSize) {
                 url = 'http://localhost:5000/api/attendance/to-approve-leaves/' + empId + '/' + branchId;
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
             yearlyRatios: function(empId, year) {
                 url = 'http://localhost:5000/api/employee/year-stats/' + empId + '/' + year;
@@ -44,6 +56,10 @@ app.factory('employeeService', [
             monthlyStats: function(empId, month, year) {
                 url = 'http://localhost:5000/api/employee/month-stats/' + empId + '/' + month + '/' + year;
                 return $http.get(url);
+            },
+            updatingLeaveStatus: function(leaveId, leave) {
+                url = 'http://localhost:5000/api/attendance/leave-status/' + leaveId;
+                return $http.put(url, leave);
             }
         }
     }

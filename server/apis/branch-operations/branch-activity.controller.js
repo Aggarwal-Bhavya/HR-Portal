@@ -1,5 +1,60 @@
 var Branch = require("../branch-operations/branch.model");
-var Employee = require("../../models/employee");
+var Employee = require("../employee-operations/employee.model")
+var crypto = require("crypto");
+var bcrypt = require("bcrypt");
+var nodemailer = require("nodemailer");
+
+function hashPassword(password) {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(password, salt);
+    return { salt, hash };
+}
+
+function generateRandomString(length) {
+    return crypto.randomBytes(Math.ceil(length / 2))
+        .toString('hex')
+        .slice(0, length);
+}
+
+function sendMail(employeeEmail, password) {
+    var transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'aggarwal.bhavya57@gmail.com',
+            pass: 'ojgqmtrditwvbvor',
+        },
+    });
+
+    var mailOptions = {
+        from: 'aggarwal.bhavya57@gmail.com',
+        to: employeeEmail,
+        subject: 'Account Created',
+        html: `<p><strong>Congratulations!</strong></p><br>You are the branch admin. The password for your account is <strong>${password}<strong>. <br>Please log in and change it.`
+    }
+
+    transporter.sendMail(mailOptions, function (err) {
+        if (err) {
+            console.log('Error sending mail', err)
+        } else {
+            console.log('Email sent successfully!')
+        }
+    })
+}
+
+// function generateEmployeeId() {
+//     const length = 7;
+//     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//     let result = '';
+
+//     for (let i = 0; i < length; i++) {
+//         result += chars.charAt(Math.floor(Math.random() * chars.length));
+//     }
+
+//     return result;
+// }
 
 var branchActivity = {
     getAllBranchInfo: function (req, res) {
@@ -38,33 +93,53 @@ var branchActivity = {
         var companyName = req.body.companyName;
         var newBranch = new Branch({
             branchName: req.body.branchName,
-            departments: req.body.departments,
+            // departments: req.body.departments,
             address: req.body.address,
-            city: req.body.city,
-            contactNumber: req.body.contactNumber,
+            city: req.body.branchCity,
+            // contactNumber: req.body.contactNumber,
             company: {
                 companyId: id,
                 companyName: companyName
             }
         });
 
+        if (req.body.departments) {
+            var departmentArr = req.body.departments.split(',');
+            departmentArr.forEach(function (dept) {
+                newBranch.departments.push(dept.trim());
+            })
+        }
+
+        if (req.body.contactNumber) {
+            var contactArr = req.body.contactNumber.split(',');
+            contactArr.forEach(function (num) {
+                newBranch.contactNumber.push(num.trim());
+            })
+        }
+
         newBranch
             .save()
             .then(function (data) {
+                var password = generateRandomString(10);
+                var { salt, hash } = hashPassword(password);
                 var branchAdmin = new Employee({
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    employeeEmail: req.body.employeeEmail,
-                    personalEmail: req.body.personalEmail,
-                    password: req.body.password,
-                    department: "rda",
-                    bloodGroup: "rda",
-                    gender: "rda",
-                    maritalStatus: "rda",
-                    currentAddress: "rda",
-                    permanentAddress: "rda",
+                    password: password,
+                    passwordHash: hash,
+                    passwordSalt: salt,
+                    personalDetails: {
+                        contact: {
+                            personalEmail: req.body.personalEmail,
+                            phoneNumber: req.body.phoneNumber
+                        },
+                        gender: req.body.gender,
+                    },
+                    employeeDetails: {
+                        employeeEmail: req.body.employeeEmail,
+                        designation: "Branch Admin",
+                    },
                     employeeRole: "branchadmin",
-                    aadharNumber: req.body.aadharNumber,
                     company: {
                         companyId: data.company.companyId,
                         companyName: data.company.companyName
@@ -79,6 +154,7 @@ var branchActivity = {
                 branchAdmin
                     .save()
                     .then(function (item) {
+                        sendMail(item.employeeDetails.employeeEmail, password);
                         res.status(201).json({
                             message: 'Branch and admin created successfully',
                             data: req.body,
@@ -125,17 +201,35 @@ var branchActivity = {
 
     updateSpecificBranch: function (req, res) {
         var id = req.params.id;
+        // console.log(req.body);
 
         var updateBranch = {
             branchName: req.body.branchName,
-            departments: req.body.departments,
             address: req.body.address,
             city: req.body.city,
-            contactNumber: req.body.contactNumber
+            departments: [],
+            contactNumber: []
         }
 
+        if (req.body.departments) {
+
+            req.body.departments.forEach(function (dept) {
+                updateBranch.departments.push(dept.trim());
+            })
+
+        }
+
+        if (req.body.contactNumber) {
+
+            req.body.contactNumber.forEach(function (num) {
+                updateBranch.contactNumber.push(num.trim());
+            })
+
+        }
+        console.log(updateBranch)
+
         Branch
-            .findByIdAndUpdate(
+            .updateOne(
                 { _id: id },
                 { $set: updateBranch },
                 { new: true }
@@ -171,10 +265,10 @@ var branchActivity = {
                 {
                     firstName: 1,
                     lastName: 1,
-                    designation: 1,
-                    employeeEmail: 1,
-                    personalEmail: 1,
-                    gender: 1,
+                    'employeeDetails.designation': 1,
+                    'employeeDetails.employeeEmail': 1,
+                    // personalDetails.personalEmail: 1,
+                    personalDetails: 1,
                     createdAt: 1
                 })
             .then(function (item) {

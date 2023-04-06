@@ -49,6 +49,12 @@
                     <span class="link-name">Update Admin</span>
                 </a>
             </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#setPasswordModal" ng-click="openSetPasswordModal()">
+                    <i class='bx bxl-gmail'></i>
+                    <span class="link-name">Change Password</span>
+                </a>
+            </li>
             <li class="log-out">
                 <a href="#">
                     <i class='bx bx-log-out'></i>
@@ -75,8 +81,8 @@
         <main ui-view> </main>
 
         <!-- BRANCH ADMIN UPDATE THEIR PROFILE MODAL -->
-        <div class="modal fade" id="updateBranchAdminModal" tabindex="-1"
-            aria-labelledby="updateBranchAdminModalLabel" aria-hidden="true">
+        <div class="modal fade" id="updateBranchAdminModal" tabindex="-1" aria-labelledby="updateBranchAdminModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -87,44 +93,79 @@
                     <div class="modal-body">
                         <form name="upadteBranchAdminForm" novalidate autocomplete="off">
                             <h5>Branch Admin Information</h5>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
-                                <input type="text" ng-model="branchadmin.firstName" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="branchadmin.firstName">First Name</label>
+                                <input type="text" ng-model="branchadmin.firstName" class="form-control">
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                            <div class="form-group">
+                                <label for="branchadmin.lastName">Last Name</label>
                                 <input type="text" ng-model="branchadmin.lastName" class="form-control"
                                     aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
-                                <input type="text" ng-model="branchadmin.employeeEmail" class="form-control"
+                            <h6 style="margin-top: 15px;">Employee Details</h6>
+                            <div class="form-group">
+                                <label for="branchadmin.employeeDetails.employeeEmail">Employee Email</label>
+                                <input type="text" ng-model="branchadmin.employeeDetails.employeeEmail"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <h6 style="margin-top: 15px;">Personal Details</h6>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.contact.personalEmail">Personal Email</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.contact.personalEmail"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.contact.phoneNumber">Phone Number</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.contact.phoneNumber"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.dateOfBirth">Date Of Birth
+                                    (MM-DD-YYY)</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.dateOfBirth"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.bloodGroup">Blood Group</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.bloodGroup"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.aadharNumber">Aadhar Number</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.aadharNumber"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.panNumber">Pan Number</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.panNumber" class="form-control"
                                     aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
-                                <input type="text" ng-model="branchadmin.personalEmail" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.currentAddress.street">Current Address
+                                    Street</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.currentAddress.street"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">New Password</span>
-                                <input type="text" ng-model="branchadmin.password" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.currentAddress.city">Current Address
+                                    City</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.currentAddress.city"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
                             </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
-                                <select class="form-select" aria-label="Default select example"
-                                    ng-model="branchadmin.maritalStatus">
-                                    <option ng-value="status" ng-repeat="status in maritalStatuses">
-                                        {{status}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Current Address</span>
-                                <input type="text" ng-model="branchadmin.currentAddress" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="branchadmin.personalDetails.currentAddress.pincode">Current Address
+                                    Pincode</label>
+                                <input type="text" ng-model="branchadmin.personalDetails.currentAddress.pincode"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="superButtonClose" data-bs-dismiss="modal"
@@ -154,102 +195,152 @@
                     <div class="modal-body">
                         <form name="newEmployeeForm" novalidate autocomplete="off">
                             <h6>Employee Personal Information</h6>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
-                                <input type="text" ng-model="employee.firstName" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="employee.firstName">First Name</label>
+                                <input type="text" ng-model="employee.firstName" class="form-control" ng-required="true"
+                                    name="firstName">
+                                <div ng-if="newEmployeeForm.firstName.$dirty && newEmployeeForm.firstName.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.firstName.$error.required">{{errorMessages.required}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
-                                <input type="text" ng-model="employee.lastName" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="employee.lastName">Last Name</label>
+                                <input type="text" ng-model="employee.lastName" class="form-control" ng-required="true"
+                                    name="lastName">
+                                <div ng-if="newEmployeeForm.lastName.$dirty && newEmployeeForm.lastName.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.lastName.$error.required">{{errorMessages.required}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
-                                <input type="text" ng-model="employee.personalEmail" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="employee.personalEmail">Personal Email</label>
+                                <input type="email" ng-model="employee.personalEmail" class="form-control"
+                                    ng-required="true" name="personalEmail">
+                                <div ng-show="newEmployeeForm.personalEmail.$dirty && newEmployeeForm.personalEmail.$error.required"
+                                    class="errorMessage">
+                                    {{errorMessages.required}}
+                                </div>
+                                <div ng-show="newEmployeeForm.personalEmail.$dirty && newEmployeeForm.personalEmail.$error.email"
+                                    class="errorMessage">
+                                    {{errorMessages.pattern}}
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Date of Birth</span>
+                            <div class="form-group">
+                                <label for="employee.phoneNumber">Phone Number</label>
+                                <input type="text" ng-model="employee.phoneNumber" class="form-control"
+                                    name="phoneNumber" required ng-pattern="/^\d{10}$/">
+                                <div ng-show="newEmployeeForm.phoneNumber.$dirty && newEmployeeForm.phoneNumber.$invalid"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.phoneNumber.$error.required">{{
+                                        errorMessages.required}}</div>
+                                    <div ng-show="newEmployeeForm.phoneNumber.$error.pattern">{{ errorMessages.pattern
+                                        }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee.dateOfBirth">Date of Birth (MM-DD-YYYY)</label>
                                 <input type="text" ng-model="employee.dateOfBirth" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                    ng-required="true" name="dateOfBirth">
+                                <div ng-if="newEmployeeForm.dateOfBirth.$dirty && newEmployeeForm.dateOfBirth.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.dateOfBirth.$error.required">
+                                        {{errorMessages.required}}</div>
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Blood Group</span>
-                                <input type="text" ng-model="employee.bloodGroup" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Gender</span>
-                                <select class="form-select" aria-label="Default select example"
-                                    ng-model="employee.gender">
-                                    <option ng-value="gender" ng-repeat="gender in genders">
-                                        {{gender}}
-                                    </option>
+                            <div class="form-group">
+                                <label for="employee.gender">Gender</label>
+                                <select ng-model="employee.gender" class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default" name="gender" required>
+                                    <option value="">-- Select Gender --</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
                                 </select>
+                                <div ng-show="newEmployeeForm.gender.$dirty && newEmployeeForm.gender.$invalid"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.gender.$error.required">{{errorMessages.required}}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Aadhar Number</span>
+                            <div class="form-group">
+                                <label for="employee.pStreet">Permanent Address
+                                    Street</label>
+                                <input type="text" ng-model="employee.pStreet" class="form-control" ng-required="true"
+                                    name="pStreet">
+                                <div ng-if="newEmployeeForm.pStreet.$dirty && newEmployeeForm.pStreet.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.pStreet.$error.required">{{errorMessages.required}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee.pCity">Permanent Address City</label>
+                                <input type="text" ng-model="employee.pCity" class="form-control" ng-required="true"
+                                    name="pCity">
+                                <div ng-if="newEmployeeForm.pCity.$dirty && newEmployeeForm.pCity.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newEmployeeForm.pCity.$error.required">{{errorMessages.required}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee.pPincode">Permanent Address
+                                    Pincode</label>
+                                <input type="text" ng-model="employee.pPincode" class="form-control" ng-required="true"
+                                    name="pPincode" ng-pattern="/^\d{6}$/">
+                                    <div ng-show="newEmployeeForm.pPincode.$dirty && newEmployeeForm.pPincode.$error.required" class="errorMessage">
+                                        {{errorMessages.required}}
+                                    </div>
+                                    <div ng-show="newEmployeeForm.pPincode.$dirty && newEmployeeForm.pPincode.$error.pattern" class="errorMessage">
+                                        {{errorMessages.pattern}}
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee.aadharNumber">Aadhar Number</label>
                                 <input type="text" ng-model="employee.aadharNumber" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                    ng-required="true" name="aadharNumber" ng-pattern="/^\d{12}$/">
+                                    <div ng-show="newEmployeeForm.aadharNumber.$dirty && newEmployeeForm.aadharNumber.$error.required" class="errorMessage">
+                                        {{errorMessages.required}}
+                                    </div>
+                                    <div ng-show="newEmployeeForm.aadharNumber.$dirty && newEmployeeForm.aadharNumber.$error.pattern" class="errorMessage">
+                                        {{errorMessages.pattern}}
+                                    </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Pan Number</span>
-                                <input type="text" ng-model="employee.panNumber" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Visa Type</span>
-                                <input type="text" ng-model="employee.visaType" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
-                                <select class="form-select" aria-label="Default select example"
-                                    ng-model="employee.maritalStatus">
-                                    <option ng-value="status" ng-repeat="status in maritalStatuses">
-                                        {{status}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Current Address</span>
-                                <input type="text" ng-model="employee.currentAddress" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Permanent Address</span>
-                                <input type="text" ng-model="employee.permanentAddress" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-
                             <h6>Employee Details</h6>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
-                                <input type="text" ng-model="employee.employeeEmail" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                            <div class="form-group">
+                                <label for="employee.employeeEmail">Employee Email</label>
+                                <input type="email" ng-model="employee.employeeEmail" class="form-control"
+                                ng-required="true" name="employeeEmail">
+                                <div ng-show="newEmployeeForm.employeeEmail.$dirty && newEmployeeForm.employeeEmail.$error.required" class="errorMessage">
+                                    {{errorMessages.required}}
+                                </div>
+                                <div ng-show="newEmployeeForm.employeeEmail.$dirty && newEmployeeForm.employeeEmail.$error.email" class="errorMessage">
+                                    {{errorMessages.pattern}}
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
-                                <input type="text" ng-model="employee.password" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Designation</span>
+                            <div class="form-group">
+                                <label for="employee.designation">Designation</label>
                                 <input type="text" ng-model="employee.designation" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                ng-required="true" name="designation">
+                                <div ng-if="newEmployeeForm.designation.$dirty && newEmployeeForm.designation.$error.required" class="errorMessage">
+                                    <div ng-show="newEmployeeForm.designation.$error.required">{{errorMessages.required}}</div>
+                                </div>
                             </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Department</span>
+                            <div class="form-group">
+                                <label for="employee.department">Department</label>
                                 <select class="form-select" aria-label="Default select example"
                                     ng-model="employee.department">
-                                    <option ng-value="dept" ng-repeat="dept in branch.departments">
+                                    <option ng-value="dept" ng-repeat="dept in departments">
                                         {{dept}}
                                     </option>
                                 </select>
                             </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Employee Role</span>
+                            <div class="form-group">
+                                <label for="employee.employeeRole">Employee Role</label>
                                 <select class="form-select" aria-label="Default select example"
                                     ng-model="employee.employeeRole">
                                     <option ng-value="role" ng-repeat="role in employeeRoles">
@@ -259,18 +350,24 @@
                             </div>
 
                             <h6>Reporting Manager Details</h6>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Employee ID</span>
+                            <div class="form-group">
+                                <label for="employee.managerid">Reporting Manager Employee ID</label>
                                 <input type="text" ng-model="employee.managerid" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                ng-required="true" name="managerid">
+                                <div ng-if="newEmployeeForm.managerid.$dirty && newEmployeeForm.managerid.$error.required" class="errorMessage">
+                                    <div ng-show="newEmployeeForm.managerid.$error.required">{{errorMessages.required}}</div>
+                                </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Name</span>
+                            <div class="form-group">
+                                <label for="employee.managername">Reporting Manager Name</label>
                                 <input type="text" ng-model="employee.managername" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                ng-required="true" name="employeeEmail">
+                                <div ng-if="newEmployeeForm.managername.$dirty && newEmployeeForm.managername.$error.required" class="errorMessage">
+                                    <div ng-show="newEmployeeForm.managername.$error.required">{{errorMessages.required}}</div>
+                                </div>
                             </div>
-                            <div class="dropdown">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Reporting Manager Role</span>
+                            <div class="form-group">
+                                <label for="employee.managerrole">Reporting Manager Role</label>
                                 <select class="form-select" aria-label="Default select example"
                                     ng-model="employee.managerrole">
                                     <option ng-value="role" ng-repeat="role in employeeRoles">
@@ -285,9 +382,44 @@
                                     Close
                                 </button>
                                 <button type="button" class="superButton" ng-click="addNewEmployee($event)"
-                                    style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                    style="color: white; background-color: #5433ea; border: none; border-radius: 5px;"
+                                    ng-disabled="!employee.firstName || !employee.lastName || !employee.phoneNumber || !employee.dateOfBirth || !employee.gender || !employee.pStreet || !employee.pCity || !employee.pPincode || !employee.aadharNumber || !employee.employeeEmail || !employee.designation || !employee.department || !employee.employeeRole || !employee.managerid || !employee.managername || !employee.managerrole">
                                     Add Employee
                                 </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHANGE PASSWORD MODAL -->
+        <div class="modal fade" id="setPasswordModal" tabindex="-1" aria-labelledby="setPasswordModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="setPasswordModalLabel">Set Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="setPasswordForm" novalidate autocomplete="off">
+                            <h5>Change Password</h5>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" ng-model="newPassword" class="form-control" id="newPassword"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" ng-model="confirmPassword" class="form-control"
+                                    id="confirmPassword" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" ng-click="changePassword($event)"
+                                    ng-disabled="setPasswordForm.$invalid || (newPassword !== confirmPassword)">Save
+                                    changes</button>
                             </div>
                         </form>
                     </div>

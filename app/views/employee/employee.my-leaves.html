@@ -12,7 +12,7 @@
                             <th>Leave Type</th>
                             <th>Comments</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <!-- <th>Actions</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -35,102 +35,19 @@
                             <td>
                                 <p>{{leave.leaveDetails.approvalStatus}}</p>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
                                     style="font-size: 25px; color: #443a3a;" ng-click="openEditModal(employee)"><i
                                         class='bx bxs-edit'></i></a>
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                     style="font-size: 28px; color: #443a3a" ng-click="openDeleteModal(employee)"><i
                                         class='bx bxs-user-x'></i></i></a>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- <div class="title">Approved Leaves</div>
-            <div class="sales-details">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Applied On</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Leave Type</th>
-                            <th>Comments</th>
-                            <th>Status</th>
-                            <th>Approved On</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="leave in leavesInfo">
-                            <td>
-                                <p>{{leave.createdAt}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.date}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.date}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.leaveType}} leave</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.comments}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.approvalStatus}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.approvalStatus}}</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> -->
-
-            <!-- <div class="title">Rejected Leaves</div>
-            <div class="sales-details">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Applied On</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Leave Type</th>
-                            <th>Comments</th>
-                            <th>Status</th>
-                            <th>Rejected On</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="leave in leavesInfo">
-                            <td>
-                                <p>{{leave.createdAt}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.date}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.date}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.leaveType}} leave</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.comments}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.approvalStatus}}</p>
-                            </td>
-                            <td>
-                                <p>{{leave.leave.approvalStatus}}</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> -->
+            <pagination current-page="currentPage" total-pages="totalPages" on-page-change="loadPage(page)"></pagination>
         </div>
     </div>
 </div>

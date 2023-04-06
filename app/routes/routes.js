@@ -161,6 +161,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $u
             templateUrl: "./views/employee/employee.menu.html",
             controller: "employeeCtrl"
         })
+        .state("menu.dashboard", {
+            url: "/dashboard",
+            templateUrl: "./views/employee/employee.dashboard.html",
+            controller: "employeeCtrl"
+        })
         .state("menu.attendance", {
             url: "/attendance",
             templateUrl: "./views/employee/employee.attendance.html",

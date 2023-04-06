@@ -6,17 +6,15 @@ app.controller('hrAdminCtrl', [
     '$window',
     '$state',
     '$rootScope',
+    '$element',
     'employeeService',
     'hrService',
-    function ($scope, $http, $window, $state, $rootScope, employeeService, hrService) {
+    'companyService',
+    function ($scope, $http, $window, $state, $rootScope, $element, employeeService, hrService, companyService) {
         $scope.hradmin = {};
-        $scope.departmentHeads = [];
-        $scope.employees = [];
-        $scope.pastEmployees = [];
 
-        $scope.maritalStatuses = ["married", "single", "rda"];
         $scope.employeeRoles = ["departmenthead", "employee"];
-        $scope.genders = ["male", "female", "other", "rda"];
+        $scope.genders = ["male", "female", "other"];
 
 
         var currUser = JSON.parse(localStorage.getItem('user'));
@@ -28,7 +26,7 @@ app.controller('hrAdminCtrl', [
         $scope.totalPages = 1;
 
         // VIEWING ALL EMPLOYEES + PAGINATION
-        if ($state.current.name === 'sidemenu.viewall' || $state.current.name === 'sidemenu.dashboard') {
+        if ($state.current.name === 'sidemenu.viewall') {
             $scope.employees = [];
             $scope.loading = true;
             getActiveEmployeeData();
@@ -58,17 +56,6 @@ app.controller('hrAdminCtrl', [
                     console.log(err);
                 })
         }
-
-        hrService
-            .getBranchDepartments(currUser.branchDetails.branchId)
-            .then(function (res) {
-                $scope.branchDepts = res.data.departments;
-                // console.log($scope.branchDepts.departments)
-            })
-            .catch(function (err) {
-                console.log(err)
-            })
-
 
         // VIEWING DEPARTMENT HEADS INFO + PAGINATION
         if ($state.current.name === 'sidemenu.viewall-deptheads') {
@@ -447,6 +434,199 @@ app.controller('hrAdminCtrl', [
                 .catch(function (err) {
                     console.log(err)
                 })
+        };
+
+        $scope.startDate = new Date(moment());
+        $scope.endDate = new Date(moment());
+        $scope.duration = null;
+        $scope.leaveTypeList = ['casual', 'sick', 'personal', 'vacation', 'emergency'];
+        $scope.leave = {};
+
+        // applying for leave
+        $scope.calculateDuration = function () {
+            if ($scope.startDate && $scope.endDate) {
+                var start = moment($scope.startDate);
+                var end = moment($scope.endDate);
+                var duration = 0;
+
+                while (start.isSameOrBefore(end)) {
+                    if (start.day() !== 0 && start.day() !== 6) {
+                        duration++;
+                    }
+                    start.add(1, 'd')
+                }
+
+                $scope.duration = duration;
+            } else {
+                $scope.duration = null;
+            }
+        };
+
+        $scope.$watchGroup(['startDate', 'endDate'], function () {
+            $scope.calculateDuration();
+        });
+
+
+        $scope.applyLeave = function () {
+            $scope.leave.employeeId = currUser.userId;
+            $scope.leave.employeeEmail = currUser.employeeEmail;
+            $scope.leave.employeeName = $scope.viewName;
+            $scope.leave.managerId = currUser.reportingManager.managerId;
+            $scope.leave.managerName = currUser.reportingManager.managerName;
+            $scope.leave.branchId = currUser.branchDetails.branchId;
+            $scope.leave.branchName = currUser.branchDetails.branchName;
+            $scope.leave.branchCity = currUser.branchDetails.branchCity;
+            $scope.leave.companyId = currUser.companyDetails.companyId;
+            $scope.leave.companyName = currUser.companyDetails.companyName;
+            $scope.leave.leaveType = $scope.leaveType;
+            $scope.leave.startDate = $scope.startDate;
+            $scope.leave.endDate = $scope.endDate;
+            $scope.leave.duration = $scope.duration;
+            $scope.leave.comments = $scope.comments;
+
+            console.log($scope.leave);
+            employeeService
+                .applyLeave($scope.leave)
+                .then(function (res) {
+                    // console.log(res)
+                    if (res.status === 201) {
+                        $window.alert('Leave applied successfully!');
+                        // $route.reload();
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        // getting leaves data
+        if ($state.current.name === 'sidemenu.leave.my-leaves') {
+            employeeService
+                .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId)
+                .then(function (res) {
+                    $scope.leavesInfo = res.data.leaveData;
+                    // console.log($scope.leavesInfo);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        // getting leaves that need to be approved
+        $scope.leavesToApprove = [];
+        if ($state.current.name === 'sidemenu.leave.approve-leaves') {
+            employeeService
+                .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId)
+                .then(function (res) {
+                    $scope.leavesToApprove = res.data.leavesToApprove;
+                    // console.log($scope.leavesToApprove)
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+
+
+            // approving leaves
+            $scope.approveRequest = function (leave) {
+                console.log('approved');
+                console.log(leave);
+                var leaveData = {}
+                leaveData.status = 'approved';
+                leaveData.startDate = leave.leaveDetails.startDate;
+                leaveData.endDate = leave.leaveDetails.endDate;
+                // console.log(leaveData);
+                employeeService
+                    .updatingLeaveStatus(leave._id, leaveData) // Pass leaveData object as the second argument
+                    .then(function (res) {
+                        console.log(res);
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+            }
+
+            // rejecting leaves
+            $scope.rejectRequest = function (leave) {
+                console.log('rejected');
+                var leaveData = {}
+                leaveData.status = 'rejected';
+                leaveData.startDate = leave.leaveDetails.startDate;
+                leaveData.endDate = leave.leaveDetails.endDate;
+                employeeService
+                    .updatingLeaveStatus(leave._id, leaveData) // Pass leaveData object as the second argument
+                    .then(function (res) {
+                        console.log(res);
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+            }
+        }
+
+        // getting department list of branch
+        if (!$rootScope.departments) {
+            $rootScope.departments = [];
+            companyService
+                .getBranch(currUser.branchDetails.branchId)
+                .then(function (res) {
+                    $rootScope.departments = res.data.branchData.departments;
+                })
+                .catch(function (err) {
+                    console.log(err)
+                })
+        }
+
+
+        // CHANGE PASSWORD MODAL
+        $scope.openSetPasswordModal = function () {
+            $http.get('#setPasswordModal').modal('show');
+        };
+
+
+        $scope.changePassword = function ($event) {
+            $event.preventDefault();
+
+            var newDetails = {
+                id: currUser.userId,
+                password: $scope.newPassword
+            }
+            hrService
+                .changePassword(newDetails)
+                .then(function (res) {
+                    // console.log(res.data.data);
+                    alert(res.data.message);
+                    $window.location.reload();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        // DISPLAY DATA
+        if($state.current.name === 'sidemenu.dashboard') {
+            hrService
+                .getEmployeeInfo(currUser.userId)
+                .then(function (res) {
+                    $scope.myData = res.data.employeeData;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        $scope.newPassword = '';
+        $scope.confirmPassword = '';
+
+        $element.on('hidden.bs.modal', function () {
+            $scope.$apply(function () {
+                $scope.newPassword = '';
+                $scope.confirmPassword = '';
+            });
+        })
+
+        $scope.errorMessages = {
+            required: 'This field is required.',
+            pattern: 'Invalid format.',
         };
     }
 ]);

@@ -16,10 +16,10 @@
 
             <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Performance In {{year}}:
-                    {{branchPerformance.avgPerformance}}</div>
+                    {{branchPerformance.avgPerformance.toFixed(2)}}</div>
             </div>
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Turnover Rate In {{year}}:
                 </div>
             </div>
@@ -27,126 +27,80 @@
             <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Hiring Rate In {{year}}:
                 </div>
-            </div>
+            </div> -->
         </div>
 
-        <div class="many-boxes" style="display: flex;">
-            <div style="display: flex;">
-                <div class="sales-boxes" style="width: 50%; height: 100%">
-                    <div class="company box">
-                        <div class="title" style="display: flex; justify-content: space-between;">
-                            {{branchData.branchName}}
-                            <div style="display: flex; flex-direction: column;">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal"
-                                    ng-if="branchData.isActive" style="font-size: 20px; color: #443a3a;"
-                                    ng-click="openEditModal(branchData)">
-                                    <i class='bx bxs-edit'>
-                                        Edit
-                                    </i>
-                                </a>
-                            </div>
+        <!-- <div class="many-boxes" style="display: flex;"> -->
+        <div style="display: flex;">
+            <div class="sales-boxes" style="width: 50%; height: 100%">
+                <div class="company box">
+                    <div class="title" style="display: flex; justify-content: space-between;">
+                        {{branchData.branchName}}
+                        <div style="display: flex; flex-direction: column;">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" ng-if="branchData.isActive"
+                                style="font-size: 18px; color: #443a3a;" ng-click="openEditModal(branchData)">
+                                <i class='bx bxs-edit'>
+                                    Edit
+                                </i>
+                            </a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#branchAdminModal"
+                                ng-if="branchData.isActive" style="font-size: 18px; color: #443a3a;"
+                                ng-click="openBranchAdminModal($event)">
+                                <i class='bx bx-window-open'>
+                                    Branch Admin
+                                </i>
+                            </a>
                         </div>
-                        <div class="sales-details">
-                            <div class="details">
-                                <p>
-                                    <strong>
-                                        Branch ID:
-                                    </strong>
-                                    {{branchData._id}}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Date of Creation:
-                                    </strong>
-                                    {{branchData.createdAt | date:'dd/MM/yyyy'}}
-                                </p>
-                                <p>
-                                    <strong>
-                                        Point of Contact:
-                                    </strong>
-                                <p>
-                                    <strong>
-                                        Contact Number:
-                                    </strong>
-                                </p>
-                                <p ng-repeat="num in branchData.contactNumber" style="margin-left: 20px;">
-                                    {{num}}
-                                </p>
-                                </p>
-                                <p>
-                                    <strong>
-                                        Departments:
-                                    </strong>
-                                <p ng-repeat="dept in branchData.departments" style="margin-left: 20px;">
-                                    {{dept}}
-                                </p>
-                                </p>
-                                <p>
-                                    <strong>
-                                        Address:
-                                    </strong>
-                                    {{branchData.address}}, {{branchData.city}}
-                                </p>
-                            </div>
-                        </div>
-
                     </div>
-                </div>
+                    <div class="sales-details">
+                        <div class="details">
+                            <p>
+                                <strong>
+                                    Branch ID:
+                                </strong>
+                                {{branchData._id}}
+                            </p>
 
-                <div class="sales-boxes" style="width: 50%; height: 100%">
-                    <div class="company box">
-                        <div class="title" style="display: flex; justify-content: space-between;">
-                            {{branchHead.firstName}}  {{branchHead.lastName}}
+                            <p>
+                                <strong>
+                                    Date of Creation:
+                                </strong>
+                                {{branchData.createdAt | date:'dd/MM/yyyy'}}
+                            </p>
+                            <p>
+                                <strong>
+                                    Point of Contact:
+                                </strong>
+                            <p>
+                                <strong>
+                                    Contact Number:
+                                </strong>
+                            </p>
+                            <p ng-repeat="num in branchData.contactNumber" style="margin-left: 20px;">
+                                {{num}}
+                            </p>
+                            </p>
+                            <p>
+                                <strong>
+                                    Departments:
+                                </strong>
+                            <p ng-repeat="dept in branchData.departments" style="margin-left: 20px;">
+                                {{dept}}
+                            </p>
+                            </p>
+                            <p>
+                                <strong>
+                                    Address:
+                                </strong>
+                                {{branchData.address}}, {{branchData.city}}
+                            </p>
                         </div>
-                        <div class="sales-details">
-                            <div class="details">
-                                <p>
-                                    <strong>
-                                        Employee ID:
-                                    </strong>
-                                    {{branchHead._id}}
-                                </p>
-
-                                <p>
-                                    <strong>
-                                        Date of Creation:
-                                    </strong>
-                                    {{branchHead.createdAt | date:'dd/MM/yyyy'}}
-                                </p>
-                                <p>
-                                    <strong>
-                                        Point of Contact:
-                                    </strong>
-                                <p>
-                                    <strong>
-                                        Email:
-                                    </strong>
-                                </p>
-                                <p style="margin-left: 20px;">
-                                    {{branchHead.employeeEmail}}
-                                </p>
-                                </p>
-                                <p>
-                                    <strong>
-                                        Gender:
-                                    </strong>
-                                <p style="margin-left: 20px;">
-                                    {{branchHead.gender}}
-                                </p>
-                                </p>
-                                <p>
-                                    <strong>
-                                        Address:
-                                    </strong>
-                                    {{branchData.address}}, {{branchData.city}}
-                                </p>
-                            </div>
-                        </div>
-
                     </div>
+
                 </div>
             </div>
+
+
             <div class="sales-boxes" style="width: 50%; height: 100%">
                 <div class="company box">
                     <month-year-selector on-month-year-change="updateData(month, year)"></month-year-selector>
@@ -158,11 +112,13 @@
                             </div>
                         </div>
                         <div class="stats-card">
-                            <div class="title" style="font-size: 18px;">Hiring Rate: {{monthRatios.hiringRate}}%
+                            <div class="title" style="font-size: 18px;">Hiring Rate:
+                                {{monthRatios.hiringRate.toFixed(2)}}%
                             </div>
                         </div>
                         <div class="stats-card">
-                            <div class="title" style="font-size: 18px;">Turnover Rate: {{monthRatios.turnoverRate}}%
+                            <div class="title" style="font-size: 18px;">Turnover Rate:
+                                {{monthRatios.turnoverRate.toFixed(2)}}%
                             </div>
                         </div>
                     </div>
@@ -170,7 +126,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- EDIT BRANCH MODAL -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -182,30 +138,28 @@
                 <div class="modal-body">
                     <form name="updateForm" novalidate autocomplete="off">
                         <h5>Branch Information</h5>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Name</span>
+                        <div class="form-group">
+                            <label for="branch.branchName">Branch Name</label>
                             <input type="text" ng-model="branch.branchName" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Location</span>
+                        <div class="form-group">
+                            <label for="branch.address">Branch Location</label>
                             <input type="text" ng-model="branch.address" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch City</span>
+                        <div class="form-group">
+                            <label for="branch.city">Branch City</label>
                             <input type="text" ng-model="branch.city" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch Contact
-                                Details</span>
+                        <div class="form-group">
+                            <label for="branch.contactNumber">Branch Contact Details</label>
                             <input type="text" ng-model="branch.contactNumber" class=" form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Branch
-                                Departments</span>
+                        <div class="form-group">
+                            <label for="branch.departments">Branch Departments</label>
                             <input type="text" ng-model="branch.departments" class=" form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
@@ -226,4 +180,73 @@
         </div>
     </div>
 
+    <!-- BRANCH ADMIN MODAL -->
+    <div class="modal fade" id="branchAdminModal" tabindex="-1" role="dialog" aria-labelledby="branchAdminModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="branchAdminModalLabel">Employee Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Employee Info</h4>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{{branchHead.firstName}} {{branchHead.lastName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Employee Designation</td>
+                                        <td>{{branchHead.employeeDetails.designation}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Personal Info</h4>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Date of Birth</td>
+                                        <td>{{branchHead.personalDetails.dateOfBirth}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Personal Email</td>
+                                        <td>{{branchHead.personalDetails.contact.personalEmail}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td>{{branchHead.personalDetails.contact.phoneNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>{{branchHead.personalDetails.gender}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Aadhar Number</td>
+                                        <td>{{branchHead.personalDetails.aadharNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current Address</td>
+                                        <td>{{branchHead.personalDetails.currentAddress.street}}, {{branchHead.personalDetails.currentAddress.city}}, {{branchHead.personalDetails.currentAddress.pincode}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                        style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>

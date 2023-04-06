@@ -4,10 +4,12 @@ app.controller('employeeCtrl', [
     '$scope',
     '$http',
     '$window',
+    '$state',
+    '$rootScope',
     'employeeService',
-    function ($scope, $http, $window, employeeService) {
-        // var socket = io.connect('http://localhost:5000');
-        // var socket = io();
+    'hrService',
+    function ($scope, $http, $window, $state, $rootScope, employeeService, hrService) {
+
         var currUser = JSON.parse(localStorage.getItem('user'));
         $scope.viewName = currUser.firstName + ' ' + currUser.lastName;
 
@@ -17,8 +19,11 @@ app.controller('employeeCtrl', [
         $scope.leaveTypeList = ['casual', 'sick', 'personal', 'vacation', 'emergency'];
         $scope.leave = {};
 
+        $scope.currentPage = 1;
+        $scope.pageSize = 5;
+        $scope.totalPages = 1;
+
         // var currTime = JSON.parse(localStorage.getItem('timeIn'));
-        $scope.leavesInfo = [];
 
         // $scope.timeIn = localStorage.getItem('timeIn');
         $scope.timeIn = JSON.parse(localStorage.getItem('timeIn'));
@@ -367,62 +372,175 @@ app.controller('employeeCtrl', [
         };
 
         // getting leaves data
-        employeeService
-            .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId)
-            .then(function (res) {
-                $scope.leavesInfo = res.data.leaveData;
-                // console.log($scope.leavesInfo);
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
+        if ($state.current.name === 'menu.leave.my-leaves') {
+            $scope.leavesInfo = [];
+
+            getLeavesInfo();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getLeavesInfo();
+            };
+        }
+
+        function getLeavesInfo() {
+            employeeService
+                .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                .then(function (res) {
+                    $scope.leavesInfo = res.data.leaveData;
+                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    // console.log($scope.leavesInfo);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
 
         // getting leaves that need to be approved
-        $scope.leavesToApprove = [];
-        employeeService
-            .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId)
-            .then(function (res) {
-                $scope.leavesToApprove = res.data.leavesToApprove;
-                // console.log($scope.leavesToApprove)
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
+        if ($state.current.name === 'menu.leave.approve-leaves') {
 
-        // listen for the 'leave_approved' event
-        // socket.on('leave_approved', function (leaveId) {
-        //     // update the status of the leave with the given ID
-        //     for (var i = 0; i < $scope.leavesToApprove.length; i++) {
-        //         if ($scope.leavesToApprove[i]._id === leaveId) {
-        //             $scope.leavesToApprove[i].status = 'approved';
-        //             break;
-        //         }
-        //     }
-        // });
+            $scope.leavesToApprove = [];
+            getLeavesToApprove();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getLeavesToApprove();
+            };
 
-        // listen for the 'leave_rejected' event
-        // socket.on('leave_rejected', function (leaveId) {
-        //     // update the status of the leave with the given ID
-        //     for (var i = 0; i < $scope.leavesToApprove.length; i++) {
-        //         if ($scope.leavesToApprove[i]._id === leaveId) {
-        //             $scope.leavesToApprove[i].status = 'rejected';
-        //             break;
-        //         }
-        //     }
-        // });
 
-        // approving leaves
-        $scope.approveRequest = function (leave) {
-            console.log('approved');
-            console.log(leave);
-            // socket.emit('approve_leave', leave._id);
-            
+
+            // approving leaves
+            $scope.approveRequest = function (leave) {
+                console.log('approved');
+                console.log(leave);
+                var leaveData = {}
+                leaveData.status = 'approved';
+                leaveData.startDate = leave.leaveDetails.startDate;
+                leaveData.endDate = leave.leaveDetails.endDate;
+                // console.log(leaveData);
+                employeeService
+                    .updatingLeaveStatus(leave._id, leaveData) // Pass leaveData object as the second argument
+                    .then(function (res) {
+                        console.log(res);
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+            }
+
+            // rejecting leaves
+            $scope.rejectRequest = function (leave) {
+                console.log('rejected');
+                var leaveData = {}
+                leaveData.status = 'rejected';
+                leaveData.startDate = leave.leaveDetails.startDate;
+                leaveData.endDate = leave.leaveDetails.endDate;
+                employeeService
+                    .updatingLeaveStatus(leave._id, leaveData) // Pass leaveData object as the second argument
+                    .then(function (res) {
+                        console.log(res);
+                    })
+                    .catch(function (err) {
+                        console.log(err)
+                    })
+            }
         }
 
-        // rejecting leaves
-        $scope.rejectRequest = function (leave) {
-            console.log('rejected');
-            // socket.emit('reject_leave', leave._id);
+        function getLeavesToApprove() {
+            employeeService
+                .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                .then(function (res) {
+                    $scope.leavesToApprove = res.data.leavesToApprove;
+                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    // console.log($scope.leavesToApprove)
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
         }
+
+        if ($state.current.name === 'menu.dashboard') {
+            hrService
+                .getEmployeeInfo(currUser.userId)
+                .then(function (res) {
+                    $scope.myData = res.data.employeeData;
+
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+
+
+        }
+
+        // UPDATING BRANCH ADMIN INFO MODAL
+        $scope.openUpdateModal = function () {
+            hrService
+                .getEmployeeInfo(currUser.userId)
+                .then(function (res) {
+                    $scope.employee = res.data.employeeData;
+                    console.log(res.data)
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+            $http.get('#updateBranchAdminModal').modal('show');
+        };
+
+        $scope.updateData = function ($event) {
+            $event.preventDefault();
+
+            console.log($scope.employee);
+            hrService
+                .updateEmployeeInfo($scope.employee)
+                .then(function (res) {
+                    // console.log(res.data)
+                    alert(res.data.message);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        };
+
+
+        // CHANGE PASSWORD MODAL
+        $scope.openSetPasswordModal = function () {
+            $http.get('#setPasswordModal').modal('show');
+        };
+
+
+        $scope.changePassword = function ($event) {
+            $event.preventDefault();
+
+            var newDetails = {
+                id: currUser.userId,
+                password: $scope.newPassword
+            }
+            hrService
+                .changePassword(newDetails)
+                .then(function (res) {
+                    // console.log(res.data.data);
+                    alert(res.data.message);
+                    $window.location.reload();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
     }
 ]);

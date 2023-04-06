@@ -12,5 +12,6 @@ router.get('/all-previous-employees/:id', branchEmployees.getPreviousBranchEmplo
 router.get('/employee-info/:id', branchEmployees.getSpecificEmployee);
 router.put('/update-employee-info/:id', branchEmployees.updateSpecificEmployee);
 router.get('/all-company-employees/:id', branchEmployees.getAllCompanyEmployees);
+router.put('/change-password', createEmployee.changePassword);
 
 module.exports = router;

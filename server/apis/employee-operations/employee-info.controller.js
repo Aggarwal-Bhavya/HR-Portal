@@ -1,8 +1,8 @@
-var Employee = require("../../models/employee");
+var Employee = require("../employee-operations/employee.model");
 var Branch = require("../branch-operations/branch.model");
 
 var employeeActivity = {
-    getBranchEmployees: function(req, res) {
+    getBranchEmployees: function (req, res) {
         var id = req.params.id;
         var page = parseInt(req.query.page);
         var count = parseInt(req.query.count);
@@ -15,14 +15,16 @@ var employeeActivity = {
                 $and: [
                     { "branch.branchId": id },
                     { isActive: true },
-                    { $or: [
-                        { employeeRole: "departmenthead" },
-                        { employeeRole: "employee" },
-                        { employeeRole: "hradmin"}
-                    ] }
+                    {
+                        $or: [
+                            { employeeRole: "departmenthead" },
+                            { employeeRole: "employee" },
+                            { employeeRole: "hradmin" }
+                        ]
+                    }
                 ]
             })
-            .then(function(item) {
+            .then(function (item) {
                 var paginatedData = item.slice(startIndex, endIndex);
                 res.status(201).json({
                     message: 'All employees of this branch are ',
@@ -39,7 +41,7 @@ var employeeActivity = {
             })
     },
 
-    getBranchDepartmentHeads: function(req, res) {
+    getBranchDepartmentHeads: function (req, res) {
         var id = req.params.id;
         var page = parseInt(req.query.page);
         var count = parseInt(req.query.count);
@@ -49,10 +51,12 @@ var employeeActivity = {
         Employee
             .find({
                 $and: [
-                    { $or: [
-                        { employeeRole: "departmenthead"},
-                        { employeeRole: "hradmin" }
-                    ] },
+                    {
+                        $or: [
+                            { employeeRole: "departmenthead" },
+                            { employeeRole: "hradmin" }
+                        ]
+                    },
                     { "reportingTo.role": "branchadmin" },
                     { isActive: true },
                     { "branch.branchId": id }
@@ -76,7 +80,7 @@ var employeeActivity = {
             })
     },
 
-    getPreviousBranchEmployees: function(req, res) {
+    getPreviousBranchEmployees: function (req, res) {
         var id = req.params.id;
         var page = parseInt(req.query.page);
         var count = parseInt(req.query.count);
@@ -90,7 +94,7 @@ var employeeActivity = {
                     { isActive: false }
                 ]
             })
-            .then(function(item) {
+            .then(function (item) {
                 var paginatedData = item.slice(startIndex, endIndex);
                 res.status(201).json({
                     message: 'All previous employees of this branch are ',
@@ -107,21 +111,21 @@ var employeeActivity = {
             })
     },
 
-    getSpecificEmployee: function(req, res) {
+    getSpecificEmployee: function (req, res) {
         var id = req.params.id;
 
         Employee
             .findById({
                 _id: id
             })
-            .then(function(item) {
+            .then(function (item) {
                 // console.log(item)
                 res.status(201).json({
                     message: 'Employee data found',
                     employeeData: item
                 })
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 res.status(500).json({
                     message: 'Error',
                     data: err
@@ -129,23 +133,31 @@ var employeeActivity = {
             })
     },
 
-    updateSpecificEmployee : function(req, res) {
+    updateSpecificEmployee: function (req, res) {
         var id = req.params.id;
-
+        // console.log(req.body);
         var updateEmployee = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            personalEmail: req.body.personalEmail,
-            maritalStatus: req.body.maritalStatus,
-            designation: req.body.designation,
-            department: req.body.department,
-            employeeRole: req.body.employeeRole,
+            'personalDetails.contact.personalEmail': req.body.personalDetails.contact.personalEmail,
+            'personalDetails.contact.phoneNumber': req.body.personalDetails.contact.phoneNumber,
+            'personalDetails.dateOfBirth': req.body.personalDetails.dateOfBirth,
+            'personalDetails.bloodGroup': req.body.personalDetails.bloodGroup,
+            'personalDetails.gender': req.body.personalDetails.gender,
+            'personalDetails.aadharNumber': req.body.personalDetails.aadharNumber,
+            'personalDetails.panNumber': req.body.personalDetails.panNumber,
+            'personalDetails.currentAddress.street': req.body.personalDetails.currentAddress.street,
+            'personalDetails.currentAddress.city': req.body.personalDetails.currentAddress.city,
+            'personalDetails.currentAddress.pincode': req.body.personalDetails.currentAddress.pincode,
+            'employeeDetails.designation': req.body.employeeDetails.designation,
+            employeeRole: req.body.employeeRole
         }
 
         Employee
-            .findByIdAndUpdate(
+            .updateOne(
                 { _id: id },
-                { $set: updateEmployee },
+                updateEmployee,
+                // { $set: updateEmployee },
                 { new: true }
             )
             .then(function (item) {
@@ -163,7 +175,7 @@ var employeeActivity = {
             })
     },
 
-    getAllCompanyEmployees: function(req, res) {
+    getAllCompanyEmployees: function (req, res) {
         var id = req.params.id;
         var page = parseInt(req.query.page);
         var count = parseInt(req.query.count);
@@ -176,14 +188,16 @@ var employeeActivity = {
                 $and: [
                     { "company.companyId": id },
                     { isActive: true },
-                    { $or: [
-                        { employeeRole: "departmenthead" },
-                        { employeeRole: "employee" },
-                        { employeeRole: "hradmin"}
-                    ] }
+                    {
+                        $or: [
+                            { employeeRole: "departmenthead" },
+                            { employeeRole: "employee" },
+                            { employeeRole: "hradmin" }
+                        ]
+                    }
                 ]
             })
-            .then(function(item) {
+            .then(function (item) {
                 var paginatedData = item.slice(startIndex, endIndex);
                 res.status(201).json({
                     message: 'All employees of this company are ',
@@ -198,7 +212,7 @@ var employeeActivity = {
                     data: err
                 })
             })
-        }
+    }
 };
 
 module.exports = employeeActivity;

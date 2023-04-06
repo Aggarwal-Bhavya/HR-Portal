@@ -3,7 +3,7 @@
     <div class="home-content">
         <div class="sales-boxes">
             <div class="company box">
-                <div class="title">Top Performing Employees</div>
+                <div class="title">Employee Details</div>
                 <div class="sales-details">
                     <table>
                         <thead>
@@ -13,36 +13,83 @@
                                 <th>Reporting To</th>
                                 <th>Department</th>
                                 <th>Designation</th>
-                                <th>Status</th>
+                                <th>Joined At</th>
                                 <!-- <th>Actions</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="employee in employees | filter: searchBar | limitTo: 5">
+                            <tr>
                                 <td>
-                                    <p>{{employee._id}}</p>
+                                    <p>{{myData._id}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.firstName + ' ' + employee.lastName}}</p>
+                                    <p>{{myData.firstName + ' ' + myData.lastName}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.reportingTo.managerName}}</p>
+                                    <p>{{myData.reportingTo.managerName}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.department}}</p>
+                                    <p>{{myData.employeeDetails.department}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.designation}}</p>
+                                    <p>{{myData.employeeDetails.designation}}</p>
                                 </td>
                                 <td>
-                                    <p>{{employee.isActive ? 'Active' : 'Inactive'}}</p>
+                                    <p>{{myData.createdAt | date: 'dd-MM-yyyy'}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="title">Personal Details</div>
+                <div class="sales-details">
+                    <table>
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>Contact Number</th>
+                                <th>Personal Email</th>
+                                <th>DOB</th>
+                                <th>Blood Group</th>
+                                <th>Aadhar Number</th>
+                                <th>Pan Number</th>
+                                <th>Current Address</th>
+                                <th>Permanent Address</th>
+                                <!-- <th>Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: center;">
+                                <td>
+                                    <p>{{myData.personalDetails.contact.phoneNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.contact.personalEmail}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.dateOfBirth}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.bloodGroup}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.aadharNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.panNumber}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.currentAddress.street + ', ' + myData.personalDetails.currentAddress.city + ', ' + myData.personalDetails.currentAddress.pincode}}</p>
+                                </td>
+                                <td>
+                                    <p>{{myData.personalDetails.permanentAddress.street + ', ' + myData.personalDetails.permanentAddress.city + ', ' + myData.personalDetails.permanentAddress.pincode}}</p>
+                
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="button">
-                    <a ui-sref="sidemenu.viewall">See All</a>
+                    <a ui-sref="sidemenu.attendance">See All</a>
                 </div>
             </div>
         </div>

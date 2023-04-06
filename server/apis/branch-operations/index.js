@@ -12,5 +12,6 @@ router.get('/branch-head/:id/:branchId', branchOperations.getBranchHeadInfo);
 router.get('/branch-departments/:id', branchOperations.getBranchDepartmentList);
 router.get('/branch-admin-info/:id', branchAdminActions.getBranchAdminInfo);
 router.put('/update-branchadmin', branchAdminActions.updateBranchAdmin);
+router.put('/change-password', branchAdminActions.changePassword);
 
 module.exports = router;

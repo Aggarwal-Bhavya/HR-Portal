@@ -5,29 +5,29 @@
     <!-- branch details -->
     <div class="home-content" ng-hide="loading">
         <div class="sales-boxes">
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Head Count: {{monthRatios.headCount}}</div>
-            </div>
+            </div> -->
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Total Hours Put In {{year}}:
                     {{branchPerformance.totalHoursWorked}}</div>
-            </div>
+            </div> -->
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Performance In {{year}}:
                     {{branchPerformance.avgPerformance}}</div>
-            </div>
+            </div> -->
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Turnover Rate In {{year}}:
                 </div>
-            </div>
+            </div> -->
 
-            <div class="stats-card">
+            <!-- <div class="stats-card">
                 <div class="title" style="font-size: 18px;">Average Hiring Rate In {{year}}:
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="sales-boxes">
             <div class="company box">
@@ -44,11 +44,11 @@
                         </div>
                     </div>
                     <div class="stats-card">
-                        <div class="title" style="font-size: 18px;">Hiring Rate: {{monthRatios.hiringRate}}%
+                        <div class="title" style="font-size: 18px;">Hiring Rate: {{monthRatios.hiringRate.toFixed(2)}}%
                         </div>
                     </div>
                     <div class="stats-card">
-                        <div class="title" style="font-size: 18px;">Turnover Rate: {{monthRatios.turnoverRate}}%
+                        <div class="title" style="font-size: 18px;">Turnover Rate: {{monthRatios.turnoverRate.toFixed(2)}}%
                         </div>
                     </div>
                 </div>

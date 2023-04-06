@@ -1,6 +1,8 @@
 <body>
+    <loader is-loading="loading" style="text-align: center; margin-top: 15%;">
+    </loader>
     <!-- customer details -->
-    <div class="home-content">
+    <div class="home-content" ng-hide="loading">
         <div class="sales-boxes">
             <div class="company box">
                 <div class="title">All Clients</div>
@@ -63,7 +65,7 @@
                         </tbody>
                     </table>
                 </div>
-
+                <pagination current-page="currentPage" total-pages="totalPages" on-page-change="loadPage(page)"></pagination>
             </div>
         </div>
     </div>

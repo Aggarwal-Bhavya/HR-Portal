@@ -72,6 +72,12 @@ var leaveOperations = {
         var empId = req.params.empId;
         var branchId = req.params.branchId;
 
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
         Leave
             .find(
                 {
@@ -89,10 +95,13 @@ var leaveOperations = {
                     createdAt: -1
                 }
             )
-            .then(function (items) {
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
                 res.status(201).json({
                     message: 'All leaves data for this employee is',
-                    leaveData: items
+                    leaveData: paginatedData,
+                    totalCount: item.length
                 })
             })
             .catch(function (err) {
@@ -107,6 +116,12 @@ var leaveOperations = {
     toBeApproved: function (req, res) {
         var empId = req.params.empId;
         var branchId = req.params.branchId;
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
 
         Leave
             .find(
@@ -124,10 +139,13 @@ var leaveOperations = {
                 }
             )
             .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
                 // console.log(item);
                 res.status(201).json({
                     message: 'Leaves to be approved by you are',
-                    leavesToApprove: item
+                    leavesToApprove: paginatedData,
+                    totalCount: item.length
                 })
             })
             .catch(function (err) {
@@ -208,6 +226,10 @@ var leaveOperations = {
                                         data: err
                                     })
                                 });
+                        } else {
+                            res.status(201).json({
+                                message: 'Leave rejected'
+                            })
                         }
                     })
             })

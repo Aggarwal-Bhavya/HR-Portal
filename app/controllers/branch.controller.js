@@ -6,11 +6,12 @@ app.controller('branchAdminCtrl', [
     '$window',
     '$rootScope',
     '$state',
+    '$q',
+    '$element',
     'branchService',
     'companyService',
-    function ($scope, $http, $window, $rootScope, $state, branchService, companyService) {
-        $scope.genders = ["male", "female", "other", "rda"];
-        $scope.maritalStatuses = ["married", "single", "rda"];
+    function ($scope, $http, $window, $rootScope, $state, $q, $element, branchService, companyService) {
+        $scope.genders = ["male", "female", "other"];
         $scope.employeeRoles = ["departmenthead", "hradmin", "employee"];
 
         var currBranch = JSON.parse(localStorage.getItem('user'));
@@ -47,6 +48,7 @@ app.controller('branchAdminCtrl', [
                     $scope.loading = false;
                     $scope.employees = res.data.branchData;
                     $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    $scope.headCount = res.data.totalCount;
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -226,8 +228,70 @@ app.controller('branchAdminCtrl', [
                     .catch(function (err) {
                         console.log(err)
                     })
+                $scope.loading = false;
             }
-            $scope.loading = false;
+
+            var getMonthYearPerformance = companyService.getMonthYearPerformance(currBranch.companyDetails.companyId, $scope.selectedMonth, $scope.selectedYear);
+            var getMonthYearRatios = companyService.getMonthYearRatios(currBranch.companyDetails.companyId, currBranch.branchDetails.branchId, $scope.selectedMonth, $scope.selectedYear);
+
+            $q
+                .all([getMonthYearPerformance, getMonthYearRatios])
+                .then(function (res) {
+                    // console.log(res.data.monthData)
+
+                    if (res[0].data.monthData.length !== 0) {
+
+                        var data = res[0].data.monthData;
+
+                        var chartData = {};
+
+                        data.forEach(function (item) {
+                            var branchId = item._id.branch;
+                            var week = item._id.week;
+                            var performance = item.performance;
+
+                            if (!chartData[branchId]) {
+                                chartData[branchId] = [];
+                            }
+
+                            chartData[branchId][week] = performance;
+                        });
+
+                        var labels = Object.keys(chartData);
+
+                        var datasets = labels.map(function (branchId) {
+                            return {
+                                label: branchId,
+                                data: chartData[branchId],
+                                fill: false,
+                                borderColor: getRandomColor(),
+                                tension: 0.1,
+                            }
+                        });
+
+                        new Chart('workingChart', {
+                            type: 'line',
+                            data: {
+                                labels: Array.from(Array(datasets[0].data.length).keys()),
+                                datasets: datasets,
+                            },
+                            options: chartOptions
+                        })
+                        // console.log(Array.from(Array(datasets[0].data.length).keys()));
+                    } else {
+                        new Chart('workingChart', {
+                            type: 'line',
+                            options: chartOptions
+                        })
+                    }
+
+                    $scope.monthRatios = res[1].data.monthRatios;
+                    $scope.loading = false;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    $scope.loading = true;
+                })
         }
 
         function getRandomColor() {
@@ -292,7 +356,7 @@ app.controller('branchAdminCtrl', [
             $event.preventDefault();
             $scope.branchadmin.branchid = currBranch.branchDetails.branchId;
             $scope.branchadmin.companyid = currBranch.companyDetails.companyId;
-            console.log($scope.branchadmin);
+            // console.log($scope.branchadmin);
             branchService
                 .updateBranchAdmin($scope.branchadmin)
                 .then(function (res) {
@@ -304,6 +368,58 @@ app.controller('branchAdminCtrl', [
                 })
         };
 
+        
+        // getting department list of branch
+        if(!$rootScope.departments || !$rootScope.creationDate) {
+            $rootScope.departments = [];
+            companyService
+                .getBranch(currBranch.branchDetails.branchId)
+                .then(function (res) {
+                    $rootScope.departments = res.data.branchData.departments;
+                    $rootScope.creationDate = res.data.branchData.createdAt;
+                })
+                .catch(function (err) {
+                    console.log(err)
+                })
+        }
 
+        // CHANGE PASSWORD MODAL
+        $scope.openSetPasswordModal = function () {
+            $http.get('#setPasswordModal').modal('show');
+        };
+
+        $scope.newPassword = '';
+        $scope.confirmPassword = '';
+        
+        $scope.changePassword = function ($event) {
+            $event.preventDefault();
+
+            var newDetails = {
+                id: currBranch.userId,
+                password: $scope.newPassword
+            }
+            branchService
+                .changePassword(newDetails)
+                .then(function (res) {
+                    // console.log(res.data.data);
+                    alert(res.data.message);
+                    $window.location.reload();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+
+        $element.on('hidden.bs.modal', function () {
+            $scope.$apply(function () {
+                $scope.newPassword = '';
+                $scope.confirmPassword = '';
+            });
+        })
+
+        $scope.errorMessages = {
+            required: 'This field is required.',
+            pattern: 'Invalid format.',
+        };
     }
 ])

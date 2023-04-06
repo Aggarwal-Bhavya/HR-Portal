@@ -6,8 +6,9 @@ app.controller('companyAdminCtrl', [
     '$window',
     '$state',
     '$rootScope',
+    '$element',
     'companyService',
-    function ($scope, $http, $window, $state, $rootScope, companyService) {
+    function ($scope, $http, $window, $state, $rootScope, $element, companyService) {
         var currCompany = JSON.parse(localStorage.getItem('user'));
 
         $scope.viewName = currCompany.companyDetails.companyName;
@@ -121,7 +122,6 @@ app.controller('companyAdminCtrl', [
         }
 
         // MORE DETAILS FOR SOME EMPLOYEE
-        // MORE DETAILS FOR SOME EMPLOYEE
         $scope.moreDetailsEmployee = function (employee) {
             $rootScope.specificEmployee = employee;
             $state.go("sidepanel.employee", { employee_id: employee._id });
@@ -136,8 +136,8 @@ app.controller('companyAdminCtrl', [
                 .getCompanyAdmin(currCompany.companyDetails.companyId)
                 .then(function (res) {
                     $scope.companyadmin = res.data.adminData;
-                    $scope.companyadmin.password = ''
-                    // console.log($scope.superadmin);
+                    // $scope.companyadmin.password = ''
+                    console.log($scope.companyadmin);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -148,7 +148,7 @@ app.controller('companyAdminCtrl', [
         $scope.updateCompanyAdmin = function ($event) {
             $event.preventDefault();
             $scope.companyadmin.id = currCompany.companyDetails.companyId;
-            console.log($scope.companyadmin);
+            // console.log($scope.companyadmin);
             companyService
                 .putCompanyAdmin($scope.companyadmin)
                 .then(function (res) {
@@ -162,6 +162,25 @@ app.controller('companyAdminCtrl', [
 
 
         // NEW BRANCH CREATION MODAL
+        $scope.branch = {
+            branchName: '',
+            address: '',
+            branchCity: '',
+            contactNumber: [],
+            departments: [],
+            firstName: '',
+            lastName: '',
+            employeeEmail: '',
+            personalEmail: '',
+            gender: ''
+        }
+
+        $element.on('hidden.bs.modal', function () {
+            $scope.$apply(function () {
+                $scope.branch = {};
+            });
+        })
+
         $scope.openNewBranchModal = function () {
             $http.get('#newBranchModal').modal('show');
         };
@@ -170,7 +189,7 @@ app.controller('companyAdminCtrl', [
             $event.preventDefault();
             $scope.branch.id = currCompany.companyDetails.companyId;
             $scope.branch.companyName = currCompany.companyDetails.companyName;
-            // console.log($scope.branch);
+            console.log($scope.branch);
 
             companyService
                 .createBranch($scope.branch)
@@ -210,6 +229,45 @@ app.controller('companyAdminCtrl', [
                 .catch(function (err) {
                     console.log(err);
                 })
+        };
+
+        // CHANGE PASSWORD MODAL
+        $scope.openSetPasswordModal = function () {
+            $http.get('#setPasswordModal').modal('show');
+        };
+
+        $scope.changePassword = function ($event) {
+            $event.preventDefault();
+
+            var newDetails = {
+                id: currCompany.companyDetails.companyId,
+                password: $scope.newPassword
+            }
+            companyService
+                .changePassword(newDetails)
+                .then(function (res) {
+                    // console.log(res.data.data);
+                    alert(res.data.message);
+                    $window.location.reload();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        };
+
+        $scope.newPassword = '';
+        $scope.confirmPassword = '';
+
+        $element.on('hidden.bs.modal', function () {
+            $scope.$apply(function () {
+                $scope.newPassword = '';
+                $scope.confirmPassword = '';
+            });
+        });
+
+        $scope.errorMessages = {
+            required: 'This field is required.',
+            pattern: 'Invalid format.',
         };
     }
 ])

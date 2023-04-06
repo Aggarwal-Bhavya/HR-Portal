@@ -1,4 +1,4 @@
-var Employee = require('../../models/employee');
+var Employee = require('../employee-operations/employee.model');
 var Attendance = require('../attendance-operations/attendance.model');
 var moment = require('moment');
 var async = require('async');
@@ -184,7 +184,7 @@ var companyStats = {
         var branchId = req.params.branchId;
         var month = Number(req.params.month);
         var year = Number(req.params.year);
-
+        
         var dateString1 = new Date(year, month - 1, 1);
         var dateString2 = new Date(year, month, 1);
 
@@ -198,11 +198,13 @@ var companyStats = {
                         {
                             $match:
                             {
-                                'company.companyId': ObjectId(compId),
-                                'branch.branchId': ObjectId(branchId),
-                                createdAt: {
-                                    $lt: dateString2
-                                }
+                                $and:[
+                                    {'company.companyId': ObjectId(compId)},
+                                    {'branch.branchId': ObjectId(branchId)},
+                                    {createdAt: {
+                                        $lt: dateString2
+                                    }}
+                                ]
                             }
                         },
                         {
@@ -218,6 +220,8 @@ var companyStats = {
             // Function 2: calculating rates
             function calculateRates(result, callback) {
                 // console.log('calculating rates');
+                // console.log('   Water fall    ')
+                // console.log(result);
                 var headCount = result[0] && result[0].count ? result[0].count : 0;
 
                 // console.log(headCount);
@@ -237,7 +241,7 @@ var companyStats = {
                                 {
                                     'company.companyId': ObjectId(compId),
                                     'branch.branchId': ObjectId(branchId),
-                                    dateOfLeaving: {
+                                    'employeeDetails.dateOfLeaving': {
                                         $gte: dateString1,
                                         $lt: dateString2
                                     }

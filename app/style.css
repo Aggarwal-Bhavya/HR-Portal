@@ -475,6 +475,21 @@ body {
     
 }
 
+.errorMessage {
+    color: red;
+    text-align: center;
+    font-size: 13px;
+}
+
+.form-group label {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.form-group input {
+    border: 1.5px solid #081D45;
+}
 /* #workingChart {
     display: block;
     margin: auto;

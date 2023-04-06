@@ -111,22 +111,26 @@
                                     <tbody>
                                         <tr>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.personalEmail}}</p>
+                                                <p>{{employeeData.personalDetails.contact.personalEmail}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>1234567891</p>
+                                                <p>{{employeeData.personalDetails.contact.phoneNumber}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.dateOfBirth | date: 'dd-MM-yyyy'}}</p>
+                                                <p>{{employeeData.personalDetails.dateOfBirth | date: 'dd-MM-yyyy'}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.gender}}</p>
+                                                <p>{{employeeData.personalDetails.gender}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.currentAddress}}</p>
+                                                <p>{{employeeData.personalDetails.currentAddress.street}},
+                                                    {{employeeData.personalDetails.currentAddress.city}},
+                                                    {{employeeData.personalDetails.currentAddress.pincode}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.permanentAddress}}</p>
+                                                <p>{{employeeData.personalDetails.permanentAddress.street}},
+                                                    {{employeeData.personalDetails.permanentAddress.city}},
+                                                    {{employeeData.personalDetails.permanentAddress.pincode}}</p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -145,7 +149,7 @@
                                         <tr>
                                             <th style="padding: 10px;">Employee Email</th>
                                             <th style="padding: 10px;">Joined At</th>
-                                            <th style="padding: 10px;" ng-if="employeeData.dateOfLeaving">Date of
+                                            <th style="padding: 10px;" ng-if="employeeData.employeeDetails.dateOfLeaving">Date of
                                                 Leaving</th>
                                             <th style="padding: 10px;">Designation</th>
                                             <th style="padding: 10px;">Department</th>
@@ -155,19 +159,22 @@
                                     <tbody>
                                         <tr>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.employeeEmail}}</p>
+                                                <p>{{employeeData.employeeDetails.employeeEmail
+                                                    }}</p>
                                             </td>
                                             <td style="padding: 10px;">
                                                 <p>{{employeeData.createdAt | date: 'dd-MM-yyyy'}}</p>
                                             </td>
-                                            <td style="padding: 10px;" ng-if="employeeData.dateOfLeaving">
-                                                <p>{{employeeData.dateOfLeaving | date: 'dd-MM-yyyy'}}</p>
+                                            <td style="padding: 10px;"
+                                                ng-if="employeeData.employeeDetails.dateOfLeaving">
+                                                <p>{{employeeData.employeeDetails.dateOfLeaving | date: 'dd-MM-yyyy'}}
+                                                </p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.designation}}</p>
+                                                <p>{{employeeData.employeeDetails.designation}}</p>
                                             </td>
                                             <td style="padding: 10px;">
-                                                <p>{{employeeData.department}}</p>
+                                                <p>{{employeeData.employeeDetails.department}}</p>
                                             </td>
                                             <td style="padding: 10px;">
                                                 <p>{{employeeData.reportingTo.managerName}}</p>
@@ -203,41 +210,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form name="updateForm" novalidate autocomplete="off">
-                        <h6>Employee Personal Information</h6>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
-                            <input type="text" ng-model="employee.firstName" class="form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                    <form name="upadteForm" novalidate autocomplete="off">
+                        <h5>Employee Information</h5>
+                        <div class="form-group">
+                            <label for="employee.firstName">First Name</label>
+                            <input type="text" ng-model="employee.firstName" class="form-control">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Last Name</span>
+                        <div class="form-group">
+                            <label for="employee.lastName">Last Name</label>
                             <input type="text" ng-model="employee.lastName" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Personal Email</span>
-                            <input type="text" ng-model="employee.personalEmail" class="form-control"
+                        <h6 style="margin-top: 15px;">Employee Details</h6>
+                        <div class="form-group">
+                            <label for="employee.employeeDetails.designation">Designation</label>
+                            <input type="text" ng-model="employee.employeeDetails.designation" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
-                        <div class="dropdown">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Marital Status</span>
-                            <select class="form-select" aria-label="Default select example"
-                                ng-model="employee.maritalStatus">
-                                <option ng-value="status" ng-repeat="status in maritalStatuses">
-                                    {{status}}
-                                </option>
-                            </select>
-                        </div>
-
-                        <h6>Employee Details</h6>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Designation</span>
-                            <input type="text" ng-model="employee.designation" class="form-control"
-                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                        <div class="dropdown">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Employee Role</span>
+                        <div class="form-group">
+                            <label for="employee.employeeRole">Employee Role</label>
                             <select class="form-select" aria-label="Default select example"
                                 ng-model="employee.employeeRole">
                                 <option ng-value="role" ng-repeat="role in employeeRoles">
@@ -245,8 +236,60 @@
                                 </option>
                             </select>
                         </div>
-
-
+                        <h6 style="margin-top: 15px;">Personal Details</h6>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.contact.personalEmail">Personal Email</label>
+                            <input type="text" ng-model="employee.personalDetails.contact.personalEmail"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.contact.phoneNumber">Phone Number</label>
+                            <input type="text" ng-model="employee.personalDetails.contact.phoneNumber"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.dateOfBirth">Date Of Birth
+                                (MM-DD-YYY)</label>
+                            <input type="text" ng-model="employee.personalDetails.dateOfBirth" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.bloodGroup">Blood Group</label>
+                            <input type="text" ng-model="employee.personalDetails.bloodGroup" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.aadharNumber">Aadhar Number</label>
+                            <input type="text" ng-model="employee.personalDetails.aadharNumber" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.panNumber">Pan Number</label>
+                            <input type="text" ng-model="employee.personalDetails.panNumber" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.street">Current Address
+                                Street</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.street"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.city">Current Address City</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.city"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.pincode">Current Address
+                                Pincode</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.pincode"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="superButtonClose" data-bs-dismiss="modal"
                                 style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
@@ -283,7 +326,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Employee Email</span>
-                            <input type="text" ng-model="employee.employeeEmail" class="form-control"
+                            <input type="text" ng-model="employee.employeeDetails.employeeEmail" class="form-control"
                                 aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
                         </div>
                         <h6>Do you wish to remove this employee?</h6>

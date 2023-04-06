@@ -55,6 +55,11 @@ app.factory('hrService', [
                 url = 'http://localhost:5000/api/hradmin/new-employee';
                 return $http.post(url, user);
             },
+            changePassword: function(password) {
+                // console.log(password);
+                url = 'http://localhost:5000/api/hradmin/change-password';
+                return $http.put(url, password);
+            }
         }
     }
 ])

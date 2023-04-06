@@ -6,13 +6,25 @@ app.factory('superadminService', [
         var url = "";
 
         return {
-            getAllCompanies: function() {
+            getAllCompanies: function(currPage, pageSize) {
                 url = 'http://localhost:5000/api/superadmin/all-companies';
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
-            getAllInactiveCompanies: function() {
+            getAllInactiveCompanies: function(currPage, pageSize) {
                 url = 'http://localhost:5000/api/superadmin/inactive-companies';
-                return $http.get(url);
+                return $http.get(url, {
+                    params:
+                    {
+                        page: currPage,
+                        count: pageSize
+                    }
+                });
             },
             getCompany: function(id) {
                 url = 'http://localhost:5000/api/superadmin/company/' + id;
@@ -41,6 +53,11 @@ app.factory('superadminService', [
             createCompany: function(user) {
                 url = 'http://localhost:5000/api/superadmin/create-company';
                 return $http.post(url, user);
+            },
+            changePassword: function(password) {
+                // console.log(password);
+                url = 'http://localhost:5000/api/superadmin/change-password';
+                return $http.put(url, password);
             }
         }
     }

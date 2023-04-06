@@ -1,4 +1,5 @@
-var Employee = require('../../models/employee');
+// var Employee = require('../../models/employee');
+var Employee = require('../employee-operations/employee.model');
 
 var checkUser = {
     checkUser: function (req, res) {
@@ -12,6 +13,7 @@ var checkUser = {
             })
             .then(function (item) {
                 if (item) {
+                    console.log(item);
                     console.log('Found user');
                     res.status(201).json({
                         message: 'Found user',

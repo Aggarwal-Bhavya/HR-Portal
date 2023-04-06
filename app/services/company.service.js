@@ -55,6 +55,7 @@ app.factory('companyService', [
             },
             getBranchHead: function (id, branchId) {
                 url = 'http://localhost:5000/api/company/branch-head/' + id + '/' + branchId;
+                // url = 'http://localhost:5000/api/company/branch-admin-info' + '/' + id;
                 return $http.get(url);
             },
             getCompanyHeadCount: function (id) {
@@ -72,6 +73,11 @@ app.factory('companyService', [
             getMonthYearRatios: function(compId, branchId, month, year) {
                 url = 'http://localhost:5000/api/company/monthly-ratios/' + compId + '/' + branchId + '/' + month + '/' + year;
                 return $http.get(url);
+            },
+            changePassword: function(password) {
+                // console.log(password);
+                url = 'http://localhost:5000/api/company/change-password';
+                return $http.put(url, password);
             }
         }
     }

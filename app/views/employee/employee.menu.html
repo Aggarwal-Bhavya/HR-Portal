@@ -7,7 +7,7 @@
 
         <ul class="nav-links">
             <li>
-                <a>
+                <a ui-sref="menu.dashboard">
                     <i class='bx bx-grid-alt'></i>
                     <span class="link-name">Dashboard</span>
                 </a>
@@ -25,10 +25,15 @@
                 </a>
             </li>
             <li>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#updateBranchAdminModal"
-                    ng-click="openUpdateBranchAdminModal()">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#updateModal" ng-click="openUpdateModal()">
                     <i class='bx bx-user-circle'></i>
                     <span class="link-name">Update Data</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#setPasswordModal" ng-click="openSetPasswordModal()">
+                    <i class='bx bxl-gmail'></i>
+                    <span class="link-name">Change Password</span>
                 </a>
             </li>
             <li class="log-out">
@@ -64,7 +69,8 @@
                 <span>
                     <span id="headerAttendanceTimeMessage" ng-if="timeIn && !timeOut">Last In: </span>
                     <!-- <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{punchTimeIn}}</strong> -->
-                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn | date: 'dd/MM/yyyy hh:mma'}}</strong>
+                    <strong id="headerAttendanceTime" ng-if="timeIn && !timeOut">{{timeIn.timeIn | date: 'dd/MM/yyyy
+                        hh:mma'}}</strong>
 
                 </span>
             </div>
@@ -73,4 +79,129 @@
         <main ui-view> </main>
 
     </section>
+
+    <!-- BRANCH ADMIN UPDATE THEIR PROFILE MODAL -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update Branch Admin Information
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="upadteBranchAdminForm" novalidate autocomplete="off">
+                        <h5>Branch Admin Information</h5>
+                        <div class="form-group">
+                            <label for="employee.firstName">First Name</label>
+                            <input type="text" ng-model="employee.firstName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.lastName">Last Name</label>
+                            <input type="text" ng-model="employee.lastName" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <h6 style="margin-top: 15px;">Personal Details</h6>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.contact.personalEmail">Personal Email</label>
+                            <input type="text" ng-model="employee.personalDetails.contact.personalEmail"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.contact.phoneNumber">Phone Number</label>
+                            <input type="text" ng-model="employee.personalDetails.contact.phoneNumber"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.dateOfBirth">Date Of Birth
+                                (MM-DD-YYY)</label>
+                            <input type="text" ng-model="employee.personalDetails.dateOfBirth" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.bloodGroup">Blood Group</label>
+                            <input type="text" ng-model="employee.personalDetails.bloodGroup" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.aadharNumber">Aadhar Number</label>
+                            <input type="text" ng-model="employee.personalDetails.aadharNumber" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.panNumber">Pan Number</label>
+                            <input type="text" ng-model="employee.personalDetails.panNumber" class="form-control"
+                                aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.street">Current Address
+                                Street</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.street"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.city">Current Address City</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.city"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="form-group">
+                            <label for="employee.personalDetails.currentAddress.pincode">Current Address
+                                Pincode</label>
+                            <input type="text" ng-model="employee.personalDetails.currentAddress.pincode"
+                                class="form-control" aria-label="Sizing edit input"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="superButtonClose" data-bs-dismiss="modal"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Close
+                            </button>
+                            <button type="button" class="superButton" ng-click="updateData($event)"
+                                style="color: white; background-color: #5433ea; border: none; border-radius: 5px;">
+                                Update Information
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!-- CHANGE PASSWORD MODAL -->
+    <div class="modal fade" id="setPasswordModal" tabindex="-1" aria-labelledby="setPasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="setPasswordModalLabel">Set Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="setPasswordForm" novalidate autocomplete="off">
+                        <h5>Change Password</h5>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" ng-model="newPassword" class="form-control" id="newPassword"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" ng-model="confirmPassword" class="form-control"
+                                id="confirmPassword" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" ng-click="changePassword($event)"
+                                ng-disabled="setPasswordForm.$invalid || (newPassword !== confirmPassword)">Save
+                                changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

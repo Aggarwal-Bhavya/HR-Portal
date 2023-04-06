@@ -62,6 +62,11 @@ app.factory('branchService', [
             removeEmployee: function(id) {
                 url = 'http://localhost:5000/api/branch/remove-employee/' + id;
                 return $http.put(url);
+            },
+            changePassword: function(password) {
+                // console.log(password);
+                url = 'http://localhost:5000/api/branch/change-password';
+                return $http.put(url, password);
             }
         }
     }

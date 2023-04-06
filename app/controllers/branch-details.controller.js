@@ -217,7 +217,7 @@ app.controller('branchDetailsCtrl', [
                 .getBranch(branch._id)
                 .then(function (res) {
                     $scope.branch = res.data.branchData;
-                    // console.log($scope.company);
+                    // console.log($scope.branch);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -227,17 +227,37 @@ app.controller('branchDetailsCtrl', [
 
         $scope.saveData = function ($event) {
             $event.preventDefault();
+            if (typeof ($scope.branch.contactNumber) == "string") {
+                $scope.branch.contactNumber = $scope.branch.contactNumber.split(",");
+            }
+            if (typeof ($scope.branch.departments) == "string") {
+                $scope.branch.departments = $scope.branch.departments.split(",");
+            }
+            // console.log($scope.branch);
 
             companyService
                 .updateBranch($scope.branch)
                 .then(function (res) {
                     // console.log(res.data);
-                    $window.location.reload();
+                    $window.location.reload(); 
                 })
                 .catch(function (err) {
                     console.log(err);
                 })
         };
 
+        // BRANCH ADMIN INFO
+        $scope.openBranchAdminModal = function ($event) {
+            companyService
+                .getBranchHead(currCompany.companyDetails.companyId, branchId)
+                .then(function (res) {
+                    console.log(res.data.branchHead);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+            $http.get('#branchAdminModal').modal('show');
+
+        }
     }
 ]);
