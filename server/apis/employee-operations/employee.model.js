@@ -15,12 +15,12 @@ var employeeSchema = new Schema({
     password: {
         type: String,
         minlength: 8,
-        select: false
+        // select: false
     },
     passwordHash: {
         type: String,
         required: true,
-        select: false
+        // select: false
     },
     passwordSalt: {
         type: String,

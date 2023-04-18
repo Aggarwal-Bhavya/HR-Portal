@@ -164,9 +164,21 @@ var branchActivity = {
                     })
                     .catch(function (err) {
                         console.log("branch admin error    ", err);
-                        res.status(500).json({
-                            message: err
-                        })
+                        
+                        Branch
+                            .findByIdAndDelete({_id: data.id})
+                            .then(function (item) {
+                                res.status(200).json({
+                                    message: 'Error creating branch admin so rolled back',
+                                    data: item
+                                })
+                            })
+                            .catch(function (err) {
+                                res.status(500).json({
+                                    message: 'Could not rollback for admin',
+                                    data: err
+                                })
+                            })
                     })
             })
             .catch(function (err) {

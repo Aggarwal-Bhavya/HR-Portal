@@ -85,7 +85,7 @@ var branchAdminActions = {
     changePassword: function (req, res) {
         var id = req.body.id;
         var password = req.body.password;
-        // console.log(password);
+        console.log(req.body);
         var { salt, hash } = hashPassword(password);
 
         Employee

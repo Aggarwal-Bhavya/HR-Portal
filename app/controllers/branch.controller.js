@@ -403,7 +403,7 @@ app.controller('branchAdminCtrl', [
                 .then(function (res) {
                     // console.log(res.data.data);
                     alert(res.data.message);
-                    $window.location.reload();
+                    // $window.location.reload();
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -420,6 +420,12 @@ app.controller('branchAdminCtrl', [
         $scope.errorMessages = {
             required: 'This field is required.',
             pattern: 'Invalid format.',
+        };
+
+        $scope.logoutAction = function () {
+            localStorage.removeItem("Authorization");
+            localStorage.removeItem("user");
+            $state.go("login");
         };
     }
 ])

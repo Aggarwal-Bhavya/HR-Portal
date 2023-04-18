@@ -540,7 +540,13 @@ app.controller('employeeCtrl', [
                 .catch(function (err) {
                     console.log(err);
                 })
-        }
+        };
+
+        $scope.logoutAction = function () {
+            localStorage.removeItem("Authorization");
+            localStorage.removeItem("user");
+            $state.go("login");
+        };
 
     }
 ]);

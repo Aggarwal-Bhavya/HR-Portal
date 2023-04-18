@@ -57,7 +57,7 @@
                 </a>
             </li>
             <li class="log-out">
-                <a href="#">
+                <a href="#" ng-click="logoutAction()">
                     <i class='bx bx-log-out'></i>
                     <span class="link-name">Logout</span>
                 </a>
@@ -114,14 +114,29 @@
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.contact.personalEmail">Personal Email</label>
                                 <input type="text" ng-model="companyadmin.personalDetails.contact.personalEmail"
-                                    class="form-control" aria-label="Sizing edit input"
-                                    aria-describedby="inputGroup-sizing-default">
+                                    class="form-control" ng-required="true" name="personalEmail">
+                                <div ng-show="upadteCompanyAdminForm.personalEmail.$dirty && upadteCompanyAdminForm.personalEmail.$error.required"
+                                    class="errorMessage">
+                                    {{errorMessages.required}}
+                                </div>
+                                <div ng-show="upadteCompanyAdminForm.personalEmail.$dirty && upadteCompanyAdminForm.personalEmail.$error.email"
+                                    class="errorMessage">
+                                    {{errorMessages.pattern}}
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.contact.phoneNumber">Phone Number</label>
                                 <input type="text" ng-model="companyadmin.personalDetails.contact.phoneNumber"
-                                    class="form-control" aria-label="Sizing edit input"
-                                    aria-describedby="inputGroup-sizing-default">
+                                    class="form-control" ng-required="true" name="phoneNumber" ng-pattern="/^\d{10}$/">
+                                <div ng-show="upadteCompanyAdminForm.phoneNumber.$dirty && upadteCompanyAdminForm.phoneNumber.$invalid"
+                                    class="errorMessage">
+                                    <div ng-show="upadteCompanyAdminForm.phoneNumber.$error.required">{{
+                                        errorMessages.required}}</div>
+                                    <div ng-show="upadteCompanyAdminForm.phoneNumber.$error.pattern">{{
+                                        errorMessages.pattern
+                                        }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.dateOfBirth">Date Of Birth
@@ -132,8 +147,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.bloodGroup">Blood Group</label>
-                                <input type="text" ng-model="companyadmin.personalDetails.bloodGroup" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" ng-model="companyadmin.personalDetails.bloodGroup"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.aadharNumber">Aadhar Number</label>
@@ -143,8 +159,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.panNumber">Pan Number</label>
-                                <input type="text" ng-model="companyadmin.personalDetails.panNumber" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" ng-model="companyadmin.personalDetails.panNumber"
+                                    class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default">
                             </div>
                             <div class="form-group">
                                 <label for="companyadmin.personalDetails.currentAddress.street">Current Address
@@ -154,7 +171,8 @@
                                     aria-describedby="inputGroup-sizing-default">
                             </div>
                             <div class="form-group">
-                                <label for="companyadmin.personalDetails.currentAddress.city">Current Address City</label>
+                                <label for="companyadmin.personalDetails.currentAddress.city">Current Address
+                                    City</label>
                                 <input type="text" ng-model="companyadmin.personalDetails.currentAddress.city"
                                     class="form-control" aria-label="Sizing edit input"
                                     aria-describedby="inputGroup-sizing-default">
@@ -196,25 +214,28 @@
                             <h6>Branch Information</h6>
                             <div class="form-group">
                                 <label for="branch.branchName">Branch Name</label>
-                                <input type="text" ng-model="branch.branchName" class="form-control"
-                                ng-required="true" name="branchName">
-                                <div ng-show="newBranchForm.branchName.$dirty && newBranchForm.branchName.$error.required" class="errorMessage">
+                                <input type="text" ng-model="branch.branchName" class="form-control" ng-required="true"
+                                    name="branchName">
+                                <div ng-show="newBranchForm.branchName.$dirty && newBranchForm.branchName.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="branch.address">Branch Location</label>
-                                <input type="text" ng-model="branch.address" class="form-control"
-                                ng-required="true" name="address">
-                                <div ng-show="newBranchForm.address.$dirty && newBranchForm.address.$error.required" class="errorMessage">
+                                <input type="text" ng-model="branch.address" class="form-control" ng-required="true"
+                                    name="address">
+                                <div ng-show="newBranchForm.address.$dirty && newBranchForm.address.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="branch.city">Branch City</label>
-                                <input type="text" ng-model="branch.branchCity" class="form-control"
-                                ng-required="true" name="branchCity">
-                                <div ng-show="newBranchForm.branchCity.$dirty && newBranchForm.branchCity.$error.required" class="errorMessage">
+                                <input type="text" ng-model="branch.branchCity" class="form-control" ng-required="true"
+                                    name="branchCity">
+                                <div ng-show="newBranchForm.branchCity.$dirty && newBranchForm.branchCity.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
                             </div>
@@ -222,17 +243,19 @@
                                 <label for="branch.contactNumber">Branch Contact
                                     Details</label>
                                 <input type="text" ng-model="branch.contactNumber" class="form-control"
-                                ng-required="true" name="contactNumber">
-                                <div ng-show="newBranchForm.contactNumber.$dirty && newBranchForm.contactNumber.$error.required" class="errorMessage">
+                                    ng-required="true" name="contactNumber">
+                                <div ng-show="newBranchForm.contactNumber.$dirty && newBranchForm.contactNumber.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="branch.departments">Branch
                                     Departments</label>
-                                <input type="text" ng-model="branch.departments" class="form-control"
-                                ng-required="true" name="departments">
-                                <div ng-show="newBranchForm.departments.$dirty && newBranchForm.departments.$error.required" class="errorMessage">
+                                <input type="text" ng-model="branch.departments" class="form-control" ng-required="true"
+                                    name="departments">
+                                <div ng-show="newBranchForm.departments.$dirty && newBranchForm.departments.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
                             </div>
@@ -240,29 +263,35 @@
                             <h6>Branch Admin Information</h6>
                             <div class="form-group">
                                 <label for="branch.firstName">First Name</label>
-                                <input type="text" ng-model="branch.firstName" class="form-control"
-                                ng-required="true" name="firstName">
-                                <div ng-if="newBranchForm.firstName.$dirty && newBranchForm.firstName.$error.required" class="errorMessage">
-                                    <div ng-show="newBranchForm.firstName.$error.required">{{errorMessages.required}}</div>
+                                <input type="text" ng-model="branch.firstName" class="form-control" ng-required="true"
+                                    name="firstName">
+                                <div ng-if="newBranchForm.firstName.$dirty && newBranchForm.firstName.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newBranchForm.firstName.$error.required">{{errorMessages.required}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="branch.lastName">Last Name</label>
-                                <input type="text" ng-model="branch.lastName" class="form-control"
-                                ng-required="true" name="lastName">
-                                <div ng-if="newBranchForm.lastName.$dirty && newBranchForm.lastName.$error.required" class="errorMessage">
-                                    <div ng-show="newBranchForm.lastName.$error.required">{{errorMessages.required}}</div>
+                                <input type="text" ng-model="branch.lastName" class="form-control" ng-required="true"
+                                    name="lastName">
+                                <div ng-if="newBranchForm.lastName.$dirty && newBranchForm.lastName.$error.required"
+                                    class="errorMessage">
+                                    <div ng-show="newBranchForm.lastName.$error.required">{{errorMessages.required}}
+                                    </div>
                                 </div>
                             </div>
                             <h6 style="margin-top: 15px;">Employee Details</h6>
                             <div class="form-group">
                                 <label for="branch.employeeEmail">Employee Email</label>
                                 <input type="email" ng-model="branch.employeeEmail" class="form-control"
-                                ng-required="true" name="employeeEmail">
-                                <div ng-show="newBranchForm.employeeEmail.$dirty && newBranchForm.employeeEmail.$error.required" class="errorMessage">
+                                    ng-required="true" name="employeeEmail">
+                                <div ng-show="newBranchForm.employeeEmail.$dirty && newBranchForm.employeeEmail.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
-                                <div ng-show="newBranchForm.employeeEmail.$dirty && newBranchForm.employeeEmail.$error.email" class="errorMessage">
+                                <div ng-show="newBranchForm.employeeEmail.$dirty && newBranchForm.employeeEmail.$error.email"
+                                    class="errorMessage">
                                     {{errorMessages.pattern}}
                                 </div>
                             </div>
@@ -270,11 +299,13 @@
                             <div class="form-group">
                                 <label for="branch.personalEmail">Personal Email</label>
                                 <input type="email" ng-model="branch.personalEmail" class="form-control"
-                                ng-required="true" name="personalEmail">
-                                <div ng-show="newBranchForm.personalEmail.$dirty && newBranchForm.personalEmail.$error.required" class="errorMessage">
+                                    ng-required="true" name="personalEmail">
+                                <div ng-show="newBranchForm.personalEmail.$dirty && newBranchForm.personalEmail.$error.required"
+                                    class="errorMessage">
                                     {{errorMessages.required}}
                                 </div>
-                                <div ng-show="newBranchForm.personalEmail.$dirty && newBranchForm.personalEmail.$error.email" class="errorMessage">
+                                <div ng-show="newBranchForm.personalEmail.$dirty && newBranchForm.personalEmail.$error.email"
+                                    class="errorMessage">
                                     {{errorMessages.pattern}}
                                 </div>
                             </div>
@@ -285,15 +316,15 @@
                             </div> -->
                             <div class="form-group">
                                 <label for="branch.gender">Gender</label>
-                                <select ng-model="branch.gender" class="form-control"
-                                    aria-label="Sizing edit input" aria-describedby="inputGroup-sizing-default"
-                                    name="gender" required>
+                                <select ng-model="branch.gender" class="form-control" aria-label="Sizing edit input"
+                                    aria-describedby="inputGroup-sizing-default" name="gender" required>
                                     <option value="">-- Select Gender --</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                     <option value="other">Other</option>
                                 </select>
-                                <div ng-show="newBranchForm.gender.$dirty && newBranchForm.gender.$invalid" class="errorMessage">
+                                <div ng-show="newBranchForm.gender.$dirty && newBranchForm.gender.$invalid"
+                                    class="errorMessage">
                                     <div ng-show="newBranchForm.gender.$error.required">{{errorMessages.required}}</div>
                                 </div>
                             </div>

@@ -628,5 +628,11 @@ app.controller('hrAdminCtrl', [
             required: 'This field is required.',
             pattern: 'Invalid format.',
         };
+
+        $scope.logoutAction = function () {
+            localStorage.removeItem("Authorization");
+            localStorage.removeItem("user");
+            $state.go("login");
+        };
     }
 ]);

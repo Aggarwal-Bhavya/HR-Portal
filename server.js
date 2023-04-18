@@ -1,5 +1,6 @@
 // importing modules
 var app = require('./server/index');
+require('dotenv').config();
 
 // creating socket
 var socketIO = require('socket.io');

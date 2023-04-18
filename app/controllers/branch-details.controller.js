@@ -9,7 +9,8 @@ app.controller('branchDetailsCtrl', [
     '$http',
     '$q',
     'companyService',
-    function ($scope, $rootScope, $stateParams, $rootScope, $window, $http, $q, companyService) {
+    'companyFactory',
+    function ($scope, $rootScope, $stateParams, $rootScope, $window, $http, $q, companyService, companyFactory) {
         var currCompany = JSON.parse(localStorage.getItem('user'));
         var branchId = $stateParams.branch_id;
 
@@ -212,15 +213,13 @@ app.controller('branchDetailsCtrl', [
 
         // EDIT BRANCH INFO MODAL
         $scope.openEditModal = function (branch) {
-            // console.log(branch._id);
-            companyService
-                .getBranch(branch._id)
-                .then(function (res) {
-                    $scope.branch = res.data.branchData;
-                    // console.log($scope.branch);
-                })
-                .catch(function (err) {
-                    console.log(err);
+            companyFactory
+                .getBranch(branch._id, function (err, res) {
+                    if (res) {
+                        $scope.branch = res.data.branchData;
+                    } else {
+                        console.log(err)
+                    }
                 })
             $http.get('#editModal').modal('show');
         };
@@ -235,26 +234,25 @@ app.controller('branchDetailsCtrl', [
             }
             // console.log($scope.branch);
 
-            companyService
-                .updateBranch($scope.branch)
-                .then(function (res) {
-                    // console.log(res.data);
-                    $window.location.reload(); 
-                })
-                .catch(function (err) {
-                    console.log(err);
+            companyFactory
+                .updateBranch($scope.branch, function (err, res) {
+                    if (res) {
+                        $window.location.reload();
+                    } else {
+                        console.log(err);
+                    }
                 })
         };
 
         // BRANCH ADMIN INFO
         $scope.openBranchAdminModal = function ($event) {
-            companyService
-                .getBranchHead(currCompany.companyDetails.companyId, branchId)
-                .then(function (res) {
-                    console.log(res.data.branchHead);
-                })
-                .catch(function (err) {
-                    console.log(err);
+            companyFactory
+                .getBranchHead(currCompany.companyDetails.companyId, branchId, function (err, res) {
+                    if (res) {
+                        // console.log(res.data.branchHead);
+                    } else {
+                        console.log(err)
+                    }
                 })
             $http.get('#branchAdminModal').modal('show');
 

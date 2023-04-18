@@ -8,8 +8,9 @@ app.controller('superAdminCtrl', [
     '$stateParams',
     '$element',
     'superadminService',
+    'superadminFactory',
     '$rootScope',
-    function ($scope, $http, $window, $state, $stateParams, $element, superadminService, $rootScope) {
+    function ($scope, $http, $window, $state, $stateParams, $element, superadminService, superadminFactory, $rootScope) {
         $scope.currentPage = 1;
         $scope.pageSize = 5;
         $scope.totalPages = 1;
@@ -34,19 +35,18 @@ app.controller('superAdminCtrl', [
         }
 
         function getAllCompanies() {
-            superadminService
-                .getAllCompanies($scope.currentPage, $scope.pageSize)
-                .then(function (res) {
-                    $scope.loading = false;
-                    // $scope.companies = res.data.companyData;
-                    $scope.companies = res.data.companyData;
-                    $scope.activeCount = res.data.companyData.length;
-                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+            superadminFactory
+                .getCompanies($scope.currentPage, $scope.pageSize, function (err, res) {
+                    if (res) {
+                        $scope.loading = false;
+                        $scope.companies = res.data.companyData;
+                        $scope.activeCount = res.data.companyData.length;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    } else {
+                        $scope.loading = true;
+                        console.log('Errorrr    ', err);
+                    }
                 })
-                .catch(function (err) {
-                    $scope.loading = true;
-                    console.log(err);
-                });
         }
 
 
@@ -88,17 +88,15 @@ app.controller('superAdminCtrl', [
 
         // MORE DETAILS FOR SOME COMPANY + REDIRECTION TO STATE
         $scope.moreDetails = function (company) {
-            superadminService
-                .getCompany(company._id)
-                .then(function (res) {
-                    // console.log(res.data.companyData);
-                    $rootScope.specificCompany = res.data.companyData;
-                    $state.go("sidebar.company", { company_id: company._id });
-
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            superadminFactory
+                .getCompany(company._id, function (err, res) {
+                    if (res) {
+                        $rootScope.specificCompany = res.data.companyData;
+                        $state.go("sidebar.company", { company_id: company._id });
+                    } else {
+                        console.log(err)
+                    }
+                });
         }
 
 
@@ -134,31 +132,28 @@ app.controller('superAdminCtrl', [
         // UPDATING SUPER ADMIN INFORMATION MODAL
         $scope.openUpdateSuperAdminModal = function () {
 
-            superadminService
-                .getSuperadmin()
-                .then(function (res) {
-                    $scope.superadmin = res.data.adminData;
-                    $scope.doj = res.data.adminData.createdAt;
-                    // console.log($scope.superadmin);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            superadminFactory
+                .getAdmin(function (err, res) {
+                    if (res) {
+                        $scope.superadmin = res.data.adminData;
+                        $scope.doj = res.data.adminData.createdAt;
+                    } else {
+                        console.log(err);
+                    }
+                });
             $http.get('#updateSuperAdminModal').modal('show');
         };
 
         $scope.updateSuperAdmin = function ($event) {
             $event.preventDefault();
-            // console.log($scope.superadmin)
-            superadminService
-                .updateSuperadmin($scope.superadmin)
-                .then(function (res) {
-                    // console.log(res.data);
-                    $window.location.reload();
-                })
-                .catch(function (err) {
-                    console.log(err)
-                })
+            superadminFactory
+                .updateAdmin($scope.superadmin, function (err, res) {
+                    if(res) {
+                        alert('success');
+                    } else {
+                        console.log(err);
+                    }
+                });
         };
 
 
@@ -190,16 +185,15 @@ app.controller('superAdminCtrl', [
             $event.preventDefault();
             // console.log($scope.company);
 
-            superadminService
-                .createCompany($scope.company)
-                .then(function (res) {
-                    // console.log(res.data);
-                    alert('Added succesfully!');
-                    $window.location.reload();
-                })
-                .catch(function (err) {
-                    console.log(err)
-                })
+            superadminFactory
+                .createCompany($scope.company, function (err, res) {
+                    if(res) {
+                        alert(res.data.message);
+                        $window.location.reload();
+                    } else {
+                        console.log(err);
+                    }
+                });
         };
 
         // CHANGE PASSWORD MODAL
@@ -210,8 +204,8 @@ app.controller('superAdminCtrl', [
         $scope.changePassword = function ($event) {
             $event.preventDefault();
 
-            superadminService
-                .changePassword({ password: $scope.newPassword })
+            superadminFactory
+                .changePassword($scope.newPassword)
                 .then(function (res) {
                     // console.log(res.data);
                     alert(res.data.message);
@@ -220,12 +214,18 @@ app.controller('superAdminCtrl', [
                 .catch(function (err) {
                     console.log(err);
                 })
-        }
+        };
+
+        $scope.logoutAction = function () {
+            localStorage.removeItem("Authorization");
+            localStorage.removeItem("user");
+            $state.go("login");
+        };
 
         $scope.errorMessages = {
             required: 'This field is required.',
             pattern: 'Invalid format.',
         };
-          
+
     }
-])
+]);

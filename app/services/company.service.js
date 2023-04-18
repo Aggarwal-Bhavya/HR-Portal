@@ -62,20 +62,20 @@ app.factory('companyService', [
                 url = 'http://localhost:5000/api/company/company-head-count/' + id;
                 return $http.get(url);
             },
-            getBranchesPerformance: function(id, year) {
+            getBranchesPerformance: function (id, year) {
                 url = 'http://localhost:5000/api/company/branch-performance/' + id + '/' + year;
                 return $http.get(url);
             },
-            getMonthYearPerformance: function(id, month, year) {
+            getMonthYearPerformance: function (id, month, year) {
                 url = 'http://localhost:5000/api/company/monthly-performance/' + id + '/' + month + '/' + year;
                 return $http.get(url);
             },
-            getMonthYearRatios: function(compId, branchId, month, year) {
+            getMonthYearRatios: function (compId, branchId, month, year) {
                 url = 'http://localhost:5000/api/company/monthly-ratios/' + compId + '/' + branchId + '/' + month + '/' + year;
                 return $http.get(url);
             },
-            changePassword: function(password) {
-                // console.log(password);
+            changePassword: function (password) {
+                console.log(password);
                 url = 'http://localhost:5000/api/company/change-password';
                 return $http.put(url, password);
             }

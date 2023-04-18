@@ -78,23 +78,24 @@ var comapnyAdminActions = {
     changePassword: function (req, res) {
         var id = req.body.id;
         var password = req.body.password;
-        // console.log(password);
+
         var { salt, hash } = hashPassword(password);
 
         Employee
             .findOneAndUpdate(
-                { $and: [{ employeeRole: "companyadmin" }, { isActive: true }, { "company.companyId": id }] },
-                { $set: {
-                    password: password,
-                    passwordHash: hash,
-                    passwordSalt: salt
-                } },
+                { $and: [{ employeeRole: "companyadmin"}, { isActive: true }, { _id: id }] },
+                {
+                    $set: {
+                        password: password,
+                        passwordHash: hash,
+                        passwordSalt: salt
+                    }
+                },
                 {
                     employeeDetails: 1
                 }
             )
             .then(function (item) {
-                // res.send("success")
                 res.status(201).json({
                     message: 'success',
                     data: item

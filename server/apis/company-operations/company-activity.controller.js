@@ -177,10 +177,21 @@ var companyActivity = {
                     })
                     .catch(function (err) {
                         console.log("company admin error   ", err);
-                        res.status(500).json({
-                            // message: 'Error',
-                            error: err
-                        });
+
+                        Company
+                            .findByIdAndDelete({_id: data._id})
+                            .then( function (item) {
+                                res.status(200).json({
+                                    message: 'Error creating company admin so rolled back',
+                                    data: item
+                                })
+                            })
+                            .catch(function (err) {
+                                res.status(500).json({
+                                    message: 'Could not rollback for admin',
+                                    data: err
+                                })
+                            })
                     })
             })
             .catch(function (err) {
