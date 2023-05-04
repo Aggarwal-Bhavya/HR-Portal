@@ -157,6 +157,171 @@ var leaveOperations = {
             })
     },
 
+    leaveRecordsFilter: function (req, res) {
+        var empId = req.params.empId;
+        var branchId = req.params.branchId;
+
+        var status = req.query.status;
+        var startDateValue = req.query.startDateValue ? new Date(req.query.startDateValue) : new Date(new Date().getFullYear(), 0, 1);
+        var endDateValue = req.query.endDateValue ? new Date(req.query.endDateValue) : new Date();
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+    
+
+        if(status !== undefined) {
+            if(status === 'pending') {
+                query['leaveDetails.approvalStatus'] = 'pending';
+            } else if(status === 'approved') {
+                query['leaveDetails.approvalStatus'] = 'approved';
+            } else if(status === 'rejected') {
+                query['leaveDetails.approvalStatus'] = 'rejected';
+            }
+        }
+
+        if(startDateValue !== undefined && endDateValue !== undefined) {
+            if(endDateValue < startDateValue) {
+                res.status(400).json({
+                    message: 'Invalid date range',
+                    data: null
+                })
+                return;
+            }
+            query['leaveDetails.startDate'] = {$gt: startDateValue, $lt: endDateValue};
+        }
+
+        query['employee.employeeId'] = empId;
+        query['branch.branchId'] = branchId;
+
+        // console.log(query);
+
+        Leave
+            .find(
+                query,
+                {
+                    employee: 1,
+                    leaveDetails: 1,
+                    createdAt: 1
+                }
+            )
+            .sort(
+                {
+                    createdAt: -1
+                }
+            )
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
+                res.status(201).json({
+                    message: 'All leaves data for this employee is',
+                    leaveData: paginatedData,
+                    totalCount: item.length
+                })
+            })
+            .catch(function (err) {
+                console.log('Error fetching leaves data   ', err);
+                res.status(500).json({
+                    message: 'Error fetching employee leave info',
+                    data: err
+                })
+            })
+    },
+
+    approvalLeavesFilter: function (req, res) {
+        var empId = req.params.empId;
+        var branchId = req.params.branchId;
+
+        var type = req.query.type;
+        var status = req.query.status;
+        var startDateValue = req.query.startDateValue ? new Date(req.query.startDateValue) : new Date(new Date().getFullYear(), 0, 1);
+        var endDateValue = req.query.endDateValue ? new Date(req.query.endDateValue) : new Date();
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+    
+
+        if(type !== undefined) {
+            if(type === 'casual') {
+                query['leaveDetails.leaveType'] = 'casual';
+            } else if(type === 'sick') {
+                query['leaveDetails.leaveType'] = 'sick';
+            } else if(type === 'personal') {
+                query['leaveDetails.leaveType'] = 'personal';
+            } else if(type === 'vacation') {
+                query['leaveDetails.leaveType'] = 'vacation';
+            } else if(type === 'emergency') {
+                query['leaveDetails.leaveType'] = 'emergency';
+            }
+        }
+
+        if(status !== undefined) {
+            if(status === 'pending') {
+                query['leaveDetails.approvalStatus'] = 'pending';
+            } else if(status === 'approved') {
+                query['leaveDetails.approvalStatus'] = 'approved';
+            } else if(status === 'rejected') {
+                query['leaveDetails.approvalStatus'] = 'rejected';
+            }
+        }
+
+        if(startDateValue !== undefined && endDateValue !== undefined) {
+            if(endDateValue < startDateValue) {
+                res.status(400).json({
+                    message: 'Invalid date range',
+                    data: null
+                })
+                return;
+            }
+            query['leaveDetails.startDate'] = {$gt: startDateValue, $lt: endDateValue};
+        }
+
+        query['reportingTo.managerId'] = empId;
+        query['branch.branchId'] = branchId;
+        // console.log(query);
+
+    
+        Leave
+            .find(
+                query,
+                {
+                    employee: 1,
+                    leaveDetails: 1,
+                    createdAt: 1
+                }
+            )
+            .sort(
+                {
+                    createdAt: -1
+                }
+            )
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
+                res.status(201).json({
+                    message: 'All leaves data for this employee is',
+                    leaveData: paginatedData,
+                    totalCount: item.length
+                })
+            })
+            .catch(function (err) {
+                console.log('Error fetching leaves data   ', err);
+                res.status(500).json({
+                    message: 'Error fetching employee leave info',
+                    data: err
+                })
+            })
+    },
+
     leaveStatusUpdate: function (req, res) {
         var id = req.params.leaveId;
         var status = req.body.status;

@@ -13,6 +13,7 @@ app.controller('branchAdminCtrl', [
     function ($scope, $http, $window, $rootScope, $state, $q, $element, branchService, companyService) {
         $scope.genders = ["male", "female", "other"];
         $scope.employeeRoles = ["departmenthead", "hradmin", "employee"];
+        $scope.exists = false;
 
         var currBranch = JSON.parse(localStorage.getItem('user'));
         $scope.branch = currBranch.branchDetails;
@@ -42,17 +43,39 @@ app.controller('branchAdminCtrl', [
 
 
         function getActiveEmployeeData() {
-            branchService
-                .getAllEmployees(currBranch.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
-                .then(function (res) {
-                    $scope.loading = false;
-                    $scope.employees = res.data.branchData;
-                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    $scope.headCount = res.data.totalCount;
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            if ($scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                branchService
+                    .getFilteredEmployees($scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue, $scope.bDepartment)
+                    .then(function (res) {
+                        $scope.loading = false;
+                        $scope.employees = res.data.branchData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        $scope.loading = true;
+                        console.log(err);
+                    })
+            } else {
+                branchService
+                    .getAllEmployees(currBranch.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.loading = false;
+                        $scope.employees = res.data.branchData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        $scope.headCount = res.data.totalCount;
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        };
+
+        $scope.filterEmployeeData = function filterEmployeeData() {
+            // console.log('filter employee')
+            if ($scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getActiveEmployeeData();
+            }
         }
 
         // VIEWING DEPARTMENT HEADS INFO + PAGINATION
@@ -368,9 +391,9 @@ app.controller('branchAdminCtrl', [
                 })
         };
 
-        
+
         // getting department list of branch
-        if(!$rootScope.departments || !$rootScope.creationDate) {
+        if (!$rootScope.departments || !$rootScope.creationDate) {
             $rootScope.departments = [];
             companyService
                 .getBranch(currBranch.branchDetails.branchId)
@@ -390,7 +413,7 @@ app.controller('branchAdminCtrl', [
 
         $scope.newPassword = '';
         $scope.confirmPassword = '';
-        
+
         $scope.changePassword = function ($event) {
             $event.preventDefault();
 

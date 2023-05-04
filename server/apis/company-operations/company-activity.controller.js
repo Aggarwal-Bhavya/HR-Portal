@@ -363,6 +363,60 @@ var companyActivity = {
                     data: err
                 })
             })
+    },
+
+    filterCompanyData: function (req, res) {
+        var statusValue = req.query.statusValue;
+        var startDateValue = req.query.startDateValue ? new Date(req.query.startDateValue) : new Date(new Date().getFullYear(), 0, 1);
+        var endDateValue = req.query.endDateValue ? new Date(req.query.endDateValue) : new Date();
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+        // console.log(req.query);
+
+        if(statusValue !== undefined) {
+            if(statusValue === 'active') {
+                query.isActive = true;
+            } else if(statusValue === 'inactive') {
+                query.isActive = false;
+            } 
+        } 
+
+        if(startDateValue !== undefined && endDateValue !== undefined) {
+            if(endDateValue < startDateValue) {
+                res.status(400).json({
+                    message: 'Invalid date range',
+                    data: null
+                })
+                return;
+            }
+            query.createdAt = {$gt: startDateValue, $lt: endDateValue};
+        }
+
+        Company
+            .find(query)
+            .sort({ createdAt: -1 })
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+                
+                res.status(201).json({
+                    message: 'Filtered data',
+                    companyData: paginatedData,
+                    totalCount: item.length
+                })
+            })
+            .catch(function (err) {
+                console.log(err)
+                res.status(500).json({
+                    message: 'Error filtering data',
+                    data: err
+                })
+            })
     }
 };
 

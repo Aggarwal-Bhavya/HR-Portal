@@ -10,7 +10,8 @@ app.controller('hrAdminCtrl', [
     'employeeService',
     'hrService',
     'companyService',
-    function ($scope, $http, $window, $state, $rootScope, $element, employeeService, hrService, companyService) {
+    'branchService',
+    function ($scope, $http, $window, $state, $rootScope, $element, employeeService, hrService, companyService, branchService) {
         $scope.hradmin = {};
 
         $scope.employeeRoles = ["departmenthead", "employee"];
@@ -45,16 +46,38 @@ app.controller('hrAdminCtrl', [
         }
 
         function getActiveEmployeeData() {
-            hrService
-                .getAllEmployees(currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
-                .then(function (res) {
-                    $scope.loading = false;
-                    $scope.employees = res.data.branchData;
-                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            if ($scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                branchService
+                    .getFilteredEmployees($scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue, $scope.bDepartment)
+                    .then(function (res) {
+                        $scope.loading = false;
+                        $scope.employees = res.data.branchData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        $scope.loading = true;
+                        console.log(err);
+                    })
+            } else {
+                hrService
+                    .getAllEmployees(currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.loading = false;
+                        $scope.employees = res.data.branchData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        }
+
+        $scope.filterEmployeeData = function filterEmployeeData() {
+            // console.log('filter employee')
+            if ($scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getActiveEmployeeData();
+            }
         }
 
         // VIEWING DEPARTMENT HEADS INFO + PAGINATION
@@ -501,30 +524,73 @@ app.controller('hrAdminCtrl', [
 
         // getting leaves data
         if ($state.current.name === 'sidemenu.leave.my-leaves') {
-            employeeService
-                .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId)
-                .then(function (res) {
-                    $scope.leavesInfo = res.data.leaveData;
-                    // console.log($scope.leavesInfo);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            $scope.leavesInfo = [];
+
+            getLeavesInfo();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getLeavesInfo();
+            };
+        }
+
+        function getLeavesInfo() {
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                employeeService
+                    .getFilteredLeaves(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue)
+                    .then(function (res) {
+                        $scope.leavesInfo = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            } else {
+                employeeService
+                    .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.leavesInfo = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        // console.log($scope.leavesInfo);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        }
+
+        $scope.filterLeaves = function filterLeaves() {
+            // console.log('filtering')
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getLeavesInfo();
+            }
         }
 
         // getting leaves that need to be approved
-        $scope.leavesToApprove = [];
+        // $scope.leavesToApprove = [];
         if ($state.current.name === 'sidemenu.leave.approve-leaves') {
-            employeeService
-                .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId)
-                .then(function (res) {
-                    $scope.leavesToApprove = res.data.leavesToApprove;
-                    // console.log($scope.leavesToApprove)
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-
+            $scope.leavesToApprove = [];
+            getLeavesToApprove();
+            $scope.loadPage = function (page) {
+                if (page === '...') {
+                    return;
+                }
+                if (page < 1) {
+                    page = 1
+                } else if (page > $scope.totalPages) {
+                    page = $scope.totalPages;
+                }
+                $scope.currentPage = page;
+                getLeavesToApprove();
+            };
 
             // approving leaves
             $scope.approveRequest = function (leave) {
@@ -562,6 +628,39 @@ app.controller('hrAdminCtrl', [
                     })
             }
         }
+
+        function getLeavesToApprove() {
+            if ($scope.status || $scope.startDateValue || $scope.endDateValue || $scope.leaveType) {
+                employeeService
+                    .getToApproveFilter(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize, $scope.status, $scope.leaveType, $scope.startDateValue, $scope.endDateValue)
+                    .then(function (res) {
+                        $scope.leavesToApprove = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            } else {
+                employeeService
+                    .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.leavesToApprove = res.data.leavesToApprove;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        // console.log($scope.leavesToApprove)
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        }
+
+        $scope.filterLeaveApproval = function filterLeaveApproval() {
+            if ($scope.status || $scope.startDateValue || $scope.endDateValue || $scope.leaveType) {
+                $scope.currentPage = 1;
+                getLeavesToApprove();
+            }
+        }
+
 
         // getting department list of branch
         if (!$rootScope.departments) {
@@ -603,7 +702,7 @@ app.controller('hrAdminCtrl', [
         }
 
         // DISPLAY DATA
-        if($state.current.name === 'sidemenu.dashboard') {
+        if ($state.current.name === 'sidemenu.dashboard') {
             hrService
                 .getEmployeeInfo(currUser.userId)
                 .then(function (res) {

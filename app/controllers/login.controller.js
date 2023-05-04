@@ -12,15 +12,15 @@ app.controller('loginController', [
             $http
             .post('http://localhost:5000/api/login/check-login-info', $scope.user)
             .then(function(res) {
-                // console.log(res.data.userData);
+                console.log(res.data.userData);
                 // console.log(res.data.token);
                 var userInfo = {
                     userId: res.data.userData._id,
-                    employeeCode: res.data.userData.employeeCode,
+                    // employeeCode: res.data.userData.employeeCode,
                     firstName: res.data.userData.firstName,
                     lastName: res.data.userData.lastName,
-                    employeeEmail: res.data.userData.employeeEmail,
-                    department: res.data.userData.department,
+                    employeeEmail: res.data.userData.employeeDetails.employeeEmail,
+                    department: res.data.userData.employeeDetails.department,
                     employeeRole: res.data.userData.employeeRole,
                     isActive: res.data.userData.isActive,
                     companyDetails: res.data.userData.company,

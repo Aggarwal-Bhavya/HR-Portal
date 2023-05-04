@@ -6,6 +6,19 @@
         <div class="sales-boxes">
             <div class="company box">
                 <div class="title">All Clients</div>
+                <div class="filters">
+                    <select ng-model="statusValue" class="drop">
+                        <option value="">--Select Status--</option>
+                        <option value="all">All</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    Start Date:
+                    <input type="date" ng-model="startDateValue">
+                    End Date:
+                    <input type="date" ng-model="endDateValue">
+                    <button ng-click="filterData()"><i class='bx bx-filter' ></i>Filter</button>
+                </div>
                 <div class="sales-details">
                     <table>
                         <thead>

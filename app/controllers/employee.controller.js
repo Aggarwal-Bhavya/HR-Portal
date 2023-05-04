@@ -391,16 +391,36 @@ app.controller('employeeCtrl', [
         }
 
         function getLeavesInfo() {
-            employeeService
-                .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
-                .then(function (res) {
-                    $scope.leavesInfo = res.data.leaveData;
-                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    // console.log($scope.leavesInfo);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                employeeService
+                    .getFilteredLeaves(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue)
+                    .then(function (res) {
+                        $scope.leavesInfo = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            } else {
+                employeeService
+                    .getLeavesInfo(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.leavesInfo = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        // console.log($scope.leavesInfo);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        }
+
+        $scope.filterLeaves = function filterLeaves() {
+            // console.log('filtering')
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getLeavesInfo();
+            }
         }
 
         // getting leaves that need to be approved
@@ -461,16 +481,35 @@ app.controller('employeeCtrl', [
         }
 
         function getLeavesToApprove() {
-            employeeService
-                .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
-                .then(function (res) {
-                    $scope.leavesToApprove = res.data.leavesToApprove;
-                    $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    // console.log($scope.leavesToApprove)
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
+            if ($scope.status || $scope.startDateValue || $scope.endDateValue || $scope.leaveType) {
+                employeeService
+                    .getToApproveFilter(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize, $scope.status, $scope.leaveType, $scope.startDateValue, $scope.endDateValue)
+                    .then(function (res) {
+                        $scope.leavesToApprove = res.data.leaveData;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            } else {
+                employeeService
+                    .getLeavesToApprove(currUser.userId, currUser.branchDetails.branchId, $scope.currentPage, $scope.pageSize)
+                    .then(function (res) {
+                        $scope.leavesToApprove = res.data.leavesToApprove;
+                        $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        // console.log($scope.leavesToApprove)
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+            }
+        }
+
+        $scope.filterLeaveApproval = function filterLeaveApproval() {
+            if ($scope.status || $scope.startDateValue || $scope.endDateValue || $scope.leaveType) {
+                $scope.currentPage = 1;
+                getLeavesToApprove();
+            }
         }
 
         if ($state.current.name === 'menu.dashboard') {

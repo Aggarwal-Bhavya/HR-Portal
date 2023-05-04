@@ -18,8 +18,10 @@ app.controller('companyAdminCtrl', [
         $scope.pageSize = 5;
         $scope.totalPages = 1;
 
+        $scope.exists = true;
+
         // VIEWING ALL BRANCHES
-        if($state.current.name === 'sidepanel.viewall' || $state.current.name === 'sidepanel.dashboard') {
+        if ($state.current.name === 'sidepanel.viewall' || $state.current.name === 'sidepanel.dashboard') {
             $scope.branches = [];
             $scope.loading = true;
             getAllBranches();
@@ -38,18 +40,40 @@ app.controller('companyAdminCtrl', [
         }
 
         function getAllBranches() {
-            companyFactory
-                .getBranches(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize, function (err, res) {
-                    if(res) {
+            if ($scope.name || $scope.department || $scope.city) {
+                companyService
+                    .getFilteredBranches($scope.currentPage, $scope.pageSize, $scope.name, $scope.department, $scope.city)
+                    .then(function (res) {
                         $scope.loading = false;
                         $scope.branches = res.data.branchData;
-                        $rootScope.branchCount = res.data.totalCount;
                         $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    } else {
+                    })
+                    .catch(function (err) {
                         $scope.loading = true;
                         console.log(err);
-                    }
-                });
+                    })
+            } else {
+                companyFactory
+                    .getBranches(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize, function (err, res) {
+                        if (res) {
+                            $scope.loading = false;
+                            $scope.branches = res.data.branchData;
+                            $rootScope.branchCount = res.data.totalCount;
+                            $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        } else {
+                            $scope.loading = true;
+                            console.log(err);
+                        }
+                    });
+            }
+        }
+
+        // FILTER DATA
+        $scope.filterData = function filterData() {
+            if ($scope.name || $scope.department || $scope.city) {
+                $scope.currentPage = 1;
+                getAllBranches();
+            }
         }
 
         // VIEWING ALL EMPLOYEES + PAGINATION
@@ -73,24 +97,46 @@ app.controller('companyAdminCtrl', [
 
 
         function getActiveEmployeeData() {
-            companyFactory
-                .getAllEmployees(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize, function (err, res) {
-                    if(res) {
+            if ($scope.bName || $scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                companyService
+                    .getFilteredEmployees($scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue, $scope.bName, $scope.bDepartment)
+                    .then(function (res) {
                         $scope.loading = false;
                         $scope.employees = res.data.companyData;
                         $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    } else {
+                    })
+                    .catch(function (err) {
                         $scope.loading = true;
                         console.log(err);
-                    }
-                })
+                    })
+            } else {
+                companyFactory
+                    .getAllEmployees(currCompany.companyDetails.companyId, $scope.currentPage, $scope.pageSize, function (err, res) {
+                        if (res) {
+                            $scope.loading = false;
+                            $scope.employees = res.data.companyData;
+                            $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        } else {
+                            $scope.loading = true;
+                            console.log(err);
+                        }
+                    })
+            }
+        }
+
+        $scope.filterEmployeeData = function filterEmployeeData() {
+            console.log('filter employee')
+            if ($scope.bName || $scope.bDepartment || $scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getActiveEmployeeData();
+            }
         }
 
         // GETTING COMPANY HEAD COUNT
-        if(!$rootScope.headCount) {
+        if (!$rootScope.headCount) {
             companyService
                 .getCompanyHeadCount(currCompany.companyDetails.companyId)
-                .then(function(res) {
+                .then(function (res) {
                     $rootScope.headCount = res.data.headCount[0].count;
                 })
                 .catch(function (err) {
@@ -100,7 +146,7 @@ app.controller('companyAdminCtrl', [
 
         // GETTING EACH BRANCH PERFORMANCE
         // avg = branch.totalWorkingHours / branch.employeeCount
-        if(!$rootScope.branchPerformance) {
+        if (!$rootScope.branchPerformance) {
             var today = new Date();
             // console.log(today.getFullYear());
             companyService
@@ -132,7 +178,7 @@ app.controller('companyAdminCtrl', [
         $scope.openUpdateCompanyAdminModal = function () {
             companyFactory
                 .getCompanyAdmin(currCompany.companyDetails.companyId, function (err, res) {
-                    if(res) {
+                    if (res) {
                         $scope.companyadmin = res.data.adminData;
                     } else {
                         console.log(err);
@@ -144,7 +190,7 @@ app.controller('companyAdminCtrl', [
         $scope.updateCompanyAdmin = function ($event) {
             $event.preventDefault();
             // $scope.companyadmin.id = currCompany.companyDetails.companyId;
-            
+
             companyFactory
                 .updateCompanyAdmin(currCompany.companyDetails.companyId, $scope.companyadmin, function (err, res) {
                     if (res) {
@@ -201,7 +247,7 @@ app.controller('companyAdminCtrl', [
         $scope.openUpdateCompanyModal = function (company) {
             companyFactory
                 .getCompany(currCompany.companyDetails.companyId, function (err, res) {
-                    if(res) {
+                    if (res) {
                         $scope.company = res.data.companyData;
                     } else {
                         console.log(err);
@@ -214,7 +260,7 @@ app.controller('companyAdminCtrl', [
             $event.preventDefault();
             companyFactory
                 .updateCompany($scope.company, function (err, res) {
-                    if(res) {
+                    if (res) {
                         $window.location.reload();
                     } else {
                         console.log(err);
@@ -236,8 +282,8 @@ app.controller('companyAdminCtrl', [
             }
             companyService
                 .changePassword(newDetails)
-            // companyFactory
-            //     .changePassword(currCompany.companyDetails.companyId, $scope.newPassword)
+                // companyFactory
+                //     .changePassword(currCompany.companyDetails.companyId, $scope.newPassword)
                 .then(function (res) {
                     console.log(res.data.data);
                     // alert(res.data.message);

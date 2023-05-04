@@ -1,5 +1,6 @@
 var Employee = require("../employee-operations/employee.model");
 var Branch = require("../branch-operations/branch.model");
+var createCsvWriter = require('csv-writer').createArrayCsvWriter;
 
 var employeeActivity = {
     getBranchEmployees: function (req, res) {
@@ -212,7 +213,177 @@ var employeeActivity = {
                     data: err
                 })
             })
-    }
+    },
+
+    filterEmployees: function (req, res) {
+        var statusValue = req.query.statusValue
+        var startDateValue = req.query.startDateValue ? new Date(req.query.startDateValue) : new Date(new Date().getFullYear(), 0, 1);
+        var endDateValue = req.query.endDateValue ? new Date(req.query.endDateValue) : new Date();
+        var name = req.query.bName ? new RegExp(req.query.bName, 'i') : undefined;
+        var department = req.query.bDepartment ? new RegExp(req.query.bDepartment, 'i') : undefined;
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+
+        if (statusValue !== undefined) {
+            if (statusValue === 'active') {
+                query.isActive = true;
+            } else if (statusValue === 'inactive') {
+                query.isActive = false;
+            }
+        }
+
+        if (startDateValue !== undefined && endDateValue !== undefined) {
+            if (endDateValue < startDateValue) {
+                res.status(400).json({
+                    message: 'Invalid date range',
+                    data: null
+                })
+                return;
+            }
+            query.createdAt = { $gt: startDateValue, $lt: endDateValue };
+        }
+
+        if (name !== undefined) {
+            query['branch.branchName'] = { $regex: name }
+        }
+
+        if (department !== undefined) {
+            query['employeeDetails.department'] = { $regex: department }
+        }
+
+        query.employeeRole = { $in: ["branchadmin", "seniorhr", "departmenthead", "employee"] }
+
+        Employee
+            .find(query)
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
+                // console.log(item.length);
+                // console.log(item)
+
+                res.status(201).json({
+                    message: 'Filtered employee data',
+                    companyData: paginatedData,
+                    totalCount: item.length
+                })
+
+            })
+            .catch(function (err) {
+                console.log(err);
+
+                res.status(500).json({
+                    message: 'Error filtering data',
+                    data: err
+                })
+            })
+    },
+
+    filterEmployeeRoles: function (req, res) {
+        var statusValue = req.query.statusValue
+        var startDateValue = req.query.startDateValue ? new Date(req.query.startDateValue) : new Date(new Date().getFullYear(), 0, 1);
+        var endDateValue = req.query.endDateValue ? new Date(req.query.endDateValue) : new Date();
+        // var name = req.query.bName ? new RegExp(req.query.bName, 'i') : undefined; 
+        var department = req.query.bDepartment ? new RegExp(req.query.bDepartment, 'i') : undefined;
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+
+        if (statusValue !== undefined) {
+            if (statusValue === 'active') {
+                query.isActive = true;
+            } else if (statusValue === 'inactive') {
+                query.isActive = false;
+            }
+        }
+
+        if (startDateValue !== undefined && endDateValue !== undefined) {
+            if (endDateValue < startDateValue) {
+                res.status(400).json({
+                    message: 'Invalid date range',
+                    data: null
+                })
+                return;
+            }
+            query.createdAt = { $gt: startDateValue, $lt: endDateValue };
+        }
+
+
+        if (department !== undefined) {
+            query['employeeDetails.department'] = { $regex: department }
+        }
+
+        query.employeeRole = { $in: ["seniorhr", "departmenthead", "employee"] }
+
+        Employee
+            .find(query)
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
+                // console.log(item.length);
+                // console.log(item)
+
+                res.status(201).json({
+                    message: 'Filtered employee data',
+                    branchData: paginatedData,
+                    totalCount: item.length
+                })
+
+            })
+            .catch(function (err) {
+                console.log(err);
+
+                res.status(500).json({
+                    message: 'Error filtering data',
+                    data: err
+                })
+            })
+    },
+
+    generateCSVReport: async function (req, res) {
+        var empId = req.params.id;
+    
+        try {
+            var employeeData = await Employee.findById({ _id: empId });
+    
+            var data = [
+                ['First Name', employeeData.firstName],
+                ['Last Name', employeeData.lastName],
+                ['Joining Date', employeeData.createdAt]
+            ];
+    
+            console.log(data);
+    
+            var csvWriter = createCsvWriter({
+                header: false,
+                path: 'D:/employee_reports/employee_report.csv'
+            });
+    
+            await csvWriter.writeRecords(data);
+    
+            // Delay for 500ms to ensure the file has been fully written
+            await new Promise(resolve => setTimeout(resolve, 500));
+    
+            res.setHeader('Content-Type', 'text/csv');
+            res.setHeader('Content-Disposition', 'attachment; filename=employee_report.csv');
+            res.sendFile('employee_report.csv', { root: __dirname });
+    
+        } catch (err) {
+            console.error('Error writing CSV file:', err);
+            res.status(500).send('Error exporting employee report');
+        }
+    }    
+
 };
 
 module.exports = employeeActivity;

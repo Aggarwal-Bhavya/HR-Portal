@@ -9,6 +9,10 @@ router.post('/apply-leave', passport.authenticate('jwt', {session: false}), leav
 
 router.get('/get-leaves/:empId/:branchId', passport.authenticate('jwt', {session: false}), leaveOperations.getLeaveRecords);
 
+router.get('/filter-my-leaves/:empId/:branchId', leaveOperations.leaveRecordsFilter);
+
+router.get('/filter-to-approve/:empId/:branchId', leaveOperations.approvalLeavesFilter);
+
 router.get('/to-approve-leaves/:empId/:branchId', passport.authenticate('jwt', {session: false}), leaveOperations.toBeApproved);
 
 router.put('/leave-status/:leaveId', passport.authenticate('jwt', {session: false}), leaveOperations.leaveStatusUpdate);

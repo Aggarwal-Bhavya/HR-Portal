@@ -16,6 +16,18 @@ app.factory('superadminService', [
                     }
                 });
             },
+            getFilteredData: function(currPage, pageSize, statusValue, startDateValue, endDateValue) {
+                url ='http://localhost:5000/api/superadmin/filter-data';
+                return $http.get(url, {
+                    params: {
+                        page: currPage,
+                        count: pageSize,
+                        statusValue: statusValue,
+                        startDateValue: startDateValue,
+                        endDateValue: endDateValue
+                    }
+                });
+            },
             getAllInactiveCompanies: function(currPage, pageSize) {
                 url = 'http://localhost:5000/api/superadmin/inactive-companies';
                 return $http.get(url, {

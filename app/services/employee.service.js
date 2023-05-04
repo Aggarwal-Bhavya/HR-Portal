@@ -39,6 +39,18 @@ app.factory('employeeService', [
                     }
                 });
             },
+            getFilteredLeaves: function(empId, branchId, currPage, pageSize, status, startDate, endDate) {
+                url = 'http://localhost:5000/api/attendance/filter-my-leaves/' + empId + '/' + branchId;
+                return $http.get(url, {
+                    params: {
+                        page: currPage,
+                        count: pageSize,
+                        status: status,
+                        startDateValue: startDate,
+                        endDateValue: endDate
+                    }
+                })
+            },
             getLeavesToApprove: function(empId, branchId, currPage, pageSize) {
                 url = 'http://localhost:5000/api/attendance/to-approve-leaves/' + empId + '/' + branchId;
                 return $http.get(url, {
@@ -48,6 +60,20 @@ app.factory('employeeService', [
                         count: pageSize
                     }
                 });
+            },
+            getToApproveFilter: function(empId, branchId, currPage, pageSize, status, leaveType, startDate, endDate) {
+                url = 'http://localhost:5000/api/attendance/filter-to-approve/' + empId + '/' + branchId;
+                return $http.get(url, {
+                    params: 
+                    {
+                        page: currPage,
+                        count: pageSize,
+                        status: status,
+                        startDateValue: startDate,
+                        endDateValue: endDate,
+                        type: leaveType
+                    }
+                })
             },
             yearlyRatios: function(empId, year) {
                 url = 'http://localhost:5000/api/employee/year-stats/' + empId + '/' + year;

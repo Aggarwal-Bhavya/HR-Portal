@@ -20,6 +20,8 @@ router.get('/branch-head/:id/:branchId', passport.authenticate('jwt', {session: 
 
 router.get('/branch-departments/:id', passport.authenticate('jwt', {session: false}), branchOperations.getBranchDepartmentList);
 
+router.get('/filter-branch', branchOperations.filterBranches);
+
 router.get('/branch-admin-info/:id', passport.authenticate('jwt', {session: false}), branchAdminActions.getBranchAdminInfo);
 
 router.put('/update-branchadmin', passport.authenticate('jwt', {session: false}), branchadminMiddleware, branchAdminActions.updateBranchAdmin);

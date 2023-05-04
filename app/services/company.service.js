@@ -23,6 +23,32 @@ app.factory('companyService', [
                     }
                 });
             },
+            getFilteredBranches: function (currPage, pageSize, name, department, city) {
+                url = 'http://localhost:5000/api/company/filter-branch';
+                return $http.get(url, {
+                    params: {
+                        page: currPage,
+                        count: pageSize,
+                        name: name, 
+                        city: city,
+                        department: department
+                    }
+                })
+            },
+            getFilteredEmployees: function (currPage, pageSize, statusValue, startDateValue, endDateValue, bName, bDepartment) {
+                url = 'http://localhost:5000/api/branch/filter-employees';
+                return $http.get(url, {
+                    params: {
+                        page: currPage,
+                        count: pageSize,
+                        bName: bName,
+                        bDepartment: bDepartment,
+                        startDateValue: startDateValue,
+                        endDateValue: endDateValue,
+                        statusValue: statusValue
+                    }
+                })
+            },
             getAllCompanyEmployees: function (id, currPage, pageSize) {
                 url = 'http://localhost:5000/api/branch/all-company-employees/' + id;
                 return $http.get(url, {

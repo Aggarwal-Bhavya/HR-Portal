@@ -23,6 +23,8 @@ router.put('/deactivate-company/:id', passport.authenticate('jwt', {session: fal
 
 router.put('/activate-company/:id', passport.authenticate('jwt', {session: false}), companyOperations.activateCompany);
 
+router.get('/filter-data', passport.authenticate('jwt', {session: false}), companyOperations.filterCompanyData);
+
 router.get('/company-admin-info/:id', passport.authenticate('jwt', {session: false}), companyadminMiddleware, companyAdminActions.getCompanyAdminInfo);
 
 router.put('/update-companyadmin', passport.authenticate('jwt', {session: false}), companyadminMiddleware, companyAdminActions.updateCompanyAdminInfo);
