@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 // routes for different apis
+// configures all the routes for our application
+
 router.use("/login", require("../apis/login/index"));
 
 
