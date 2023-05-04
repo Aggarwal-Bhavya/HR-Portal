@@ -35,20 +35,41 @@ app.controller('superAdminCtrl', [
         }
 
         function getAllCompanies() {
-            superadminFactory
-                .getCompanies($scope.currentPage, $scope.pageSize, function (err, res) {
-                    if (res) {
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                superadminService
+                    .getFilteredData($scope.currentPage, $scope.pageSize, $scope.statusValue, $scope.startDateValue, $scope.endDateValue)
+                    .then(function (res) {
+                        // console.log(res.data)
                         $scope.loading = false;
                         $scope.companies = res.data.companyData;
-                        $scope.activeCount = res.data.companyData.length;
                         $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
-                    } else {
+                    })
+                    .catch(function (err) {
                         $scope.loading = true;
-                        console.log('Errorrr    ', err);
-                    }
-                })
+                        console.log(err);
+                    })
+            } else {
+                superadminFactory
+                    .getCompanies($scope.currentPage, $scope.pageSize, function (err, res) {
+                        if (res) {
+                            $scope.loading = false;
+                            $scope.companies = res.data.companyData;
+                            $scope.activeCount = res.data.companyData.length;
+                            $scope.totalPages = Math.ceil(res.data.totalCount / $scope.pageSize);
+                        } else {
+                            $scope.loading = true;
+                            console.log('Errorrr    ', err);
+                        }
+                    })
+            }
         }
 
+        $scope.filterData = function filterData() {
+            if ($scope.statusValue || $scope.startDateValue || $scope.endDateValue) {
+                $scope.currentPage = 1;
+                getAllCompanies();
+            }
+        }
 
         // VIEWING ALL INACTIVE CLIENTS + PAGINATION
         if ($state.current.name === 'sidebar.previous-customers') {
@@ -148,7 +169,7 @@ app.controller('superAdminCtrl', [
             $event.preventDefault();
             superadminFactory
                 .updateAdmin($scope.superadmin, function (err, res) {
-                    if(res) {
+                    if (res) {
                         alert('success');
                     } else {
                         console.log(err);
@@ -187,7 +208,7 @@ app.controller('superAdminCtrl', [
 
             superadminFactory
                 .createCompany($scope.company, function (err, res) {
-                    if(res) {
+                    if (res) {
                         alert(res.data.message);
                         $window.location.reload();
                     } else {

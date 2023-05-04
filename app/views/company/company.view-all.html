@@ -6,6 +6,12 @@
         <div class="sales-boxes">
             <div class="company box">
                 <div class="title">All Branches</div>
+                <div class="filters">
+                    <input type="text" placeholder="Branch Name" ng-model="name">
+                    <input type="text" placeholder="Branch City" ng-model="city">
+                    <input type="text" placeholder="Department" ng-model="department">
+                    <button ng-click="filterData()"><i class='bx bx-filter' ></i>Filter</button>
+                </div>
                 <div class="sales-details">
                     <table>
                         <thead>

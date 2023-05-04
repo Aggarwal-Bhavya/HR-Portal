@@ -59,6 +59,19 @@ app.factory('branchService', [
                     }
                 });
             },
+            getFilteredEmployees: function (currPage, pageSize, statusValue, startDateValue, endDateValue, bDepartment) {
+                url = 'http://localhost:5000/api/branch/filter-employees-roles';
+                return $http.get(url, {
+                    params: {
+                        page: currPage,
+                        count: pageSize,
+                        bDepartment: bDepartment,
+                        startDateValue: startDateValue,
+                        endDateValue: endDateValue,
+                        statusValue: statusValue
+                    }
+                })
+            },
             removeEmployee: function(id) {
                 url = 'http://localhost:5000/api/branch/remove-employee/' + id;
                 return $http.put(url);

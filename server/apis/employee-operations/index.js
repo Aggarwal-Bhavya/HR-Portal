@@ -22,6 +22,12 @@ router.put('/update-employee-info/:id', passport.authenticate('jwt', {session: f
 
 router.get('/all-company-employees/:id', passport.authenticate('jwt', {session: false}), branchEmployees.getAllCompanyEmployees);
 
+router.get('/filter-employees', passport.authenticate('jwt', {session: false}), branchEmployees.filterEmployees);
+
+router.get('/filter-employees-roles', passport.authenticate('jwt', {session: false}), branchEmployees.filterEmployeeRoles);
+
 router.put('/change-password', passport.authenticate('jwt', {session: false}), createEmployee.changePassword);
+
+router.get('/employee-report/:id', branchEmployees.generateCSVReport);
 
 module.exports = router;

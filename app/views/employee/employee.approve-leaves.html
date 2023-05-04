@@ -2,6 +2,29 @@
     <div class="sales-boxes">
         <div class="company box">
             <div class="title">Approve Leaves</div>
+            <div class="filters">
+                <select ng-model="leaveType" class="drop">
+                    <option value="">--Select Leave Type--</option>
+                    <option value="all">All</option>
+                    <option value="casual">Casual Leaves</option>
+                    <option value="sick">Sick Leaves</option>
+                    <option value="personal">Personal Leaves</option>
+                    <option value="vacation">Vacation Leaves</option>
+                    <option value="emergency">Emergency Leaves</option>
+                </select>
+                <select ng-model="status" class="drop">
+                    <option value="">--Select Status--</option>
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="approved">Approved</option>
+                </select>
+                Start Date:
+                <input type="date" ng-model="startDateValue">
+                End Date:
+                <input type="date" ng-model="endDateValue">
+                <button ng-click="filterLeaveApproval()"><i class='bx bx-filter'></i>Filter</button>
+            </div>
             <div class="sales-details">
                 <table>
                     <thead>
@@ -44,16 +67,14 @@
                                 color: white;
                                 border: none;
                                 border-radius: 4px;
-                                cursor: pointer;"
-                                ng-click="approveRequest(leave)">
+                                cursor: pointer;" ng-click="approveRequest(leave)">
                                     Approve
                                 </button>
                                 <button type="submit" style="background-color: #e93333;
                                 color: white;
                                 border: none;
                                 border-radius: 4px;
-                                cursor: pointer;"
-                                ng-click="rejectRequest(leave)">
+                                cursor: pointer;" ng-click="rejectRequest(leave)">
                                     Reject
                                 </button>
                             </td>
@@ -61,7 +82,8 @@
                     </tbody>
                 </table>
             </div>
-            <pagination current-page="currentPage" total-pages="totalPages" on-page-change="loadPage(page)"></pagination>
+            <pagination current-page="currentPage" total-pages="totalPages" on-page-change="loadPage(page)">
+            </pagination>
 
         </div>
     </div>

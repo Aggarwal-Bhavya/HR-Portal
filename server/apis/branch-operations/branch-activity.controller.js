@@ -325,6 +325,53 @@ var branchActivity = {
                     data: err
                 })
             })
+    },
+
+    filterBranches: function (req, res) {
+        var name = req.query.name ? new RegExp(req.query.name,'i') : undefined;
+        var department = req.query.department ? new RegExp(req.query.department, 'i') : undefined;
+        var city = req.query.city ? new RegExp(req.query.city, 'i') : undefined;
+
+        var page = parseInt(req.query.page);
+        var count = parseInt(req.query.count);
+
+        var startIndex = (page - 1) * count;
+        var endIndex = page * count;
+
+        var query = {};
+
+        if(name !== undefined) {
+            query.branchName = {$regex: name}
+        }
+
+        if(department !== undefined) {
+            query.departments = {$in: [department]}
+        }
+
+        if(city !== undefined) {
+            query.city = {$regex: city}
+        }
+
+        Branch
+            .find(query)
+            .then(function (item) {
+                var paginatedData = item.slice(startIndex, endIndex);
+
+                res.status(201).json({
+                    message: 'Filtered Data',
+                    branchData: paginatedData,
+                    totalCount: item.length
+                })
+            })
+            .catch(function (err) {
+                console.log(err)
+
+                res.status(500).json({
+                    message: 'Error filtering data',
+                    data: err
+                })
+            })
+
     }
 };
 
